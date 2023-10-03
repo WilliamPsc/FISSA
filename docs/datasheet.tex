@@ -1,0 +1,52 @@
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc} % style d'écriture
+\usepackage[T1]{fontenc}      % package
+\usepackage[french]{babel}  % package pour langue française
+\usepackage[a4paper]{geometry} % definition des marges
+\usepackage[pdftex]{graphicx} % definition d'image
+\usepackage{fancyhdr} % haut de page
+\usepackage{float}
+% \usepackage[table,xcdraw]{xcolor}
+\usepackage{tcolorbox,listings}
+% \usepackage{caption}
+% \usepackage{ragged2e} % justification du texte dans les itemizes
+% \usepackage{color}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+
+
+\renewcommand{\thesection}{\Roman{section}}
+
+\input{include/header.tex}
+
+\begin{document}
+    \input{include/titlepage.tex}
+
+    \pagestyle{fancy}
+		\lhead{William PENSEC}
+		\chead{}
+		\rhead{Générateur de fichiers TCL}
+		\lfoot{}
+		\cfoot{\thepage}
+		\rfoot{}
+		
+	\newpage\renewcommand{\contentsname}{Sommaire}
+	\tableofcontents
+    \listoffigures
+    \listoftables
+    \lstlistoflistings
+    \printnomenclature
+
+	\newpage
+    \input{script/00_introduction.tex}
+
+    \input{script/conclusion.tex}
+
+            
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % \bibliographystyle{plain}
+        % \bibliography{bibliographie}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

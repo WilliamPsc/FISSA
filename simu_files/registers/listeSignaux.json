@@ -1,0 +1,2282 @@
+{
+    "fetch": [
+        {
+            "id": "fetch_00",
+            "id_parent": [
+                "decode_010"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/jump_target_id_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_01",
+            "id_parent": [
+                "execution_018"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/jump_target_ex_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_02",
+            "id_parent": [
+                "decode_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_set_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_03",
+            "id_parent": [
+                "fetch_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "fetch_04",
+            "id_parent": [
+                "fetch_00",
+                "fetch_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/fetch_addr_n_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_05",
+            "id_parent": [
+                "fetch_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_if_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "fetch_06",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/if_valid_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_07",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_mux_i",
+            "size": 3,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "fetch_08",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o",
+            "size": 32,
+            "registre": 1,
+            "control": 0
+        }
+    ],
+    "decode": [
+        {
+            "id": "decode_00",
+            "id_parent": [
+                "lsu_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_wdata_wb_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_01",
+            "id_parent": [
+                "execution_015"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_wdata_fw_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_02",
+            "id_parent": [
+                "execution_016"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_we_fw_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_03",
+            "id_parent": [
+                "execution_017"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_waddr_fw_i_tag",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_04",
+            "id_parent": [
+                "csr_00"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/tpr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_05",
+            "id_parent": [
+                "csr_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/tcr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_06",
+            "id_parent": [
+                "fetch_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/pc_id_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_07",
+            "id_parent": [
+                "execution_019"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/pc_enable_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_08",
+            "id_parent": [
+                "execution_022"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/rs1_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_09",
+            "id_parent": [
+                "execution_023"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/exception_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_010",
+            "id_parent": [
+                "decode_037"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/jump_target_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_011",
+            "id_parent": [
+                "decode_06"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/pc_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_012",
+            "id_parent": [
+                "controller_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/pc_set_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_013",
+            "id_parent": [
+                "decode_038"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operator_o_mode",
+            "size": 2,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_014",
+            "id_parent": [
+                "decode_030"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/store_dest_addr_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_015",
+            "id_parent": [
+                "decode_032"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/store_source_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_016",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/use_store_ops_ex_o",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_017",
+            "id_parent": [
+                "decode_030"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_a_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_018",
+            "id_parent": [
+                "decode_031",
+                "decode_032"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_b_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_019",
+            "id_parent": [
+                "decode_032"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_c_ex_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_020",
+            "id_parent": [
+                "decode_061"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_waddr_ex_o_tag",
+            "size": 5,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_021",
+            "id_parent": [
+                "decode_045"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s1_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_022",
+            "id_parent": [
+                "decode_046"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s2_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_023",
+            "id_parent": [
+                "decode_047"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_d_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_024",
+            "id_parent": [
+                "decode_050"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/register_set_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_025",
+            "id_parent": [
+                "decode_051"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/is_store_post_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_026",
+            "id_parent": [
+                "decode_052"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/memory_set_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "decode_027",
+            "id_parent": [
+                "rf_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_data_ra_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_028",
+            "id_parent": [
+                "rf_tag_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_data_rb_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_029",
+            "id_parent": [
+                "rf_tag_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_data_rc_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_030",
+            "id_parent": [
+                "decode_033",
+                "decode_034",
+                "decode_06"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_a_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_031",
+            "id_parent": [
+                "decode_036"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_b_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_032",
+            "id_parent": [
+                "decode_034",
+                "decode_035",
+                "decode_037"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_c_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_033",
+            "id_parent": [
+                "decode_00",
+                "decode_01",
+                "decode_027"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/operand_a_fw_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_034",
+            "id_parent": [
+                "decode_00",
+                "decode_01",
+                "decode_028"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/operand_b_fw_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_035",
+            "id_parent": [
+                "decode_00",
+                "decode_01",
+                "decode_029"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/operand_c_fw_id_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_036",
+            "id_parent": [
+                "decode_034",
+                "decode_035"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/operand_b_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_037",
+            "id_parent": [
+                "decode_06",
+                "decode_027"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/jump_target_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_038",
+            "id_parent": [
+                "mode_tag_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operator_mode",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_039",
+            "id_parent": [
+                "enable_tag_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/is_store",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_040",
+            "id_parent": [
+                "enable_tag_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_a",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_041",
+            "id_parent": [
+                "enable_tag_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_b",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_042",
+            "id_parent": [
+                -1,
+                "decode_07"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/branch_taken_ex_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_043",
+            "id_parent": [
+                "load_propagation_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_dest_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_044",
+            "id_parent": [
+                "load_propagation_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_045",
+            "id_parent": [
+                "check_tag_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s1_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_046",
+            "id_parent": [
+                "check_tag_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s2_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_047",
+            "id_parent": [
+                "check_tag_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_d_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_048",
+            "id_parent": [
+                "check_tag_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/execute_pc_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_049",
+            "id_parent": [
+                "load_check_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/exception_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_050",
+            "id_parent": [
+                "mode_tag_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/register_set_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_051",
+            "id_parent": [
+                "mode_tag_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/is_store_post_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_052",
+            "id_parent": [
+                "mode_tag_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/memory_set_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_053",
+            "id_parent": [
+                "decode_06",
+                "decode_09",
+                "decode_048",
+                "decode_049",
+                "decode_054"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec_dift",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_054",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_055",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/jump_in_id",
+            "size": 2,
+            "registre": 0,
+            "control": 1
+        },
+        {
+            "id": "decode_056",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/data_load_event_id",
+            "size": 1,
+            "registre": 0,
+            "control": 1
+        },
+        {
+            "id": "decode_057",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/id_valid_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_058",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mult_en",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_059",
+            "id_parent": [
+                "lsu_017"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/data_misaligned_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_060",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/ex_ready_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_061",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_waddr_id",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "decode_062",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_we_id",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "rf_tag": [
+        {
+            "id": "rf_tag_00",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/raddr_a_i",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_01",
+            "id_parent": [
+                "rf_tag_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rdata_a_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_02",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/raddr_b_i",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_03",
+            "id_parent": [
+                "rf_tag_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rdata_b_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_04",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/raddr_c_i",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_05",
+            "id_parent": [
+                "rf_tag_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rdata_c_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_06",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/waddr_a_i",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_07",
+            "id_parent": [
+                "decode_043"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/wdata_a_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_08",
+            "id_parent": [
+                "decode_044"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/we_a_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_09",
+            "id_parent": [
+                "decode_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/waddr_b_i",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_010",
+            "id_parent": [
+                "decode_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/wdata_b_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_011",
+            "id_parent": [
+                "decode_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/we_b_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_012",
+            "id_parent": [
+                "rf_tag_07",
+                "rf_tag_010"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg",
+            "size": 32,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_013",
+            "id_parent": [
+                "rf_tag_08"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/we_a_dec",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_014",
+            "id_parent": [
+                "rf_tag_011"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/we_b_dec",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_015",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[0]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_016",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[1]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_017",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[2]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_018",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[3]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_019",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[4]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_020",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[5]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_021",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[6]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_022",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[7]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_023",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[8]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_024",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[9]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_025",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[10]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_026",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[11]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_027",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[12]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_028",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[13]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_029",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[14]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_030",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[15]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_031",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[16]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_032",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[17]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_033",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[18]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_034",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[19]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_035",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[20]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_036",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[21]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_037",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[22]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_038",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[23]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_039",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[24]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_040",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[25]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_041",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[26]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_042",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[27]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_043",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[28]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_044",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[29]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_045",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[30]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "rf_tag_046",
+            "id_parent": [],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[31]",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        }
+    ],
+    "mode_tag": [
+        {
+            "id": "mode_tag_00",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/instr_rdata_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "mode_tag_01",
+            "id_parent": [
+                "decode_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/tpr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "mode_tag_02",
+            "id_parent": [
+                "mode_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/alu_operator_o_mode",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "mode_tag_03",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/register_set_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "mode_tag_04",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/is_store_post_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "mode_tag_05",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/mode_i_tag/memory_set_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "enable_tag": [
+        {
+            "id": "enable_tag_00",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_i_tag/instr_rdata_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "enable_tag_01",
+            "id_parent": [
+                "decode_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_i_tag/tpr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "enable_tag_02",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_i_tag/is_store_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "enable_tag_03",
+            "id_parent": [
+                "enable_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_i_tag/enable_a_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "enable_tag_04",
+            "id_parent": [
+                "enable_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/enable_i_tag/enable_b_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "load_propagation": [
+        {
+            "id": "load_propagation_00",
+            "id_parent": [
+                "decode_00"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/regfile_wdata_wb_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_01",
+            "id_parent": [
+                "decode_08"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/rs1_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_02",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/regfile_we_wb_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_03",
+            "id_parent": [
+                "decode_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/tpr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_04",
+            "id_parent": [
+                "operand_a",
+                "operand_b"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/regfile_dest_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_05",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/regfile_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_06",
+            "id_parent": [
+                "load_propagation_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/alu_operator_mode",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_07",
+            "id_parent": [
+                "load_propagation_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/enable_a",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_08",
+            "id_parent": [
+                "load_propagation_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/enable_b",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_09",
+            "id_parent": [
+                "load_propagation_01",
+                "load_propagation_07"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/operand_a",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_propagation_010",
+            "id_parent": [
+                "load_propagation_00",
+                "load_propagation_08"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_propagation/operand_b",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "load_check": [
+        {
+            "id": "load_check_00",
+            "id_parent": [
+                "decode_00"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/regfile_wdata_wb_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_01",
+            "id_parent": [
+                "decode_08"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/rs1_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_02",
+            "id_parent": [
+                "load_propagation_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/regfile_dest_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_03",
+            "id_parent": [
+                "decode_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/tcr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_04",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/regfile_we_wb_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_05",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/exception_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_06",
+            "id_parent": [
+                "load_check_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/check_s",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_07",
+            "id_parent": [
+                "load_check_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/check_sa",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "load_check_08",
+            "id_parent": [
+                "load_check_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/load_i_check/check_d",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "check_tag": [
+        {
+            "id": "check_tag_00",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/instr_rdata_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "check_tag_01",
+            "id_parent": [
+                "decode_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/tcr_i",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "check_tag_02",
+            "id_parent": [
+                "check_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/source_1_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "check_tag_03",
+            "id_parent": [
+                "check_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/source_2_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "check_tag_04",
+            "id_parent": [
+                "check_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/dest_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "check_tag_05",
+            "id_parent": [
+                "check_tag_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_i_tag/execute_pc_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "execution": [
+        {
+            "id": "execution_00",
+            "id_parent": [
+                "decode_013"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/alu_operator_i_mode",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_01",
+            "id_parent": [
+                "decode_017"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/alu_operand_a_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_02",
+            "id_parent": [
+                "decode_018"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/alu_operand_b_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_03",
+            "id_parent": [
+                "decode_019"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/alu_operand_c_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_04",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/data_we_ex_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_05",
+            "id_parent": [
+                "decode_021"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/check_s1_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_06",
+            "id_parent": [
+                "decode_022"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/check_s2_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_07",
+            "id_parent": [
+                "decode_023"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/check_d_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_08",
+            "id_parent": [
+                "decode_024"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/register_set_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_09",
+            "id_parent": [
+                "decode_025"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/is_store_post_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_010",
+            "id_parent": [
+                "decode_026"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/memory_set_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_011",
+            "id_parent": [
+                "decode_020"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/regfile_alu_waddr_i_tag",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_012",
+            "id_parent": [
+                "decode_014"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/store_dest_addr_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_013",
+            "id_parent": [
+                "decode_015"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/store_source_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_014",
+            "id_parent": [
+                "decode_016"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/use_store_ops_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_015",
+            "id_parent": [
+                "execution_024"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/regfile_alu_wdata_fw_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_016",
+            "id_parent": [
+                "execution_09",
+                "execution_025",
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/regfile_alu_we_fw_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_017",
+            "id_parent": [
+                "execution_011"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/regfile_alu_waddr_fw_o_tag",
+            "size": 5,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_018",
+            "id_parent": [
+                "execution_03",
+                "execution_024"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/jump_target_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_019",
+            "id_parent": [
+                "execution_026"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/pc_enable_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_020",
+            "id_parent": [
+                "execution_024"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/data_wdata_ex_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_021",
+            "id_parent": [
+                "execution_04",
+                "execution_025"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/data_we_ex_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_022",
+            "id_parent": [
+                "execution_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/rs1_o_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "execution_023",
+            "id_parent": [
+                "tag_check_logic_07"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/exception_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_024",
+            "id_parent": [
+                "tag_propagation_logic_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/alu_result_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_025",
+            "id_parent": [
+                "tag_propagation_logic_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/rf_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_026",
+            "id_parent": [
+                "tag_propagation_logic_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/pc_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_027",
+            "id_parent": [
+                "execution_01",
+                "execution_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/check_a",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_028",
+            "id_parent": [
+                "execution_02",
+                "execution_013"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/check_b",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "execution_029",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/regfile_we_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "tag_propagation_logic": [
+        {
+            "id": "tag_propagation_logic_00",
+            "id_parent": [
+                "execution_00"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/operator_i",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_propagation_logic_01",
+            "id_parent": [
+                "execution_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/operand_a_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_propagation_logic_02",
+            "id_parent": [
+                "execution_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/operand_b_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_propagation_logic_03",
+            "id_parent": [
+                "execution_01",
+                "execution_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/result_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_propagation_logic_04",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/rf_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_propagation_logic_05",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_propagation_logic_i/pc_enable_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "tag_check_logic": [
+        {
+            "id": "tag_check_logic_00",
+            "id_parent": [
+                "execution_027"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/operand_a_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_01",
+            "id_parent": [
+                "execution_028"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/operand_b_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_02",
+            "id_parent": [
+                "execution_024"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/result_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_03",
+            "id_parent": [
+                "execution_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/check_s1_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_04",
+            "id_parent": [
+                "execution_06"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/check_s2_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_05",
+            "id_parent": [
+                "execution_07"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/check_d_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_06",
+            "id_parent": [
+                "execution_029"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/is_load_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "tag_check_logic_07",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/tag_check_logic_i/exception_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "csr": [
+        {
+            "id": "csr_00",
+            "id_parent": [
+                "csr_01"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_o",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "csr_01",
+            "id_parent": [
+                "csr_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q",
+            "size": 32,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "csr_02",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_n",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "csr_03",
+            "id_parent": [
+                "csr_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_o",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "csr_04",
+            "id_parent": [
+                "csr_05"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q",
+            "size": 32,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "csr_05",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_n",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "lsu": [
+        {
+            "id": "lsu_00",
+            "id_parent": [
+                "lsu_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_we_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_01",
+            "id_parent": [
+                "lsu_04"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_wdata_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_02",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_rdata_i_tag",
+            "size": 4,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_03",
+            "id_parent": [
+                "execution_021"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_we_ex_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_04",
+            "id_parent": [
+                "execution_020"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_wdata_ex_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_05",
+            "id_parent": [
+                "lsu_09",
+                "lsu_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_rdata_ex_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_06",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_gnt_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_07",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_rvalid_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_08",
+            "id_parent": [
+                "lsu_03"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_we_q_tag",
+            "size": 1,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "lsu_09",
+            "id_parent": [
+                "lsu_02",
+                "lsu_012"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_q_tag",
+            "size": 4,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "lsu_010",
+            "id_parent": [
+                "lsu_018"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_offset_q_tag",
+            "size": 2,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "lsu_011",
+            "id_parent": [
+                "lsu_019"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_type_q_tag",
+            "size": 2,
+            "registre": 1,
+            "control": 0
+        },
+        {
+            "id": "lsu_012",
+            "id_parent": [
+                "lsu_013",
+                "lsu_014",
+                "lsu_015"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_rdata_ext_tag",
+            "size": 4,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_013",
+            "id_parent": [
+                "lsu_02",
+                "lsu_09"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_w_ext_tag",
+            "size": 4,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_014",
+            "id_parent": [
+                "lsu_02",
+                "lsu_09"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_h_ext_tag",
+            "size": 4,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_015",
+            "id_parent": [
+                "lsu_02"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_b_ext_tag",
+            "size": 4,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_016",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_misaligned_ex_i",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_017",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_misaligned_o",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_018",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_addr_int",
+            "size": 32,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "lsu_019",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_type_ex_i",
+            "size": 2,
+            "registre": 0,
+            "control": 0
+        }
+    ],
+    "controller": [
+        {
+            "id": "controller_00",
+            "id_parent": [
+                "decode_042"
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/controller_i/branch_taken_ex_i_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        },
+        {
+            "id": "controller_01",
+            "id_parent": [
+                -1
+            ],
+            "name": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/controller_i/pc_set_o_tag",
+            "size": 1,
+            "registre": 0,
+            "control": 0
+        }
+    ]
+}

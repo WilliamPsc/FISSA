@@ -1,0 +1,10 @@
+# YAML Configuration File for simulator
+---
+Version: "1.0"
+ApplicationName: "Générateur de fichiers TCL modulables dans le cadre de simulations d'injections de fautes"
+Authors:
+  - "William PENSEC"
+  - "Noura AIT MANSSOUR" # Simulateur basé sur la base développée par Noura AIT MANSSOUR
+DateStartProject: "19/01/2023"
+LastModification: "20/09/2023"
+...

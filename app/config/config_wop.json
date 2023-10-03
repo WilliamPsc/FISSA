@@ -1,0 +1,64 @@
+{
+    "name_simulator": "modelsim",
+    "path_tcl_generation": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2",
+    "path_files_sim": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2/simu_files/",
+    "path_results_sim": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2/simu_files/results_simulations/",
+    "path_simulation": [
+        "/home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/",
+        "__code",
+        "/CMakeFiles/",
+        "__code",
+        ".vsimc.dir/",
+        "__code"
+    ],
+    "prot": "wop",
+    "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
+    "codes": [
+        "buffer_overflow",
+        "secretFunction",
+        "propagationTagV2"
+    ],
+    "threat_model": [
+        "set0",
+        "set1",
+        "bitflip"
+    ],
+    "avoid_register": [
+        "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec_dift",
+        "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o",
+        "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o"
+    ],
+    "log_registers": [
+        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q",
+        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q",
+        "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"
+    ],
+    "fenetre_tir": {
+        "buffer_overflow": [
+            [
+                137140,
+                137380
+            ]
+        ],
+        "secretFunction": [
+            [
+                2099100,
+                2099420
+            ]
+        ],
+        "propagationTagV2": [
+            [
+                33300,
+                33460
+            ]
+        ]
+    },
+    "cycle_ref": 100,
+    "cpu_period": 40,
+    "log_paths": {
+        "tcr": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q",
+        "tpr": "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q",
+        "rf": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg",
+        "rf_tag": "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"
+    }
+}
