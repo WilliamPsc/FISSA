@@ -44,9 +44,10 @@ class TCL:
         self._registers_size = []
         self._tcl_string = []
         self._nb_simu = 0
+        self._nb_simu_total = 0
         self._code_exec = CodeExecute(config_data)
-        # self._log_data = LogData(config_data)
-        # self._inject_fault = FaultInjection(config_data)
+        self._log_data = LogData(config_data)
+        self._inject_fault = FaultInjection(config_data)
 
     @property
     def sim_path(self):
@@ -105,18 +106,18 @@ class TCL:
     @property
     def nb_simu(self):
         '''Return the number of simulations to be done'''
-        return self._nb_simu
+        return self._nb_simu_total
 
     # @nb_simu.setter
-    def set_nb_simu(self, threat_model:list, window:list):
+    def set_nb_simu_total(self, threat_model:list, window:list):
         '''Set number of simulations to be done'''
         for threat in threat_model:
             if(threat == "set0"):
-                self._nb_simu += (len(self._registers_list) * int((window[1] - window[0]) / 40))
+                self._nb_simu_total += (len(self._registers_list) * int((window[1] - window[0]) / 40))
             elif(threat == "set1"):
-                self._nb_simu += (len(self._registers_list) * int((window[1] - window[0]) / 40))
+                self._nb_simu_total += (len(self._registers_list) * int((window[1] - window[0]) / 40))
             elif(threat == "bitflip"):
-                self._nb_simu += (sum(self._registers_size) * int((window[1] - window[0]) / int(self._config_data_simulator['cpu_period'])))
+                self._nb_simu_total += (sum(self._registers_size) * int((window[1] - window[0]) / int(self._config_data_simulator['cpu_period'])))
 
 
 
@@ -125,13 +126,13 @@ class TCL:
         """Function used to build the simulation TCL string"""
         reg_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-ver-" + self._protection + "/faulted-reg.yaml"
         for window in self._config_data_simulator['fenetre_tir'][self._code]:
-            self.set_nb_simu(self._config_data_simulator["threat_model"], window)
-            print("Number of simulations to be run : {nbSim}".format(nbSim = self._nb_simu))
+            self.set_nb_simu_total(self._config_data_simulator["threat_model"], window)
+            print("Number of simulations to be run : {nbSim}".format(nbSim = self._nb_simu_total))
 
-            # log_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-ver-unprotected/" + self._code + "-ver-unprotected_" + str(fenetre[0]) +".json"
+            log_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-ver-unprotected/" + self._code + "-ver-unprotected_" + str(window[0]) +".json"
 
-            # self.build_ref_sim(reg_file_sim, log_file_sim, fenetre, self._nb_simus)
-            # self.build_simus(fenetre, self.nb_simu())
+            self.build_ref_sim(reg_file_sim, log_file_sim, window, self._nb_simu_total)
+            self.build_simus(window, self._nb_simu_total)
             
 
     def build_ref_sim(self, reg_file_sim, log_file_sim, fenetre, nb_simulations):
@@ -206,6 +207,7 @@ class TCL:
         name_regs = []
         size_regs = []
         try:
+            print(self._files_sim)
             with open(self._files_sim + "registers/registers_" + self._protection + ".yaml", "r", encoding="utf-8") as registers_file:
                 try:
                     registers = yaml.safe_load(registers_file)
@@ -216,7 +218,7 @@ class TCL:
                     name_regs.append(data_reg['name'])
                     size_regs.append(data_reg['width'])
         except FileNotFoundError:
-            print("File not found. Please check the installation.")
+            print(f"File registers_{self._protection}.yaml not found. Please check the installation.")
             return 1
         self._registers_list = name_regs
         self._registers_size = size_regs

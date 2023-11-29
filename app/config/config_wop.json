@@ -1,8 +1,8 @@
 {
     "name_simulator": "modelsim",
-    "path_tcl_generation": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2",
-    "path_files_sim": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2/simu_files/",
-    "path_results_sim": "/home/wpensec/these/trustift/simulateurs/simulateurFIAV2/simu_files/results_simulations/",
+    "path_tcl_generation": "/home/wpensec/these/genTCL_fault_injections",
+    "path_files_sim": "/home/wpensec/these/genTCL_fault_injections/simu_files/",
+    "path_results_sim": "/home/wpensec/these/genTCL_fault_injections/simu_files/results_simulations/",
     "path_simulation": [
         "/home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/",
         "__code",
