@@ -7,11 +7,15 @@
 """
 
 ### Import packages ###
+from timeit import default_timer as timer
 from main import Main
 
 ### Execute simulator ###
 if __name__ == "__main__":
+    start_time_main = timer()
     protect = "wop"
     app_main = Main(protect=protect)
     app_main.read_config()
     app_main.launch_generator()
+    end_time = timer()
+    print(f'Execute time main : {round(1000*(end_time - start_time_main), 2)} ms')

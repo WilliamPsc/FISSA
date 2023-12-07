@@ -36,16 +36,21 @@ close $f
 """.format(regs_file = reg_file, state_file = log_file)
 
     def init_tcl_variables(self, start_window):
+        log_registers = ""
+        for reg in self._config_data['avoid_log_registers']:
+            log_registers += str(reg) + " "
         return """
 ###### INIT VARIABLES ######
 ### CONTROL ###
-set periode 40
+set periode {periode}
+set half_periode [expr {{$periode / 2}}]
+
 set start {start_ns}
 set nb_sim 0  ;# Simulation number
 set sim_active 1 ;# Active sim Boolean
 set cycle_ref {init_cycle} ;# Setting the number of reference cycles for the complete simulation
 set cycle_curr 0
-set log_registers_list [split "{log_reg}" ',']
+set log_registers_list {{{log_reg}}}
 
 ### FAULTED REGISTER ###
 set threat ""
@@ -58,8 +63,7 @@ set cycle_ill_insn ""
 
 ### STATUS END ###
 set status_end -1 ;# End of simulation code (0: reference simulation / 1: reference cycle number exceeded (crash) / 2: jump to illegal instruction handler (identical to reference simulation) / 3: jump to illegal instruction handler (delayed) / 4: success / 5: error detected / ...)
-
-""".format(start_ns=start_window[0], init_cycle=self._cycle_ref, log_reg = ','.join(self._config_data['log_registers']))
+""".format(start_ns=start_window[0], init_cycle=self._cycle_ref, log_reg = log_registers, periode = self.config_data['cpu_period'])
 
     def gen_simu_ref(self):
         return """
@@ -94,8 +98,8 @@ set cycle_curr 0
     def init_sim_attacked(self, nb_sim, start_time, threat, register, size_register = 1):
         return """
 ##############################################################################
-incr nb_sim
 ############# ATTACK {number} #############
+set nb_sim {number}
 ###### JUMP TO ATTACK START ######
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
