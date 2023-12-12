@@ -11,34 +11,39 @@
 ### Class ###
 class FaultInjection:
     def __init__(self, config_data):
-        self._simulator = config_data["name_simulator"]
+        self.__simulator = config_data["name_simulator"]
 
-    def inject_fault(self, bit_flipped = 0):
-        match self._simulator:
-            case "modelsim":
-                return self.fault_modelsim(bit_flipped)
-            case "xsim":
+    def inject_fault(self, threat, bit_flipped = 0):
+        match threat:
+            case "set0":
+                return self.__set0()
+            case "set1":
+                return self.__set1()
+            case "bitflip":
+                return self.__bitflip(bit_flipped)
+            case "multi_bitflip_spatial":
                 pass
-            case "verilator":
+            case "multi_bitflip_temporel":
                 pass
             case _:
                 return ""
 
-    def fault_modelsim(self, bit_flipped):
+
+    # def fault_modelsim(self, threat, bit_flipped):
         return """
 if {{$threat == "set0"}} {{
     if {{$faulted_register == "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"}} {{
         for {{set j 0}} {{$j < [llength $faulted_register]}} {{incr j}} {{
-            force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{{$j}}\] "1'h0" 0 -cancel "$periode ns"
+            force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{{$j}}\] "1'h0" 0 -cancel "$half_periode ns"
         }}
     }} else {{
-        force -freeze $faulted_register 0 0 -cancel "$periode ns"
+        force -freeze $faulted_register 0 0 -cancel "$half_periode ns"
     }}  
 }} elseif {{$threat == "set1"}} {{
     if {{$width_threat == 1}} {{
-        force -freeze $faulted_register 1'h1 0 -cancel "$periode ns"
+        force -freeze $faulted_register 1'h1 0 -cancel "$half_periode ns"
     }} else {{
-        force -freeze $faulted_register [concat [expr $width_threat]'h[string repeat F $width_threat]] 0 -cancel "$periode ns"
+        force -freeze $faulted_register [concat [expr $width_threat]'h[string repeat F $width_threat]] 0 -cancel "$half_periode ns"
     }}
 }} elseif {{$threat == "bitflip"}} {{
     if {{$width_threat == 1}} {{
@@ -58,31 +63,33 @@ if {{$threat == "set0"}} {{
 }}
 """.format(wreg = bit_flipped)
 
-    def set0(self):
+    def __set0(self):
+        """Return the code to inject a fault in case of a bit reset fault injection scenario"""
         return """
 if {$threat == "set0"} {
     if {$faulted_register == "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"} {
         for {set j 0} {$j < [llength $faulted_register]} {incr j} {
-            force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\] "1'h0" 0 -cancel "$periode ns"
+            force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\] "1'h0" 0 -cancel "$half_periode ns"
         }
     } else {
-        force -freeze $faulted_register 0 0 -cancel "$periode ns"
+        force -freeze $faulted_register 0 0 -cancel "$half_periode ns"
     }  
 }
 """
 
-    def set1(self):
+    def __set1(self):
+        """Return the code to inject a fault in case of a bit set fault injection scenario"""
         return """
 if {$threat == "set1"} {
     if {$width_threat == 1} {
-        force -freeze $faulted_register 1'h1 0 -cancel "$periode ns"
+        force -freeze $faulted_register 1'h1 0 -cancel "$half_periode ns"
     } else {
-        force -freeze $faulted_register [concat [expr $width_threat]'h[string repeat F $width_threat]] 0 -cancel "$periode ns"
+        force -freeze $faulted_register [concat [expr $width_threat]'h[string repeat F $width_threat]] 0 -cancel "$half_periode ns"
     }
 }
 """
 
-    def bitflip(self, bit_flipped):
+    def __bitflip(self, bit_flipped):
         return """
 if {{$threat == "bitflip"}} {{
     if {{$width_threat == 1}} {{
@@ -102,10 +109,10 @@ if {{$threat == "bitflip"}} {{
 }}
 """.format(wreg = bit_flipped)
     
-    def multi_bitflip_spatial(self, bit_flipped_1, bit_flipped_2):
+    def __multi_bitflip_spatial(self, bit_flipped_1, bit_flipped_2):
         """Generate code for a spatial multi-bit-flip fault threat model"""
         pass
 
-    def multi_bitflip_temporel(self):
+    def __multi_bitflip_temporel(self):
         """Generate code for a multi-bit-flip temporal fault threat model"""
         pass

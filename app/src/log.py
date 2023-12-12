@@ -11,13 +11,13 @@
 ### Class ###
 class LogData:
     def __init__(self, config_data):
-        self._simulator = config_data["name_simulator"]
+        self.__simulator = config_data["name_simulator"]
         # Ajout des chemins vers csr, tpr, tcr, rf, rft, ....
 
-    def log_sim(self):
-        match self._simulator:
+    def log_sim(self, nb_file = 1):
+        match self.__simulator:
             case "modelsim":
-                return self.log_data_modelsim()
+                return self.log_data_modelsim(nb_file)
             case "xsim":
                 pass
             case "verilator":
@@ -25,9 +25,10 @@ class LogData:
             case _:
                 return ""
 
-    def log_data_modelsim(self):
+    def log_data_modelsim(self, nb_file = 1):
         # insérer tcl list avoid registers + insérer log_paths du fichier de config
-        return """
+        if(nb_file == 1):
+            return """
 #############  LOG #############
 #---- INIT ----
 set f [open $state_file a]
@@ -78,3 +79,5 @@ puts $f "\\t},"
 #---- Close log ----
 close $f
 """
+        else:
+            return ""

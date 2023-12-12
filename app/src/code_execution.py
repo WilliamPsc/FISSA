@@ -14,15 +14,16 @@ class CodeExecute:
     ## Class constructor
     # def __init__(self, config_data):
     def __init__(self, config_data:dict):
-        self._config_data = config_data
-        self._cycle_ref = self._config_data['cycle_ref']
+        self.__config_data = config_data
+        self.__cycle_ref = self.__config_data['cycle_ref']
 
     @property
     def config_data(self):
-        return self._config_data
+        return self.__config_data
 
-    def init_sim(self, reg_file, log_file):
-        return """#############  INIT SIMULATIONS #############
+    def init_sim(self, reg_file, log_file, nb_file):
+        if(nb_file == 1):
+            return """#############  INIT SIMULATIONS #############
 set regs_file {regs_file}
 set state_file {state_file}
 set f [open $state_file w]
@@ -34,10 +35,19 @@ set f [open $regs_file r]
 set reg_file_data [read $f]
 close $f
 """.format(regs_file = reg_file, state_file = log_file)
+        else:
+            return """#############  INIT SIMULATIONS #############
+set regs_file {regs_file}
+set state_file {state_file}
 
+set f [open $regs_file r]
+set reg_file_data [read $f]
+close $f
+""".format(regs_file = reg_file, state_file = log_file)
+        
     def init_tcl_variables(self, start_window):
         log_registers = ""
-        for reg in self._config_data['avoid_log_registers']:
+        for reg in self.__config_data['avoid_log_registers']:
             log_registers += str(reg) + " "
         return """
 ###### INIT VARIABLES ######
@@ -63,7 +73,7 @@ set cycle_ill_insn ""
 
 ### STATUS END ###
 set status_end -1 ;# End of simulation code (0: reference simulation / 1: reference cycle number exceeded (crash) / 2: jump to illegal instruction handler (identical to reference simulation) / 3: jump to illegal instruction handler (delayed) / 4: success / 5: error detected / ...)
-""".format(start_ns=start_window[0], init_cycle=self._cycle_ref, log_reg = log_registers, periode = self.config_data['cpu_period'])
+""".format(start_ns=start_window[0], init_cycle=self.__cycle_ref, log_reg = log_registers, periode = self.config_data['cpu_period'])
 
     def gen_simu_ref(self):
         return """

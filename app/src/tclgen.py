@@ -30,98 +30,98 @@ class TCL:
     # def __init__(self, nb_simulations, path, simulator, commands_simulator, codes):
     def __init__(self, config_data:dict, code:str, prot:str):
         # Initializing attributes
-        self._config_data_simulator = config_data
-        self._sim_path = config_data["path_tcl_generation"]
-        self._name_simulator = config_data["name_simulator"]
-        self._files_sim = config_data["path_files_sim"]
-        self._threat_model = config_data['threat_model']
-        self._code = code
-        self._protection = prot
-        self._res_path = config_data["path_results_sim"] + code + "/" + code + "-" + self._protection + "_" + '-'.join(self._threat_model) + "/"
-        if os.path.exists(self._res_path):
-            shutil.rmtree(self._res_path)
-        os.makedirs(self._res_path)
-        self._registers_list = list()
-        self._registers_size = list()
-        self._tcl_string =  list()
-        self._nb_simu = 0
-        self._nb_simu_total = 0
-        self._code_exec = CodeExecute(config_data)
-        self._log_data = LogData(config_data)
-        self._inject_fault = FaultInjection(config_data)
-        self._batch_number = 1
-        self._batch_max_sim:int = config_data["batch_sim"]
-        self._build_make_list = list()
+        self.__config_data_simulator = config_data
+        self.__sim_path = config_data["path_tcl_generation"]
+        self.__name_simulator = config_data["name_simulator"]
+        self.__files_sim = config_data["path_files_sim"]
+        self.__threat_model = config_data['threat_model']
+        self.__code = code
+        self.__protection = prot
+        self.__res_path = config_data["path_results_sim"] + code + "/" + code + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/"
+        if os.path.exists(self.__res_path):
+            shutil.rmtree(self.__res_path)
+        os.makedirs(self.__res_path)
+        self.__registers_list = list()
+        self.__registers_size = list()
+        self.__tcl_string =  list()
+        self.__nb_simu = 0
+        self.__nb_simu_total = 0
+        self.__code_exec = CodeExecute(config_data)
+        self.__log_data = LogData(config_data)
+        self.__inject_fault = FaultInjection(config_data)
+        self.__batch_number = 1
+        self.__batch_max_sim:int = config_data["batch_sim"]
+        self.__build_make_list = list()
 
     @property
     def sim_path(self):
-        return self._sim_path
+        return self.__sim_path
     
     @property
     def name_simulator(self):
-        return self._name_simulator
+        return self.__name_simulator
 
     @property  
     def files_sim(self):
-        return self._files_sim
+        return self.__files_sim
 
     @property
     def code(self):
-        return self._code
+        return self.__code
  
     @property
     def version_code(self):
-        return self._protection
+        return self.__protection
 
     @property
     def res_path(self):
-        return self._res_path
+        return self.__res_path
 
     @property
     def tcl_file(self):
-        return self._tcl_file
+        return self.__tcl_file
 
     @property
     def registers_list(self):
         '''Getter register_list : list variable'''
-        return self._registers_list
+        return self.__registers_list
     
     @registers_list.setter
     def registers_list(self, values:list):
         '''Setter register_list : list variable'''
         if(type(values) is list):
-            self._registers_list = values
+            self.__registers_list = values
         else:
-            self._registers_list = []
+            self.__registers_list = []
 
     @property
     def registers_size(self):
         '''Getter registers_size : list variable'''
-        return self._registers_size
+        return self.__registers_size
     
     @registers_size.setter
     def registers_size(self, values:list):
         '''Setter registers_size : list variable'''
         if(type(values) is list):
-            self._registers_size = values
+            self.__registers_size = values
         else:
-            self._registers_size = []
+            self.__registers_size = []
 
     @property
     def nb_simu(self):
         '''Return the number of simulations to be done'''
-        return self._nb_simu_total
+        return self.__nb_simu_total
 
     @property
     def build_make_list(self):
         '''Getter build_make_list : list variable'''
-        return self._build_make_list
+        return self.__build_make_list
 
     @build_make_list.setter
     def build_make_list(self, value:str) -> int:
         '''Setter build_make_list : list variable'''
-        self._build_make_list.append(value)
-        if(value in self._build_make_list):
+        self.__build_make_list.append(value)
+        if(value in self.__build_make_list):
             return 0
         else:
             return 1
@@ -131,99 +131,138 @@ class TCL:
         '''Set number of simulations to be done'''
         for threat in threat_model:
             if(threat == "set0"):
-                self._nb_simu_total += (len(self._registers_list) * int((window[1] - window[0]) / 40))
+                self.__nb_simu_total += (len(self.__registers_list) * int((window[1] - window[0]) / 40))
             elif(threat == "set1"):
-                self._nb_simu_total += (len(self._registers_list) * int((window[1] - window[0]) / 40))
+                self.__nb_simu_total += (len(self.__registers_list) * int((window[1] - window[0]) / 40))
             elif(threat == "bitflip"):
-                self._nb_simu_total += (sum(self._registers_size) * int((window[1] - window[0]) / int(self._config_data_simulator['cpu_period'])))
+                self.__nb_simu_total += (sum(self.__registers_size) * int((window[1] - window[0]) / int(self.__config_data_simulator['cpu_period'])))
+            elif(threat == "multi_bitflip_spatial"):
+                pass
+            elif(threat == "multi_bitflip_temporel"):
+                pass
+            else:
+                pass
 
     ## Fonction servant à construire la chaîne de simulation
     def build_data_string(self):
         """Function used to build the simulation TCL string"""
-        path_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-" + self._protection + "_" + '-'.join(self._threat_model) + "/"
+        path_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/"
         reg_file_sim = path_file_sim + "faulted_regs.yaml"
-        for window in self._config_data_simulator['fenetre_tir'][self._code]:
-            self.set_nb_simu_total(self._config_data_simulator["threat_model"], window)
-            print(f"Number of simulations to be run : {self._nb_simu_total}")
+        for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
+            self.set_nb_simu_total(self.__config_data_simulator["threat_model"], window)
+            print(f"Number of simulations to be run : {self.__nb_simu_total}")
             file_number = 1
-            if(self._nb_simu_total < self._batch_max_sim):
-                nb_files = math.ceil(self._nb_simu_total / self._batch_max_sim)
+            if(self.__nb_simu_total < self.__batch_max_sim):
+                nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
                 print("Nombre de fichiers à générer :", nb_files)
-                file_str = "source\ " + str(path_file_sim) + str(self._code) + "_" + str(self._protection) + "_" + str(file_number) + ".tcl"
+                file_str = "source\ " + str(path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(file_number) + ".tcl"
                 self.build_make_list = file_str
-                self._tcl_file = self._res_path + self._code + "_" + self._protection + "_" + str(file_number) + ".tcl"
-                log_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-" + self._protection + "/" + self._code + "-" + self._protection + "_" + str(file_number) + ".json"
-                self.build_ref_sim(reg_file_sim, log_file_sim, window, self._nb_simu_total)
-                self.build_simus(window, self._nb_simu_total, self._batch_max_sim)
+                self.__tcl_file = self.__res_path + self.__code + "_" + self.__protection + "_" + str(file_number) + ".tcl"
+                log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_" + str(file_number) + ".json"
+                self.build_ref_sim(reg_file_sim, log_file_sim, window, self.__nb_simu_total, 1)
+                self.build_simus(window, self.__nb_simu_total, self.__batch_max_sim)
             else:
-                nb_files = math.ceil(self._nb_simu_total / self._batch_max_sim)
+                nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
                 print("Nombre de fichiers à générer :", nb_files)
                 for i in range(nb_files):
                     if(file_number != -1):
-                        file_str = "source\ " + str(path_file_sim) + str(self._code) + "_" + str(self._protection) + "_" + str(file_number) + ".tcl"
+                        file_str = "source\ " + str(path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(file_number) + ".tcl"
                         self.build_make_list = file_str
-                        self._tcl_file = self._res_path + self._code + "_" + self._protection + "_" + str(file_number) + ".tcl"
-                        # log_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-" + self._protection + "/" + self._code + "-" + self._protection + "_" + str(file_number) +".json"
-                        log_file_sim = ''.join(self._config_data_simulator['path_simulation']).replace('__code', self._code) + "-" + self._protection + "/" + self._code + "-" + self._protection + ".json"
-                        self.build_ref_sim(reg_file_sim, log_file_sim, window, self._nb_simu_total)
-                        file_number = self.build_simus(window, self._nb_simu_total, self._batch_max_sim)
+                        self.__tcl_file = self.__res_path + self.__code + "_" + self.__protection + "_" + str(file_number) + ".tcl"
+                        log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + ".json"
+                        self.build_ref_sim(reg_file_sim, log_file_sim, window, self.__nb_simu_total, file_number)
+                        file_number = self.build_simus(window, self.__nb_simu_total, self.__batch_max_sim)
         self.gen_build_make()
             
-    def build_ref_sim(self, reg_file_sim, log_file_sim, fenetre, nb_simulations):
-        self._tcl_string = list()
-        self._tcl_string.append(self._code_exec.init_sim(reg_file_sim, log_file_sim))
-        self._tcl_string.append(self._code_exec.init_tcl_variables(fenetre))
-        self._tcl_string.append(self._code_exec.gen_simu_ref())
-        self._tcl_string.append(self._code_exec.run_simu_ref())
-        self._tcl_string.append(self._log_data.log_sim())
-        self._tcl_string.append(self._code_exec.end_sim(0,nb_simulations))
-        self.write_tcl_file(''.join(self._tcl_string))
+    def build_ref_sim(self, reg_file_sim, log_file_sim, fenetre, nb_simulations, nb_file = 1):
+        self.__tcl_string = list()
+        self.__tcl_string.append(self.__code_exec.init_sim(reg_file_sim, log_file_sim, nb_file))
+        self.__tcl_string.append(self.__code_exec.init_tcl_variables(fenetre))
+        self.__tcl_string.append(self.__code_exec.gen_simu_ref())
+        self.__tcl_string.append(self.__code_exec.run_simu_ref())
+        self.__tcl_string.append(self.__log_data.log_sim(nb_file))
+        self.__tcl_string.append(self.__code_exec.end_sim(0,nb_simulations))
+        self.write_tcl_file(''.join(self.__tcl_string))
      
     def build_simus(self, fenetre, nb_simulations, nb_simu_max_batch):
-        self._tcl_string = list()
-        for reg in self._registers_list: # attention lorsqu'un registre est un tableau de plusieurs bits
-            if (reg not in self._config_data_simulator['avoid_register']):
-                for threat in self._threat_model:
+        self.__tcl_string = list()
+        for reg in self.__registers_list: # attention lorsqu'un registre est un tableau de plusieurs bits
+            if (reg not in self.__config_data_simulator['avoid_register']):
+                for threat in self.__threat_model:
                     if(threat == "bitflip"):
-                        for wreg in range(self._registers_size[self._registers_list.index(reg)]):
+                        for wreg in range(self.__registers_size[self.__registers_list.index(reg)]):
                             for start_time in range(fenetre[0], fenetre[1], 40):
-                                self._tcl_string = list()
-                                self._nb_simu += 1
-                                self._tcl_string.append(self._code_exec.init_sim_attacked(self._nb_simu, start_time, threat, reg, self._registers_size[self._registers_list.index(reg)]))
-                                self._tcl_string.append(self._inject_fault.inject_fault(wreg))
-                                self._tcl_string.append(self._code_exec.run_sim_attacked())
-                                self._tcl_string.append(self._log_data.log_sim())
-                                self._tcl_string.append(self._code_exec.end_sim(self._nb_simu, nb_simulations))
+                                self.__tcl_string = list()
+                                self.__nb_simu += 1
+                                self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, threat, reg, self.__registers_size[self.__registers_list.index(reg)]))
+                                self.__tcl_string.append(self.__inject_fault.inject_fault(threat, wreg))
+                                self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                                self.__tcl_string.append(self.__log_data.log_sim())
+                                self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                                 try:
-                                    self.write_tcl_file(''.join(self._tcl_string))
+                                    self.write_tcl_file(''.join(self.__tcl_string))
                                 except TypeError as e:
                                     print("TypeError")
                                     return -1
-                                if(self._nb_simu >= (nb_simu_max_batch * self._batch_number)):
-                                    self._batch_number += 1
-                                    return self._batch_number
-                                if(self._nb_simu >= nb_simulations):
+                                if(self.__nb_simu >= (nb_simu_max_batch * self.__batch_number)):
+                                    self.__batch_number += 1
+                                    return self.__batch_number
+                                if(self.__nb_simu >= nb_simulations):
                                     return -1
                     else:
                         for start_time in range(fenetre[0], fenetre[1], 40):
-                            self._tcl_string = list()
-                            self._nb_simu += 1
-                            self._tcl_string.append(self._code_exec.init_sim_attacked(self._nb_simu, start_time, threat, reg, self._registers_size[self._registers_list.index(reg)]))
-                            self._tcl_string.append(self._inject_fault.inject_fault())
-                            self._tcl_string.append(self._code_exec.run_sim_attacked())
-                            self._tcl_string.append(self._log_data.log_sim())
-                            self._tcl_string.append(self._code_exec.end_sim(self._nb_simu, nb_simulations))
+                            self.__tcl_string = list()
+                            self.__nb_simu += 1
+                            self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, threat, reg, self.__registers_size[self.__registers_list.index(reg)]))
+                            self.__tcl_string.append(self.__inject_fault.inject_fault(threat))
+                            self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                            self.__tcl_string.append(self.__log_data.log_sim())
+                            self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                             try:
-                                self.write_tcl_file(''.join(self._tcl_string))
+                                self.write_tcl_file(''.join(self.__tcl_string))
                             except TypeError:
-                                print(self._nb_simu, self._tcl_file, nb_simulations, nb_simu_max_batch)
-                                print(self._tcl_string)
+                                print(self.__nb_simu, self.__tcl_file, nb_simulations, nb_simu_max_batch)
+                                print(self.__tcl_string)
                                 return -1
-                            if(self._nb_simu >= (nb_simu_max_batch * self._batch_number)):
-                                self._batch_number += 1
-                                return self._batch_number
-                            if(self._nb_simu >= nb_simulations):
+                            if(self.__nb_simu >= (nb_simu_max_batch * self.__batch_number)):
+                                self.__batch_number += 1
+                                return self.__batch_number
+                            if(self.__nb_simu >= nb_simulations):
                                 return -1
+
+    def build_faulted_simu(self):
+        for threat in self.__threat_model:
+            if(threat == "multi_bitflip_spatial"):
+                self.build_multi_bitflip_spatial()
+            if(threat == "multi_bitflip_temporel"):
+                self.build_multi_bitflip_temporel()
+
+            match threat:
+                case "set0":
+                    self.build_bit_reset_simu()
+                case "set1":
+                    self.build_bit_set_simu()
+                case "bitflip":
+                    self.build_bitflip_simu()
+                case _:
+                    print("Unknown threat model. You forgot to define it.")
+
+    def build_bit_set_simu(self):
+        for reg in self.__registers_list:
+            if(reg not in self.__config_data_simulator['avoid_register']):
+                pass
+
+    def build_bit_reset_simu(self):
+        pass
+
+    def build_bitflip_simu(self):
+        pass
+
+    def build_multi_bitflip_spatial(self):
+        pass
+
+    def build_multi_bitflip_temporel(self):
+        pass
 
     ## Fonction servant à écrire le fichier tcl final avec toutes les données de simulations
     def write_tcl_file(self, data):
@@ -232,7 +271,7 @@ class TCL:
             - this function append the string to the file
         """
         try:
-            with open(self._tcl_file, 'a') as tcl_f:
+            with open(self.__tcl_file, 'a') as tcl_f:
                 tcl_f.write(data)
         except Exception as e:
             print("Une exception est survenue : {exc}".format(exc=e.args[1]))
@@ -246,7 +285,7 @@ class TCL:
         name_regs = []
         size_regs = []
         try:
-            with open(self._files_sim + "registers/registers_" + self._protection + ".yaml", "r", encoding="utf-8") as registers_file:
+            with open(self.__files_sim + "registers/registers_" + self.__protection + ".yaml", "r", encoding="utf-8") as registers_file:
                 try:
                     registers = yaml.safe_load(registers_file)
                 except yaml.YAMLError as e:
@@ -256,17 +295,17 @@ class TCL:
                     name_regs.append(data_reg['name'])
                     size_regs.append(data_reg['width'])
         except FileNotFoundError:
-            print(f"File registers_{self._protection}.yaml not found. Please check the installation.")
+            print(f"File registers_{self.__protection}.yaml not found. Please check the installation.")
             return 1
-        self._registers_list = name_regs
-        self._registers_size = size_regs
+        self.__registers_list = name_regs
+        self.__registers_size = size_regs
         return 0
     
     def write_faulted_registers_file(self):
         """Create the faulted registers file in the simulation folder."""
         try:
-            with open(self._res_path + "faulted_regs.yaml", 'w') as file:
-                yaml.dump(self._registers_list, file, default_flow_style=False)
+            with open(self.__res_path + "faulted_regs.yaml", 'w') as file:
+                yaml.dump(self.__registers_list, file, default_flow_style=False)
         except Exception as e:
             print("An exception has occurred : {exc}".format(exc=e.args[1]))
             return 1
@@ -275,6 +314,8 @@ class TCL:
     def gen_build_make(self):
         """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
         str_to_clipboard = ""
-        for elem in self._build_make_list:
-            str_to_clipboard += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/wpensec/Documents/DRiSCY/pulpino/vsim\ TB_TEST=""\ /home/wpensec/tools_memphis/questa/questasim/linux_x86_64/vsim\ \ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ " + elem + "\;\ exit\;'\ > vsim.log"
-        pyperclip.copy(str_to_clipboard)
+        if (len(self.__build_make_list) != 0):
+            str_to_clipboard = "cd /home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/" + self.__code
+            for elem in self.__build_make_list:
+                str_to_clipboard += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/wpensec/Documents/DRiSCY/pulpino/vsim\ TB_TEST=\"\"\ /home/wpensec/tools_memphis/questa/questasim/linux_x86_64/vsim\ \ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ " + elem + "\;\ exit\;'\ > vsim.log"
+            pyperclip.copy(str_to_clipboard)

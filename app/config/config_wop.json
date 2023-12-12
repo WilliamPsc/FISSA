@@ -3,6 +3,7 @@
     "path_tcl_generation": "/home/pensec/Documents/Github/genTCL_fault_injections/",
     "path_files_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/",
     "path_results_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/results_simulations/",
+    "work_env": "/home/pensec/Documents/Divers/sharedFolder",
     "path_simulation": [
         "/home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/",
         "__code",
@@ -19,7 +20,9 @@
         "propagationTagV2"
     ],
     "threat_model": [
-        "set0"
+        "set0",
+        "set1",
+        "bitflip"
     ],
     "avoid_register": [
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec_dift",
@@ -140,5 +143,5 @@
     },
     "cycle_ref": 100,
     "cpu_period": 40,
-    "batch_sim": 165
+    "batch_sim": 500
 }
