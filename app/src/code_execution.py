@@ -21,7 +21,7 @@ class CodeExecute:
     def config_data(self):
         return self.__config_data
 
-    def init_sim(self, reg_file, log_file, nb_file):
+    # def init_sim(self, reg_file, log_file, nb_file):
         if(nb_file == 1):
             return """#############  INIT SIMULATIONS #############
 set regs_file {regs_file}
@@ -39,6 +39,20 @@ close $f
             return """#############  INIT SIMULATIONS #############
 set regs_file {regs_file}
 set state_file {state_file}
+
+set f [open $regs_file r]
+set reg_file_data [read $f]
+close $f
+""".format(regs_file = reg_file, state_file = log_file)
+        
+    def init_sim(self, reg_file, log_file, nb_file):
+        return """#############  INIT SIMULATIONS #############
+set regs_file {regs_file}
+set state_file {state_file}
+set f [open $state_file w]
+puts $f "{{"
+puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
+close $f
 
 set f [open $regs_file r]
 set reg_file_data [read $f]
@@ -110,6 +124,7 @@ set cycle_curr 0
 ##############################################################################
 ############# ATTACK {number} #############
 set nb_sim {number}
+puts "Simulation number : $nb_sim"
 ###### JUMP TO ATTACK START ######
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
@@ -127,6 +142,32 @@ set bit_flipped -1
 set status_end -1 
 """.format(number = nb_sim, start_window = start_time, faute = threat, width_register = size_register, reg = register)
 
+    def init_sim_attacked_multi_bitflip(self, nb_sim, start_time, threat, register_0 = '', size_register_0 = 1, register_1 = '', size_register_1 = 1):
+        return """
+##############################################################################
+############# ATTACK {number} #############
+set nb_sim {number}
+puts "Simulation number : $nb_sim"
+###### JUMP TO ATTACK START ######
+set start_sim "{start_window} ns"
+run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
+
+set nb_cycle [expr [expr {start_window} - $start] / 40]
+set sim_active 1
+##---------------------
+###### FORCE VALUE ON FAULTED REGISTER ######
+set threat "{faute}"
+set width_register_0 {width_register_0}
+set faulted_register_0 {reg_0}
+set width_register_1 {width_register_1}
+set faulted_register_1 {reg_1}
+set bit_flipped_0 -1
+set bit_flipped_1 -1
+
+### STATUS END ###
+set status_end -1 
+""".format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1)
+
     def run_sim_attacked(self):
         return """
 ###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
@@ -139,6 +180,53 @@ while {$sim_active == 1} {
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
     if {$nb_cycle > $cycle_ref} {
+        ## CYCLE OVERFLOW : CRASH ##
+        set sim_active 0
+        set status_end 1
+    } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
+        ## INSN ILL HANDLER ##
+        if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
+            # Illegal insn handler au même moment que simulation 0  : NOTHING #
+            set status_end 2
+        } else {
+            # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
+            set status_end 3
+        }
+        set sim_active 0
+    } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
+        ## RAS ##
+        set status_end 0
+        set sim_active 0
+    } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
+        ## SUCCESS ? ##
+        set status_end 4
+        set sim_active 0
+    }
+}
+"""
+
+    def run_sim_attacked_hamming(self):
+        return """
+###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
+while {$sim_active == 1} {
+    run "$periode ns" ;# run 1 cycle
+    incr nb_cycle
+
+    set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
+
+    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
+    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
+    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
+    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
+    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
+
+    #############  CHECKING SIM VALUES #############
+    ## if conditions to stop the run cycles
+    if {[expr {$error_tcr} != {"5'h0"}] || [expr {$error_tpr} != {"5'h0"}] || [expr {$error_addr_tag} != {"4'h0"}] || [expr {$error_26} != {"5'h0"}] || [expr {$error_rf_tag} != {"6'h0"}]} {
+        ## Detection error ##
+        set status_end 5
+        set sim_active 0
+    } elseif {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1

@@ -80,6 +80,7 @@ class Main:
         # codes = self.get_codes()
         codes = ["buffer_overflow"]
         for code in codes:
+            print("===============", code, "===============")
             tcl_gen = TCL(self.__config_data, code, protection)
             tcl_gen.read_register_list()
             tcl_gen.write_faulted_registers_file()
@@ -90,3 +91,4 @@ class Main:
             #         src = self.__results_folder + '/' + code + '/' + code + "-" + protection + "_" + '-'.join(self.__config_data['threat_model'])
             #         dest = self.__config_data['work_env']
             #         shutil.copytree(src,dest,dirs_exist_ok=True)
+            print("\n")

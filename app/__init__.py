@@ -13,7 +13,11 @@ from main import Main
 ### Execute simulator ###
 if __name__ == "__main__":
     start_time_main = timer()
-    protect = "wop"
+    print("======== List of protections available ========")
+    print("\t - Without protection: wop")
+    print("\t - Hamming Code: hamming")
+    # protect = input("Which protection do you want to use ? ")
+    protect = "hamming"
     app_main = Main(protect=protect)
     app_main.read_config()
     app_main.launch_generator()

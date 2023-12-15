@@ -12,7 +12,7 @@
         ".vsimc.dir/",
         "__code"
     ],
-    "prot": "wop",
+    "prot": "hamming",
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",
