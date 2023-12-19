@@ -113,7 +113,7 @@ if {{$threat == "bitflip"}} {{
         """Generate code for a spatial multi-bit-flip fault threat model"""
         if(size_reg_0 == 1 and size_reg_1 == 1):
             return """
-# 2 registres taille 1, on flippe les deux bits simplement
+# Both registers size are equal to 1
 ## Bit flip registre 0
 set value_curr_reg [examine -bin $faulted_register_0]
 set value [lindex [split $value_curr_reg b] 1]
@@ -130,7 +130,7 @@ force -freeze $faulted_register_1 $bf 0 -cancel "$half_periode ns"
 """
         elif(size_reg_0 > 1 and size_reg_1 == 1):
             return """
-# 1 registre taille 1 et l'autre taille différente, on flippe le bit du 1er registre normalement et pour l'autre registre on regarde le bit à flip en paramètre
+# The first register size is different of 1, we flip the bit indicated in arg 1, the other register size is equal to 1
 ## Bit flip registre 0
 set bit_attacked {wreg_0}
 set bit_flipped_0 $bit_attacked
@@ -148,7 +148,7 @@ force -freeze $faulted_register_1 $bf 0 -cancel "$half_periode ns"
 """.format(wreg_0 = bit_flipped_0)
         elif(size_reg_0 == 1 and size_reg_1 > 1):
             return """
-# 1 registre taille 1 et l'autre taille différente, on flippe le bit du 1er registre normalement et pour l'autre registre on regarde le bit à flip en paramètre
+# The first register size is equal to 1, the second is different of 1 so we flip the bit indicated in arg 2
 ## Bit flip registre 0
 set value_curr_reg [examine -bin $faulted_register_0]
 set value [lindex [split $value_curr_reg b] 1]
@@ -166,6 +166,7 @@ force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1
 """.format(wreg_1 = bit_flipped_1)
         elif(size_reg_0 > 1 and size_reg_1 > 1):
             return """
+# Both registers sizes are different of 1, we flip the bit indicated in arg 1 and 2
 ## Bit flip registre 0
 set bit_attacked {wreg_0}
 set bit_flipped_0 $bit_attacked

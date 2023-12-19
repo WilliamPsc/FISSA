@@ -7,8 +7,10 @@
 """
 
 ### Import packages ###
+from datetime import datetime
 from timeit import default_timer as timer
 from main import Main
+from time import strftime
 
 ### Execute simulator ###
 if __name__ == "__main__":
@@ -23,3 +25,4 @@ if __name__ == "__main__":
     app_main.launch_generator()
     end_time = timer()
     print(f'Execute time main : {round(1000*(end_time - start_time_main), 2)} ms')
+    print("Time of generation :", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))

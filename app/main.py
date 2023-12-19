@@ -78,7 +78,7 @@ class Main:
     def launch_generator(self):
         protection = self.get_prot()
         # codes = self.get_codes()
-        codes = ["buffer_overflow"]
+        codes = ["secretFunction", "propagationTagV2"]
         for code in codes:
             print("===============", code, "===============")
             tcl_gen = TCL(self.__config_data, code, protection)

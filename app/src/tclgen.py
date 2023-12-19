@@ -151,8 +151,8 @@ class TCL:
         """Function used to build the simulation TCL string"""
         self.__path_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/"
         self.__reg_file_sim = self.__path_file_sim + "faulted_regs.yaml"
+        self.__file_number = 1
         for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
-            self.__file_number = 1
             self.set_nb_simu_total(self.__config_data_simulator["threat_model"], window)
             print(f"Number of simulations to be run : {self.__nb_simu_total}")
 
@@ -174,8 +174,8 @@ class TCL:
         file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
         self.build_make_list = file_str
         self.__tcl_file = self.__res_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
-        log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_" + str(self.__file_number) + ".json"
-        # log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_1.json"
+        # log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_" + str(self.__file_number) + ".json"
+        log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_1.json"
         self.build_ref_sim(log_file_sim, window, self.__nb_simu_total, self.__file_number)
 
     def build_faulted_simu(self, window, nb_simulations):
@@ -213,7 +213,7 @@ class TCL:
         self.__tcl_string.append(self.__code_exec.init_tcl_variables(window))
         self.__tcl_string.append(self.__code_exec.gen_simu_ref())
         self.__tcl_string.append(self.__code_exec.run_simu_ref())
-        self.__tcl_string.append(self.__log_data.log_sim(nb_file))
+        self.__tcl_string.append(self.__log_data.log_sim(nb_file, threat="simu0"))
         self.__tcl_string.append(self.__code_exec.end_sim(0,nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
@@ -227,7 +227,7 @@ class TCL:
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "set0", reg, self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__inject_fault.inject_fault("set0"))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
-        self.__tcl_string.append(self.__log_data.log_sim())
+        self.__tcl_string.append(self.__log_data.log_sim(threat="set0"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
@@ -241,7 +241,7 @@ class TCL:
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "set1", reg, self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__inject_fault.inject_fault("set1"))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
-        self.__tcl_string.append(self.__log_data.log_sim())
+        self.__tcl_string.append(self.__log_data.log_sim(threat="set1"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
@@ -254,7 +254,7 @@ class TCL:
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "bitflip", reg, self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__inject_fault.inject_fault("bitflip", wreg))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
-        self.__tcl_string.append(self.__log_data.log_sim())
+        self.__tcl_string.append(self.__log_data.log_sim(threat="bitflip"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
@@ -309,7 +309,7 @@ class TCL:
                         size_reg_1 = self.__registers_size[self.__registers_list.index(reg2[:-3])]
                 self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_spatial", bit_flip_0, bit_flip_1, size_reg_0, size_reg_1))
                 self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
-                self.__tcl_string.append(self.__log_data.log_sim())
+                self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_spatial"))
                 self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                 try:
                     self.write_tcl_file(''.join(self.__tcl_string))

@@ -46,13 +46,25 @@ close $f
 """.format(regs_file = reg_file, state_file = log_file)
         
     def init_sim(self, reg_file, log_file, nb_file):
-        return """#############  INIT SIMULATIONS #############
+        if(nb_file == 1):
+            return """
+#############  INIT SIMULATIONS #############
 set regs_file {regs_file}
 set state_file {state_file}
 set f [open $state_file w]
 puts $f "{{"
 puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
 close $f
+
+set f [open $regs_file r]
+set reg_file_data [read $f]
+close $f
+""".format(regs_file = reg_file, state_file = log_file)
+        else:
+            return """
+#############  INIT SIMULATIONS #############
+set regs_file {regs_file}
+set state_file {state_file}
 
 set f [open $regs_file r]
 set reg_file_data [read $f]
@@ -222,11 +234,13 @@ while {$sim_active == 1} {
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    if {[expr {$error_tcr} != {"5'h0"}] || [expr {$error_tpr} != {"5'h0"}] || [expr {$error_addr_tag} != {"4'h0"}] || [expr {$error_26} != {"5'h0"}] || [expr {$error_rf_tag} != {"6'h0"}]} {
-        ## Detection error ##
-        set status_end 5
-        set sim_active 0
-    } elseif {$nb_cycle > $cycle_ref} {
+    # if {[expr {$error_tcr} != {"5'h0"}] || [expr {$error_tpr} != {"5'h0"}] || [expr {$error_addr_tag} != {"4'h0"}] || [expr {$error_26} != {"5'h0"}] || [expr {$error_rf_tag} != {"6'h0"}]} {
+    #     ## Detection error ##
+    #     set status_end 5
+    #     set sim_active 0
+    # }
+    
+    if {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
