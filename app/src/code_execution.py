@@ -47,8 +47,7 @@ close $f
         
     def init_sim(self, reg_file, log_file, nb_file):
         if(nb_file == 1):
-            return """
-#############  INIT SIMULATIONS #############
+            return """#############  INIT SIMULATIONS #############
 set regs_file {regs_file}
 set state_file {state_file}
 set f [open $state_file w]
@@ -180,6 +179,34 @@ set bit_flipped_1 -1
 set status_end -1 
 """.format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1)
 
+    def init_sim_attacked_multi_bitflip_temporel(self, nb_sim, start_time, threat, register_0 = '', size_register_0 = 1, register_1 = '', size_register_1 = 1, t_reg0 = 0, t_reg1 = 0):
+        return """
+##############################################################################
+############# ATTACK {number} #############
+set nb_sim {number}
+puts "Simulation number : $nb_sim"
+###### JUMP TO ATTACK START ######
+set start_sim "{start_window} ns"
+run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
+
+set nb_cycle [expr [expr {start_window} - $start] / 40]
+set sim_active 1
+##---------------------
+###### FORCE VALUE ON FAULTED REGISTER ######
+set threat "{faute}"
+set width_register_0 {width_register_0}
+set faulted_register_0 {reg_0}
+set time_fault_register_0 {time_fault_reg_0}
+set width_register_1 {width_register_1}
+set faulted_register_1 {reg_1}
+set time_fault_register_1 {time_fault_reg_1}
+set bit_flipped_0 -1
+set bit_flipped_1 -1
+
+### STATUS END ###
+set status_end -1 
+""".format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1, time_fault_reg_0 = t_reg0, time_fault_reg_1 = t_reg1)
+
     def run_sim_attacked(self):
         return """
 ###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
@@ -265,6 +292,9 @@ while {$sim_active == 1} {
     }
 }
 """
+
+    def inject_fault_run_sim_attacked_multi_bitflip_temporel(self, bit_flip_0 = 0, bit_flip_1 = 0, size_reg_0 = 0, size_reg_1 = 0, t_reg0 = 0, t_reg1 = 0):
+        pass
 
     def end_sim(self, nbSimCurr, nbSimusTotal):
         if nbSimCurr < nbSimusTotal:

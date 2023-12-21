@@ -38,7 +38,7 @@ class LogData:
             case "multi_bitflip_spatial":
                 return self.__log_data_multi_bitflip_spatial(nb_file)
             case "multi_bitflip_temporel":
-                pass
+                return self.__log_data_multi_bitflip_temporel(nb_file)
             case _:
                 return ""
 
@@ -197,6 +197,67 @@ if {$nb_sim != 0} {
     puts $f "\\t\\t\\"bit_flipped_0\\": $bit_flipped_0,"
 
     # Faulted register 1
+    puts $f "\\t\\t\\"faulted_register_1\\": \\"$faulted_register_1\\","
+    puts $f "\\t\\t\\"size_faulted_register_1\\": $width_register_1,"
+    puts $f "\\t\\t\\"bit_flipped_1\\": $bit_flipped_1,"
+}
+ 
+#---- Ending status ----
+puts $f "\\t\\t\\"simulation_end_time\\": \\"[expr {$now / 1000}] ns\\","
+puts $f "\\t\\t\\"status_end\\": $status_end"
+puts $f "\\t},"
+
+#---- Close log ----
+close $f
+"""
+        else:
+            return ""
+        
+    def __log_data_multi_bitflip_temporel(self, nb_file = 1):
+        if(nb_file == 1):
+            return """
+#############  LOG #############
+#---- INIT ----
+set f [open $state_file a]
+puts $f "\\t\\"simulation_$nb_sim\\": {"
+
+#---- Cycle Checking ----
+puts $f "\\t\\t\\"cycle_ref\\": $cycle_ref," 
+puts $f "\\t\\t\\"cycle_ending\\": $check_cycle,"
+
+#---- TCR / TPR ----
+puts $f "\\t\\t\\"TPR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q]\\","
+puts $f "\\t\\t\\"TCR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q]\\","
+
+#---- Log Register File ----
+for {set j 0} {$j < 32} {incr j} {
+    puts $f "\\t\\t\\"rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
+}
+
+#---- Log Register File Tag ----
+for {set j 0} {$j < 32} {incr j} {
+    puts $f "\\t\\t\\"rf_tag$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\]]\\","
+}
+
+#---- Log Registres du fichiers registres.yaml ----
+foreach reg $reg_file_data {
+    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+        set nom_reg_list [split $reg "/"]
+        puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
+    }
+}
+
+#---- Log faulted register: name, width, threat considered, when ----
+if {$nb_sim != 0} {
+    puts $f "\\t\\t\\"threat\\": \\"$threat\\","
+    # Faulted register 0
+    puts $f "\\t\\t\\"cycle_attacked_0\\": \\"$ACHANGER_0\\","
+    puts $f "\\t\\t\\"faulted_register_0\\": \\"$faulted_register_0\\","
+    puts $f "\\t\\t\\"size_faulted_register_0\\": $width_register_0,"
+    puts $f "\\t\\t\\"bit_flipped_0\\": $bit_flipped_0,"
+
+    # Faulted register 1
+    puts $f "\\t\\t\\"cycle_attacked_1\\": \\"$ACHANGER_1\\","
     puts $f "\\t\\t\\"faulted_register_1\\": \\"$faulted_register_1\\","
     puts $f "\\t\\t\\"size_faulted_register_1\\": $width_register_1,"
     puts $f "\\t\\t\\"bit_flipped_1\\": $bit_flipped_1,"

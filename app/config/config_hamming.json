@@ -20,7 +20,7 @@
         "propagationTagV2"
     ],
     "threat_model": [
-        "multi_bitflip_spatial"
+        "multi_bitflip_temporel"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
