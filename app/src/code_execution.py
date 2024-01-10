@@ -293,8 +293,55 @@ while {$sim_active == 1} {
 }
 """
 
-    def inject_fault_run_sim_attacked_multi_bitflip_temporel(self, bit_flip_0 = 0, bit_flip_1 = 0, size_reg_0 = 0, size_reg_1 = 0, t_reg0 = 0, t_reg1 = 0):
-        pass
+    def run_sim_attacked_multi_bitflip_temporel(self, fault_injection = ""):
+        return """
+###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
+while {{$sim_active == 1}} {{
+    run "$periode ns" ;# run 1 cycle
+    incr nb_cycle
+
+    {fault_injection}
+
+    set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
+
+    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
+    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
+    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
+    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
+    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
+
+    #############  CHECKING SIM VALUES #############
+    ## if conditions to stop the run cycles
+    # if {{[expr {{$error_tcr}} != {{"5'h0"}}] || [expr {{$error_tpr}} != {{"5'h0"}}] || [expr {{$error_addr_tag}} != {{"4'h0"}}] || [expr {{$error_26}} != {{"5'h0"}}] || [expr {{$error_rf_tag}} != {{"6'h0"}}]}} {{
+    #     ## Detection error ##
+    #     set status_end 5
+    #     set sim_active 0
+    # }}
+    if {{$nb_cycle > $cycle_ref}} {{
+        ## CYCLE OVERFLOW : CRASH ##
+        set sim_active 0
+        set status_end 1
+    }} elseif {{([expr {{$value_pc}} == {{"32'h0000022c"}}]) && ([expr {{[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]}} == {{"32'hfa010113"}}])}} {{
+        ## INSN ILL HANDLER ##
+        if {{[expr {{$cycle_ill_insn}} == {{[expr $now / 1000]}}]}} {{
+            # Illegal insn handler au même moment que simulation 0  : NOTHING #
+            set status_end 2
+        }} else {{
+            # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
+            set status_end 3
+        }}
+        set sim_active 0
+    }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} == {{$value_end_pc}}])}} {{
+        ## RAS ##
+        set status_end 0
+        set sim_active 0
+    }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} != {{$value_end_pc}}])}} {{
+        ## SUCCESS ? ##
+        set status_end 4
+        set sim_active 0
+    }}
+}}
+""".format(fault_injection = fault_injection)
 
     def end_sim(self, nbSimCurr, nbSimusTotal):
         if nbSimCurr < nbSimusTotal:

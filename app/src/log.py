@@ -174,11 +174,6 @@ for {set j 0} {$j < 32} {incr j} {
     puts $f "\\t\\t\\"rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
 }
 
-#---- Log Register File Tag ----
-for {set j 0} {$j < 32} {incr j} {
-    puts $f "\\t\\t\\"rf_tag$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\]]\\","
-}
-
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
     if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
@@ -251,16 +246,16 @@ foreach reg $reg_file_data {
 if {$nb_sim != 0} {
     puts $f "\\t\\t\\"threat\\": \\"$threat\\","
     # Faulted register 0
-    puts $f "\\t\\t\\"cycle_attacked_0\\": \\"$ACHANGER_0\\","
+    puts $f "\\t\\t\\"cycle_attacked_0\\": \\"$time_fault_register_0\\","
     puts $f "\\t\\t\\"faulted_register_0\\": \\"$faulted_register_0\\","
-    puts $f "\\t\\t\\"size_faulted_register_0\\": $width_register_0,"
-    puts $f "\\t\\t\\"bit_flipped_0\\": $bit_flipped_0,"
+    puts $f "\\t\\t\\"size_faulted_register_0\\": $width_register_0\\","
+    puts $f "\\t\\t\\"bit_flipped_0\\": $bit_flipped_0\\","
 
     # Faulted register 1
-    puts $f "\\t\\t\\"cycle_attacked_1\\": \\"$ACHANGER_1\\","
+    puts $f "\\t\\t\\"cycle_attacked_1\\": \\"$time_fault_register_1\\","
     puts $f "\\t\\t\\"faulted_register_1\\": \\"$faulted_register_1\\","
-    puts $f "\\t\\t\\"size_faulted_register_1\\": $width_register_1,"
-    puts $f "\\t\\t\\"bit_flipped_1\\": $bit_flipped_1,"
+    puts $f "\\t\\t\\"size_faulted_register_1\\": $width_register_1\\","
+    puts $f "\\t\\t\\"bit_flipped_1\\": $bit_flipped_1\\","
 }
  
 #---- Ending status ----

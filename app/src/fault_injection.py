@@ -24,7 +24,7 @@ class FaultInjection:
             case "multi_bitflip_spatial":
                 return self.__multi_bitflip_spatial(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
             case "multi_bitflip_temporel":
-                pass
+                return self.__multi_bitflip_temporel(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
             case _:
                 return ""
 
@@ -152,6 +152,96 @@ force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1
             print("Erreur de paramètres ! ", size_reg_0, size_reg_1)
             exit(2)
 
-    def __multi_bitflip_temporel(self):
+    def __multi_bitflip_temporel(self, bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1):
         """Generate code for a multi-bit-flip temporal fault threat model"""
-        pass
+        if(size_reg_0 == 1 and size_reg_1 == 1):
+            return """
+    # Both registers size are equal to 1
+    if {[expr {$time_fault_register_0} == [expr $now / 1000]]} {
+        ## Bit flip registre 0
+        set value_curr_reg [examine -bin $faulted_register_0]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bf [expr {$value^1}]
+        set bit_flipped_0 0
+        force -freeze $faulted_register_0 $bf 0 -cancel "$half_periode ns"
+    }
+
+    if {[expr {$time_fault_register_1} == {[expr $now / 1000]}]} {
+        ## Bit flip registre 1
+        set value_curr_reg [examine -bin $faulted_register_1]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bf [expr {$value^1}]
+        set bit_flipped_1 0
+        force -freeze $faulted_register_1 $bf 0 -cancel "$half_periode ns"
+    }
+"""
+        elif(size_reg_0 > 1 and size_reg_1 == 1):
+            return """
+    # The first register size is different of 1, we flip the bit indicated in arg 1, the other register size is equal to 1
+    if {{[expr {{$time_fault_register_0}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 0
+        set bit_attacked {wreg_0}
+        set bit_flipped_0 $bit_attacked
+        set value_curr_reg [examine -bin $faulted_register_0\[{{$bit_attacked}}\]]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bitflip_faulted_register_0 [expr $value^1]
+        force -freeze $faulted_register_0\[{{$bit_attacked}}\] [concat $width_register_0'b$bitflip_faulted_register_0] 0 -cancel "$half_periode ns"
+    }}
+
+    if {{[expr {{$time_fault_register_1}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 1
+        set value_curr_reg [examine -bin $faulted_register_1]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bf [expr {{$value^1}}]
+        set bit_flipped_1 0
+        force -freeze $faulted_register_1 $bf 0 -cancel "$half_periode ns"
+    }}
+""".format(wreg_0 = bit_flipped_0)
+        elif(size_reg_0 == 1 and size_reg_1 > 1):
+            return """
+    # The first register size is equal to 1, the second is different of 1 so we flip the bit indicated in arg 2
+    if {{[expr {{$time_fault_register_0}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 0
+        set value_curr_reg [examine -bin $faulted_register_0]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bf [expr {{$value^1}}]
+        set bit_flipped_0 0
+        force -freeze $faulted_register_0 $bf 0 -cancel "$half_periode ns"
+    }}
+
+    if {{[expr {{$time_fault_register_1}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 1
+        set bit_attacked {wreg_1}
+        set bit_flipped_1 $bit_attacked
+        set value_curr_reg [examine -bin $faulted_register_1\[{{$bit_attacked}}\]]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bitflip_faulted_register_1 [expr $value^1]
+        force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1'b$bitflip_faulted_register_1] 0 -cancel "$half_periode ns"
+    }}
+""".format(wreg_1 = bit_flipped_1)
+        elif(size_reg_0 > 1 and size_reg_1 > 1):
+            return """
+    # Both registers sizes are different of 1, we flip the bit indicated in arg 1 and 2
+    if {{[expr {{$time_fault_register_0}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 0
+        set bit_attacked {wreg_0}
+        set bit_flipped_0 $bit_attacked
+        set value_curr_reg [examine -bin $faulted_register_0\[{{$bit_attacked}}\]]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bitflip_faulted_register_0 [expr $value^1]
+        force -freeze $faulted_register_0\[{{$bit_attacked}}\] [concat $width_register_0'b$bitflip_faulted_register_0] 0 -cancel "$half_periode ns"
+    }}
+
+    if {{[expr {{$time_fault_register_1}} == {{[expr $now / 1000]}}]}} {{
+        ## Bit flip registre 1
+        set bit_attacked {wreg_1}
+        set bit_flipped_1 $bit_attacked
+        set value_curr_reg [examine -bin $faulted_register_1\[{{$bit_attacked}}\]]
+        set value [lindex [split $value_curr_reg b] 1]
+        set bitflip_faulted_register_1 [expr $value^1]
+        force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1'b$bitflip_faulted_register_1] 0 -cancel "$half_periode ns"
+    }}
+""".format(wreg_0 = bit_flipped_0, wreg_1 = bit_flipped_1)
+        else:
+            print("Erreur de paramètres ! ", size_reg_0, size_reg_1)
+            exit(2)

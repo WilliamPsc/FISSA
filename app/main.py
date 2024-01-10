@@ -27,10 +27,10 @@ class Main:
         self.__app_folder = pathlib.Path(__file__).resolve().parent
         self.__config_folder = pathlib.Path.joinpath(self.__app_folder, "config")
         self.__config_file_path = str(self.__config_folder) + "/config_" + protect + ".json"
-        self.__src_folder = pathlib.Path.joinpath(self.__app_folder, "src")
-        self.__sim_folder = pathlib.Path(pathlib.Path(__file__).resolve().parent).resolve().parent
-        self.__simu_folder = pathlib.Path.joinpath(self.__sim_folder, "simu_files")
-        self.__results_folder = pathlib.Path.joinpath(self.__sim_folder, "results_simulations")
+        # self.__src_folder = pathlib.Path.joinpath(self.__app_folder, "src")
+        # self.__sim_folder = pathlib.Path(pathlib.Path(__file__).resolve().parent).resolve().parent
+        # self.__simu_folder = pathlib.Path.joinpath(self.__sim_folder, "simu_files")
+        # self.__results_folder = pathlib.Path.joinpath(self.__sim_folder, "results_simulations")
 
         # Define other variables
         self.__config_data = dict()
@@ -77,8 +77,9 @@ class Main:
     
     def launch_generator(self):
         protection = self.get_prot()
-        # codes = self.get_codes()
-        codes = ["buffer_overflow"]
+        codes = self.get_codes()
+        # codes = ["buffer_overflow"]
+        # codes = ["buffer_overflow"]
         for code in codes:
             print("===============", code, "===============")
             tcl_gen = TCL(self.__config_data, code, protection)

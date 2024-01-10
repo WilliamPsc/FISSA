@@ -2,6 +2,7 @@
     "name_simulator": "modelsim",
     "path_tcl_generation": "/home/pensec/Documents/Github/genTCL_fault_injections/",
     "path_files_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/",
+    "path_generated_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/generated_simulations/",
     "path_results_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/results_simulations/",
     "work_env": "/home/pensec/Documents/Divers/sharedFolder",
     "path_simulation": [
@@ -19,8 +20,13 @@
         "secretFunction",
         "propagationTagV2"
     ],
+    "name_results": {
+        "buffer_overflow": "Buffer Overflow",
+        "secretFunction": "WU-FTPd",
+        "propagationTagV2": "Compare/Compute"
+    },
     "threat_model": [
-        "multi_bitflip_temporel"
+        "multi_bitflip_spatial"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
