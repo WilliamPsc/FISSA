@@ -39,6 +39,8 @@ class LogData:
                 return self.__log_data_multi_bitflip_spatial(nb_file)
             case "multi_bitflip_temporel":
                 return self.__log_data_multi_bitflip_temporel(nb_file)
+            case "multi_bitflip_reg":
+                return self.__log_data_multi_bitflip_spatial(nb_file)
             case _:
                 return ""
 

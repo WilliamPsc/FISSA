@@ -162,6 +162,11 @@ class TCL:
                     self.__nb_simu_total += math.comb(sum(self.__registers_size), self.__nb_faults) * delta_window
                 case "multi_bitflip_temporel":
                     self.__nb_simu_total += int(math.pow(sum(self.__registers_size), self.__nb_faults) * math.comb(delta_window, self.__nb_faults))
+                case "multi_bitflip_reg":
+                    for index, register in enumerate(self.__registers_list):
+                        size = self.__registers_size[index]
+                        if (size > 1 and size >= self.__nb_faults):
+                            self.__nb_simu_total += math.comb(size, self.__nb_faults) * delta_window
                 case _:
                     self.__nb_simu_total = 0
 
@@ -205,6 +210,9 @@ class TCL:
             elif(threat == "multi_bitflip_temporel"):
                 print("Multi bit-flip temporel")
                 self.build_multi_bitflip_temporel(window, nb_simulations)
+            elif(threat == "multi_bitflip_reg"):
+                print("Multiples bit-flip inside a register")
+                self.build_multi_bitflip_reg(window, nb_simulations)
             elif(threat == "bitflip"):
                 print("Single bit-flip")
                 for reg in self.__registers_list:
@@ -330,7 +338,10 @@ class TCL:
                         size_reg_0 = self.__registers_size[self.__registers_list.index(reg1[:-3])]
                         size_reg_1 = self.__registers_size[self.__registers_list.index(reg2[:-3])]
                 self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_spatial", bit_flip_0, bit_flip_1, size_reg_0, size_reg_1))
-                self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                if(self.__protection == "wop"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                elif(self.__protection == "hamming"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
                 self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_spatial"))
                 self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                 try:
@@ -398,6 +409,58 @@ class TCL:
                     self.write_tcl_file(''.join(self.__tcl_string))
                 except TypeError:
                     print("TypeError happened -- multi_bitflip_temporel")
+                    exit(1)
+                if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
+                    self.__batch_number += 1
+                    self.gen_new_file(window)
+
+    def build_multi_bitflip_reg(self, window, nb_simulations):
+        """"""
+        relevant_reg = list()
+        relevant_reg_size = list()
+        combinations_list = list()
+        full_list_registre_with_size = list()
+        for index, register in enumerate(self.__registers_list):
+            size = self.__registers_size[index]
+            if (size > 1 and size >= self.__nb_faults):
+                relevant_reg.append(register)
+                relevant_reg_size.append(size)
+        print("Number of registers to be targeted :", len(relevant_reg))
+
+        for reg in relevant_reg:
+            full_list_registre_with_size = list()
+            for bit in range(relevant_reg_size[relevant_reg.index(reg)]):
+                concat_reg = reg + "[" + str(bit) + "]"
+                full_list_registre_with_size.append(concat_reg)
+            combinations_list.extend(list(combinations(full_list_registre_with_size, self.__nb_faults)))
+        print("Number of possible combinations:", len(combinations_list))
+
+        for reg1, reg2 in combinations_list:
+            for start_time in range(window[0], window[1], 40):
+                self.__tcl_string = list()
+                self.__nb_simu += 1
+                bit_flip_0 = -1
+                bit_flip_1 = -1
+                size_reg_0 = 0
+                size_reg_1 = 0
+
+                self.__tcl_string.append(self.__code_exec.init_sim_attacked_multi_bitflip(self.__nb_simu, start_time, "multi_bitflip_reg", reg1.split("[")[0], self.__registers_size[self.__registers_list.index(reg1.split("[")[0])], reg2.split("[")[0], self.__registers_size[self.__registers_list.index(reg2.split("[")[0])]))
+                bit_flip_0 = reg1.split("[")[1][:-1]
+                bit_flip_1 = reg2.split("[")[1][:-1]
+                size_reg_0 = self.__registers_size[self.__registers_list.index(reg1.split("[")[0])]
+                size_reg_1 = self.__registers_size[self.__registers_list.index(reg2.split("[")[0])]
+
+                self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg", bit_flip_0, bit_flip_1, size_reg_0, size_reg_1))
+                if(self.__protection == "wop"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                elif(self.__protection == "hamming"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg"))
+                self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
+                try:
+                    self.write_tcl_file(''.join(self.__tcl_string))
+                except TypeError:
+                    print("TypeError happened -- multi_bitflip_reg")
                     exit(1)
                 if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
                     self.__batch_number += 1

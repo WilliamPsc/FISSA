@@ -253,11 +253,11 @@ while {$sim_active == 1} {
 
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
-    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
-    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
-    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
-    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
-    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
+    # set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
+    # set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
+    # set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
+    # set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
+    # set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles

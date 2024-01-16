@@ -22,13 +22,13 @@ class AnalyseResults:
         self.__config = data
         self.__idx_app = list()
         self.__table1 = self.__config['path_files_sim'] + "analyse/table_1/"
-        if os.path.exists(self.__table1):
-            shutil.rmtree(self.__table1)
-        os.makedirs(self.__table1)
+        if not os.path.exists(self.__table1):
+        #     shutil.rmtree(self.__table1)
+            os.makedirs(self.__table1)
         self.__table2 = self.__config['path_files_sim'] + "analyse/heatmap/"
-        if os.path.exists(self.__table2):
-            shutil.rmtree(self.__table2)
-        os.makedirs(self.__table2)
+        if not os.path.exists(self.__table2):
+            # shutil.rmtree(self.__table2)
+            os.makedirs(self.__table2)
 
     def get_codes(self):
         return self.__config['codes']
@@ -58,10 +58,42 @@ class AnalyseResults:
     # def bar_plot_res(self):
         """Display results in a bar plot"""
 
+    def heatmap(self, appli:str, name_appli:str, threat:str):
+        """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
+        # Extract the last part of the strings after the last '/'
+        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].str.split('/').str[-1]
+        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].str.split('/').str[-1]
+
+        # Create a pivot table for 'faulted_register' on both axes and count occurrences
+        heatmap_data = self.__table_data_filtered.pivot_table(index='faulted_register_1', columns='faulted_register_0', values='status_end', aggfunc='count', fill_value=0)
+
+        # Create a heatmap using seaborn with white background for 0 values
+        plt.figure(figsize=(12, 10))
+        sns.heatmap(heatmap_data, annot=True, cmap='coolwarm', fmt='g', cbar_kws={'label': 'Number of success'},
+                    vmin=0, vmax=heatmap_data.values.max(), center=None, linewidths=0.5, linecolor='black',
+                    mask=(heatmap_data == 0), annot_kws={'fontsize': 6, 'ha': 'center', 'va': 'center'})
+        plt.title(f'Heatmap of success based on both faulted registers values for {name_appli}')
+
+        # Set fontsize for x and y-axis labels
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
+
+        # Set fontsize for x and y-axis labels
+        plt.xlabel('Faulted Register 0', fontsize=10)
+        plt.ylabel('Faulted Register 1', fontsize=10)
+
+        # Adjust layout to eliminate extra white space
+        plt.tight_layout()
+
+        # Save the figure to a PDF file
+        plt.savefig(self.__table2 + "heatmap_" + appli + "-" + self.__config['prot'] + "_" + threat + ".pdf", format='pdf')
+
     def analyse_results(self):
+        """"""
         test:bool = True
         if(test):
-            applications = ["propagationTagV2", "secretFunction"]
+            applications = ["buffer_overflow", "propagationTagV2"]
         else:
             applications = self.get_codes()
         df_t1 = pd.DataFrame([], columns=["Crash", "NSTR", "Delay", "Success", "Total"])
@@ -70,45 +102,28 @@ class AnalyseResults:
             for threat in self.__config['threat_model']:
                 print("=================== " + self.__config['name_results'][appli] + " ===================")
                 # Ouverture de chaque fichier résultat
+                print("\t>>> Opening result file")
                 path_to_filename = self.__config["path_results_sim"] + appli + "/" + appli + "-" + self.__config['prot'] + "_" + threat + "/"
                 json_files = [pos_json for pos_json in os.listdir(path_to_filename) if pos_json.endswith('.json')]
                 # Enregistrement sous forme de DataFrame panda
+                print("\t>>> READING FILE ...")
                 for file in json_files:
                     value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose().drop(index=['start', 'simulation_0', 'end'])
                     self.__table_data = pd.concat([self.__table_data, value_basique], ignore_index=True)
                 # ==================== TABLE 1 ====================
                 self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
-                print("==================== TABLE 1 ====================")
+                print("\t>>> TABLE 1")
                 df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
-                print(df_t1)
                 # =================================================
 
                 # ==================== TABLE 2 ====================
-                self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
-                # Extract the last part of the strings after the last '/'
-                self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].str.split('/').str[-1]
-                self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].str.split('/').str[-1]
-
-                # Create a pivot table for 'faulted_register' on both axes and count occurrences
-                heatmap_data = self.__table_data_filtered.pivot_table(index='faulted_register_1', columns='faulted_register_0', values='status_end', aggfunc='count', fill_value=0)
-
-                # Create a heatmap using seaborn with white background for 0 values
-                plt.figure(figsize=(12, 8))
-                sns.heatmap(heatmap_data, annot=True, cmap='coolwarm', fmt='g', cbar_kws={'label': 'Number of success'},
-                            vmin=0, vmax=heatmap_data.values.max(), center=None, linewidths=0.5, linecolor='black',
-                            mask=(heatmap_data == 0), annot_kws={'fontsize': 6, 'ha': 'center', 'va': 'center'})
-
-                plt.title('Heatmap of success based on both faulted registers values')
-
-                # Adjust layout to eliminate extra white space
-                plt.tight_layout()
-                # Save the figure to a file (e.g., PNG format)
-                plt.savefig(self.__table2 + "heatmap_" + appli + ".pdf", format='pdf')
+                print("\t>>> Heatmap")
+                self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)
                 # =================================================
-                print("\n")
+                print()
 
         # Tableau avec résultats globaux
         print("==================== TABLE 1 ====================")
         df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
         print(df_t1)
-        self.write_results(self.__table1 + "table.tex", df_t1.style.format_index(escape="latex").to_latex(caption="End of simulation for buffer overflow and final state", label="table:end_sim_by_status", position_float="centering", multicol_align="c", hrules=True, position="H"))
+        self.write_results(self.__table1 + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']) + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="H"))

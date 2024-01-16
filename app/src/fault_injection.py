@@ -25,6 +25,8 @@ class FaultInjection:
                 return self.__multi_bitflip_spatial(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
             case "multi_bitflip_temporel":
                 return self.__multi_bitflip_temporel(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
+            case "multi_bitflip_reg":
+                return self.__multi_bitflip_spatial(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
             case _:
                 return ""
 

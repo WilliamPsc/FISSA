@@ -77,11 +77,10 @@ class Main:
     
     def launch_generator(self):
         protection = self.get_prot()
-        codes = self.get_codes()
-        # codes = ["buffer_overflow"]
-        # codes = ["buffer_overflow"]
+        # codes = self.get_codes()
+        codes = ["buffer_overflow"]
         for code in codes:
-            print("===============", code, "===============")
+            print("===============", self.__config_data['name_results'][code], "===============")
             tcl_gen = TCL(self.__config_data, code, protection)
             tcl_gen.read_register_list()
             tcl_gen.write_faulted_registers_file()
