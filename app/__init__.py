@@ -37,13 +37,14 @@ if __name__ == "__main__":
     print("======== List of available commands ========")
     print("\t 1- Launch Generator")
     print("\t 2- Analyse results")
-    command = int(input("What do you want to execute? "))
-    # command = 1
+    # command = int(input("What do you want to execute? "))
+    command = 2
 
     print("======== List of protections available ========")
     print("\t 1- Without protection")
     print("\t 2- Hamming Code")
-    protect_choice = int(input("Which protection do you want to use ? "))
+    # protect_choice = int(input("Which protection do you want to use ? "))
+    protect_choice = 1
     match protect_choice:
         case 1:
             protect = "wop"

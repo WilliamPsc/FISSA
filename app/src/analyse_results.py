@@ -7,11 +7,10 @@
 
 ### Import packages ###
 import os
-import shutil
-from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from datetime import datetime
 
 ### Class ###
 class AnalyseResults:
@@ -55,9 +54,6 @@ class AnalyseResults:
         list_table1 = [len(crash), len(nstr), len(delay), str(len(success)) + " (" + percent_success + "\%)", total]
         t1.loc[len(t1)] = list_table1
 
-    # def bar_plot_res(self):
-        """Display results in a bar plot"""
-
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
         self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
@@ -89,11 +85,29 @@ class AnalyseResults:
         # Save the figure to a PDF file
         plt.savefig(self.__table2 + "heatmap_" + appli + "-" + self.__config['prot'] + "_" + threat + ".pdf", format='pdf')
 
+    def calculate_time_difference(self, start, end):
+        # Convert the date strings to datetime objects
+        date_format = "%Y/%m/%d:%H:%M:%S"
+        date1 = datetime.strptime(start, date_format)
+        date2 = datetime.strptime(end, date_format)
+
+        # Calculate the difference between the two dates
+        time_difference = date2 - date1
+
+        # Extract days, hours, and minutes from the time difference
+        days = time_difference.days
+        hours, remainder = divmod(time_difference.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+
+        # Print the difference
+        print(f"\t\t >>>> The simulation time was:: {days} days, {hours} hours, {minutes} minutes")
+
+
     def analyse_results(self):
         """"""
-        test:bool = True
+        test:bool = False
         if(test):
-            applications = ["buffer_overflow", "propagationTagV2"]
+            applications = ["propagationTagV2"]
         else:
             applications = self.get_codes()
         df_t1 = pd.DataFrame([], columns=["Crash", "NSTR", "Delay", "Success", "Total"])
@@ -101,6 +115,7 @@ class AnalyseResults:
             self.__table_data = pd.DataFrame()
             for threat in self.__config['threat_model']:
                 print("=================== " + self.__config['name_results'][appli] + " ===================")
+                print(f"\t======= >>> {threat} <<< =======")
                 # Ouverture de chaque fichier résultat
                 print("\t>>> Opening result file")
                 path_to_filename = self.__config["path_results_sim"] + appli + "/" + appli + "-" + self.__config['prot'] + "_" + threat + "/"
@@ -108,7 +123,13 @@ class AnalyseResults:
                 # Enregistrement sous forme de DataFrame panda
                 print("\t>>> READING FILE ...")
                 for file in json_files:
-                    value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose().drop(index=['start', 'simulation_0', 'end'])
+                    value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose()
+                    # Extract values associated with 'start' and 'end' from index
+                    start_value = value_basique.loc['start'].iloc[0]  # Assuming 'start' is in the index
+                    end_value = value_basique.loc['end'].iloc[0]  # Assuming 'end' is in the index
+                    self.calculate_time_difference(start_value, end_value)
+
+                    value_basique = value_basique.drop(index=['start', 'simulation_0', 'end'])
                     self.__table_data = pd.concat([self.__table_data, value_basique], ignore_index=True)
                 # ==================== TABLE 1 ====================
                 self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
@@ -126,4 +147,4 @@ class AnalyseResults:
         print("==================== TABLE 1 ====================")
         df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
         print(df_t1)
-        self.write_results(self.__table1 + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']) + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="H"))
+        self.write_results(self.__table1 + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']) + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="H"))
