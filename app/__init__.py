@@ -43,23 +43,27 @@ if __name__ == "__main__":
     print("======== List of protections available ========")
     print("\t 1- Without protection")
     print("\t 2- Hamming Code")
-    # protect_choice = int(input("Which protection do you want to use ? "))
-    protect_choice = 1
-    match protect_choice:
-        case 1:
-            protect = "wop"
-        case 2:
-            protect = "hamming"
-        case 3:
-            protect = "simple_parity"
-        case _:
-            protect = ""
-
-    match command:
-        case 1:
-            generator(protect=protect)
-        case 2:
-            analyse_results(protect=protect)
-        case _:
-            print("No choice has been found. Try again.")
+    print("\t 3- Simple Parity")
+    print("\t 4- BCH Code")
+    protect_choice = [1,2]
     
+    for protection in protect_choice:
+        match protection:
+            case 1:
+                protect = "wop"
+            case 2:
+                protect = "hamming"
+            case 3:
+                protect = "simple_parity"
+            case _:
+                protect = ""
+
+        print(f"\n==================== >>>> {protect.capitalize()} <<<< ====================")
+
+        match command:
+            case 1:
+                generator(protect=protect)
+            case 2:
+                analyse_results(protect=protect)
+            case _:
+                print("No choice has been found. Try again.")

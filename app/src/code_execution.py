@@ -16,34 +16,12 @@ class CodeExecute:
     def __init__(self, config_data:dict):
         self.__config_data = config_data
         self.__cycle_ref = self.__config_data['cycle_ref']
+        if(self.__config_data['multi_res_files'] < 1):
+            self.__config_data['multi_res_files'] = 1
 
     @property
     def config_data(self):
         return self.__config_data
-
-    # def init_sim(self, reg_file, log_file, nb_file):
-        if(nb_file == 1):
-            return """#############  INIT SIMULATIONS #############
-set regs_file {regs_file}
-set state_file {state_file}
-set f [open $state_file w]
-puts $f "{{"
-puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
-close $f
-
-set f [open $regs_file r]
-set reg_file_data [read $f]
-close $f
-""".format(regs_file = reg_file, state_file = log_file)
-        else:
-            return """#############  INIT SIMULATIONS #############
-set regs_file {regs_file}
-set state_file {state_file}
-
-set f [open $regs_file r]
-set reg_file_data [read $f]
-close $f
-""".format(regs_file = reg_file, state_file = log_file)
         
     def init_sim(self, reg_file, log_file, nb_file):
         if(nb_file == 1):
@@ -53,6 +31,19 @@ set state_file {state_file}
 set f [open $state_file w]
 puts $f "{{"
 puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
+close $f
+
+set f [open $regs_file r]
+set reg_file_data [read $f]
+close $f
+""".format(regs_file = reg_file, state_file = log_file)
+        elif(nb_file != 1 and self.__config_data['multi_res_files'] > 1):
+            return """
+#############  INIT SIMULATIONS #############
+set regs_file {regs_file}
+set state_file {state_file}
+set f [open $state_file w]
+puts $f "{{"
 close $f
 
 set f [open $regs_file r]
@@ -89,7 +80,7 @@ set log_registers_list {{{log_reg}}}
 
 ### FAULTED REGISTER ###
 set threat ""
-set width_threat 0
+set width_register 0
 set faulted_register ""
 
 ### DETECTED ERRORS ###
@@ -120,8 +111,6 @@ while {$cycle_curr <= $cycle_ref} {
     }
 }
 
-echo $cycle_ill_insn
-
 #############  CHECKING SIM VALUES #############
 ## CHECK ENDING CYCLE ##
 set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Vérification du numéro du cycle actuel
@@ -145,7 +134,7 @@ set sim_active 1
 ##---------------------
 ###### FORCE VALUE ON FAULTED REGISTER ######
 set threat "{faute}"
-set width_threat {width_register}
+set width_register {width_register}
 set faulted_register {reg}
 set bit_flipped -1
 
@@ -206,6 +195,32 @@ set bit_flipped_1 -1
 ### STATUS END ###
 set status_end -1 
 """.format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1, time_fault_reg_0 = t_reg0, time_fault_reg_1 = t_reg1)
+    
+    def init_sim_attacked_multi_bitflip_reg_multi(self, nb_sim, start_time, threat, register_0 = '', size_register_0 = 1, register_1 = '', size_register_1 = 1):
+        return """
+##############################################################################
+############# ATTACK {number} #############
+set nb_sim {number}
+puts "Simulation number : $nb_sim"
+###### JUMP TO ATTACK START ######
+set start_sim "{start_window} ns"
+run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
+
+set nb_cycle [expr [expr {start_window} - $start] / 40]
+set sim_active 1
+##---------------------
+###### FORCE VALUE ON FAULTED REGISTER ######
+set threat "{faute}"
+set width_register_0 {width_register_0}
+set faulted_register_0 {reg_0}
+set width_register_1 {width_register_1}
+set faulted_register_1 {reg_1}
+set bit_flipped_0 -1
+set bit_flipped_1 -1
+
+### STATUS END ###
+set status_end -1 
+""".format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1)
 
     def run_sim_attacked(self):
         return """
@@ -253,20 +268,8 @@ while {$sim_active == 1} {
 
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
-    # set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
-    # set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
-    # set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
-    # set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
-    # set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
-
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    # if {[expr {$error_tcr} != {"5'h0"}] || [expr {$error_tpr} != {"5'h0"}] || [expr {$error_addr_tag} != {"4'h0"}] || [expr {$error_26} != {"5'h0"}] || [expr {$error_rf_tag} != {"6'h0"}]} {
-    #     ## Detection error ##
-    #     set status_end 5
-    #     set sim_active 0
-    # }
-    
     if {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
@@ -344,7 +347,20 @@ while {{$sim_active == 1}} {{
 """.format(fault_injection = fault_injection)
 
     def end_sim(self, nbSimCurr, nbSimusTotal):
-        if nbSimCurr < nbSimusTotal:
+        if (nbSimCurr != 0) and ((nbSimCurr % self.__config_data['batch_sim']) == 0):
+            print(nbSimCurr, end=' ')
+            return """
+############# END SIM {number} #############
+# Write date of end
+set f [open $state_file a]
+puts $f "\\"end\\": \\"[clock format [clock seconds] -format "%Y/%m/%d:%H:%M:%S"]\\""
+puts $f "}}"
+close $f
+
+# Exit the simulation
+exit
+#------------------------------------""".format(number = nbSimCurr)
+        elif nbSimCurr < nbSimusTotal:
             return """
 ############# END SIM {number} #############
 # Restart the simulation

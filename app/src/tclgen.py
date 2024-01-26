@@ -8,11 +8,9 @@
 
 ### Import packages ###
 import os
-import shutil
 import yaml
 import math
-import pyperclip
-from itertools import combinations, permutations, product
+from itertools import combinations, product
 from src.fault_injection import FaultInjection
 from src.log import LogData
 from src.code_execution import CodeExecute
@@ -28,7 +26,6 @@ class TCL:
     """
 
     ## Class constructor
-    # def __init__(self, nb_simulations, path, simulator, commands_simulator, codes):
     def __init__(self, config_data:dict, code:str, prot:str):
         # Initializing attributes
         self.__config_data_simulator = config_data
@@ -71,6 +68,7 @@ class TCL:
         self.__log_data = LogData(config_data)
         self.__inject_fault = FaultInjection(config_data)
         self.__batch_number = 1
+        self.__res_file = 1
         self.__batch_max_sim:int = config_data["batch_sim"]
         self.__build_make_list = list()
 
@@ -143,7 +141,7 @@ class TCL:
             return 1
 
     @property
-    def nb_simu(self):
+    def nb_simu(self) -> int:
         '''Return the number of simulations to be done'''
         return self.__nb_simu_total
     
@@ -165,8 +163,19 @@ class TCL:
                 case "multi_bitflip_reg":
                     for index, register in enumerate(self.__registers_list):
                         size = self.__registers_size[index]
-                        if (size > 1 and size >= self.__nb_faults):
-                            self.__nb_simu_total += math.comb(size, self.__nb_faults) * delta_window
+                        if (size >= 2 and size < 16):
+                            self.__nb_simu_total += int(math.pow(2,size)) * delta_window
+                case "multi_bitflip_reg_multi":
+                    valid_registers = [(reg1, reg2)
+                                       for (reg1, size1), (reg2, size2) in combinations(zip(self.__registers_list, self.__registers_size), 2)
+                                       if 2 <= size1 < 10 and 2 <= size2 < 10]
+                    for index, (register_1, register_2) in enumerate(valid_registers):
+                        index_1 = self.__registers_list.index(register_1)
+                        index_2 = self.__registers_list.index(register_2)
+                        size_1 = self.__registers_size[index_1]
+                        size_2 = self.__registers_size[index_2]
+
+                        self.__nb_simu_total += int(math.pow(2,size_1)) * int(math.pow(2,size_2)) * delta_window
                 case _:
                     self.__nb_simu_total = 0
 
@@ -178,10 +187,10 @@ class TCL:
         self.__file_number = 1
         for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
             self.set_nb_simu_total(self.__config_data_simulator["threat_model"], window)
-            print(f"Number of simulations to execute: {self.__nb_simu_total}")
+            print(f"\t\t >>>> Number of simulations to execute: {self.__nb_simu_total}")
 
             self.__nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
-            print("Number of files to generate:", self.__nb_files)
+            print("\t\t >>>> Number of files to generate:", self.__nb_files)
 
             file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
             self.build_make_list = file_str
@@ -198,23 +207,33 @@ class TCL:
         file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
         self.build_make_list = file_str
         self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
-        # log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_" + str(self.__file_number) + ".json"
-        log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_1.json"
+
+        if(self.__config_data_simulator['multi_res_files'] < 1):
+            self.__config_data_simulator['multi_res_files'] = 1
+
+        if(self.__config_data_simulator['multi_res_files'] == 1):
+            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_1.json"
+        else:
+            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "-" + self.__protection + "_" + '-'.join(self.__threat_model) + "/" + self.__code + "-" + self.__protection + "_" + str(self.__file_number) + ".json"
+        
         self.build_ref_sim(log_file_sim, window, self.__nb_simu_total, self.__file_number)
 
     def build_faulted_simu(self, window, nb_simulations):
         for threat in self.__threat_model:
             if(threat == "multi_bitflip_spatial"):
-                print("Multi bit-flip spatial")
+                print("\t\t >>>> Multi bit-flip spatial")
                 self.build_multi_bitflip_spatial(window, nb_simulations)
             elif(threat == "multi_bitflip_temporel"):
-                print("Multi bit-flip temporel")
+                print("\t\t >>>> Multi bit-flip temporel")
                 self.build_multi_bitflip_temporel(window, nb_simulations)
             elif(threat == "multi_bitflip_reg"):
-                print("Multiples bit-flip inside a register")
+                print("\t\t >>>> Multiples bit-flip inside a register")
                 self.build_multi_bitflip_reg(window, nb_simulations)
+            elif(threat == "multi_bitflip_reg_multi"):
+                print("\t\t >>>> Multiples bit-flip inside 2 registers")
+                self.build_multi_bitflip_reg_multi(window, nb_simulations)
             elif(threat == "bitflip"):
-                print("Single bit-flip")
+                print("\t\t >>>> Single bit-flip")
                 for reg in self.__registers_list:
                     if(reg not in self.__config_data_simulator['avoid_register']):
                         for wreg in range(self.__registers_size[self.__registers_list.index(reg)]):
@@ -293,7 +312,7 @@ class TCL:
             exit(1)
 
     def build_multi_bitflip_spatial(self, window, nb_simulations):
-        print("Number of registers to be targeted: ", len(self.__registers_list))
+        print("\t\t\t >>>> Number of registers to be targeted: ", len(self.__registers_list))
         full_list_registre_with_size = list()
         for reg in self.__registers_list:
             if(reg not in self.__config_data_simulator['avoid_register']):
@@ -301,7 +320,7 @@ class TCL:
                     concat_reg = reg + "[" + str(bit) + "]"
                     full_list_registre_with_size.append(concat_reg)
         combinations_list = list(combinations(full_list_registre_with_size, 2))
-        print("Number of possible combinations: ", len(combinations_list))
+        print("\t\t\t >>>> Number of possible combinations: ", len(combinations_list))
 
         for reg1, reg2 in combinations_list:
             for start_time in range(window[0], window[1], 40):
@@ -354,7 +373,7 @@ class TCL:
                     self.gen_new_file(window)
             
     def build_multi_bitflip_temporel(self, window, nb_simulations):
-        print("Number of registers to be targeted : ", len(self.__registers_list))
+        print("\t\t\t >>>> Number of registers to be targeted : ", len(self.__registers_list))
         full_list_registre_with_size = list()
         for reg in self.__registers_list:
             if(reg not in self.__config_data_simulator['avoid_register']):
@@ -362,10 +381,10 @@ class TCL:
                     concat_reg = reg + "[" + str(bit) + "]"
                     full_list_registre_with_size.append(concat_reg)
         permutations_list = list(product(full_list_registre_with_size, repeat=int(self.__config_data_simulator['multi_fault_injection'])))
-        print("Number of possible permutations: ", len(permutations_list))
+        print("\t\t\t >>>> Number of possible permutations: ", len(permutations_list))
 
         combinations_list_window = list(combinations(range(window[0], window[1], int(self.__config_data_simulator['cpu_period'])), int(self.__config_data_simulator['multi_fault_injection'])))
-        print("Number of possible combinations in attack window: ", len(combinations_list_window))
+        print("\t\t\t >>>> Number of possible combinations in attack window: ", len(combinations_list_window))
 
         for reg1, reg2 in permutations_list:
             for t_reg1, t_reg2 in combinations_list_window:
@@ -418,53 +437,67 @@ class TCL:
         """"""
         relevant_reg = list()
         relevant_reg_size = list()
-        combinations_list = list()
-        full_list_registre_with_size = list()
         for index, register in enumerate(self.__registers_list):
             size = self.__registers_size[index]
-            if (size > 1 and size >= self.__nb_faults):
+            if (size >= self.__nb_faults and size < 16):
                 relevant_reg.append(register)
                 relevant_reg_size.append(size)
-        print("Number of registers to be targeted :", len(relevant_reg))
+        print("\t\t\t >>>> Number of registers to be targeted :", len(relevant_reg))
 
-        for reg in relevant_reg:
-            full_list_registre_with_size = list()
-            for bit in range(relevant_reg_size[relevant_reg.index(reg)]):
-                concat_reg = reg + "[" + str(bit) + "]"
-                full_list_registre_with_size.append(concat_reg)
-            combinations_list.extend(list(combinations(full_list_registre_with_size, self.__nb_faults)))
-        print("Number of possible combinations:", len(combinations_list))
+        for index, register in enumerate(relevant_reg):
+            size_reg = relevant_reg_size[index]
+            for size in range(int(math.pow(2,size_reg))):
+                for start_time in range(window[0], window[1], 40):
+                    self.__tcl_string = list()
+                    self.__nb_simu += 1
+                    self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "multi_bitflip_reg", register, size_reg))
+                    self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg", bin(size)[2:]))
+                    if(self.__protection == "wop"):
+                        self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                    elif(self.__protection == "hamming"):
+                        self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                    self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg"))
+                    self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
+                    try:
+                        self.write_tcl_file(''.join(self.__tcl_string))
+                    except TypeError as e:
+                        print("TypeError happened -- multi_bitflip_reg\n", e)
+                        exit(1)
+                    if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
+                        self.__batch_number += 1
+                        self.gen_new_file(window)
 
-        for reg1, reg2 in combinations_list:
-            for start_time in range(window[0], window[1], 40):
-                self.__tcl_string = list()
-                self.__nb_simu += 1
-                bit_flip_0 = -1
-                bit_flip_1 = -1
-                size_reg_0 = 0
-                size_reg_1 = 0
+    def build_multi_bitflip_reg_multi(self, window, nb_simulations):
+        """"""
+        valid_registers = [(reg1, size1, reg2, size2)
+                           for (reg1, size1), (reg2, size2) in combinations(zip(self.__registers_list, self.__registers_size), 2)
+                           if 2 <= size1 < 10 and 2 <= size2 < 10]
 
-                self.__tcl_string.append(self.__code_exec.init_sim_attacked_multi_bitflip(self.__nb_simu, start_time, "multi_bitflip_reg", reg1.split("[")[0], self.__registers_size[self.__registers_list.index(reg1.split("[")[0])], reg2.split("[")[0], self.__registers_size[self.__registers_list.index(reg2.split("[")[0])]))
-                bit_flip_0 = reg1.split("[")[1][:-1]
-                bit_flip_1 = reg2.split("[")[1][:-1]
-                size_reg_0 = self.__registers_size[self.__registers_list.index(reg1.split("[")[0])]
-                size_reg_1 = self.__registers_size[self.__registers_list.index(reg2.split("[")[0])]
+        nb_valid_reg = sum(1 for size in self.__registers_size if 2 <= size < 10)
+        print("\t\t\t >>>> Number of registers to be targeted :", nb_valid_reg)
 
-                self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg", bit_flip_0, bit_flip_1, size_reg_0, size_reg_1))
-                if(self.__protection == "wop"):
-                    self.__tcl_string.append(self.__code_exec.run_sim_attacked())
-                elif(self.__protection == "hamming"):
-                    self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
-                self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg"))
-                self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
-                try:
-                    self.write_tcl_file(''.join(self.__tcl_string))
-                except TypeError:
-                    print("TypeError happened -- multi_bitflip_reg")
-                    exit(1)
-                if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
-                    self.__batch_number += 1
-                    self.gen_new_file(window)
+        for index, (register_1, size_1, register_2, size_2) in enumerate(valid_registers):
+            for size1 in range(int(math.pow(2,size_1))):
+                for size2 in range(int(math.pow(2,size_2))):
+                    for start_time in range(window[0], window[1], 40):
+                        self.__tcl_string = list()
+                        self.__nb_simu += 1
+                        self.__tcl_string.append(self.__code_exec.init_sim_attacked_multi_bitflip_reg_multi(self.__nb_simu, start_time, "multi_bitflip_reg_multi", register_1, size_1, register_2, size_2))
+                        self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg_multi", bit_flipped_0=bin(size1)[2:], bit_flipped_1=bin(size2)[2:]))
+                        if(self.__protection == "wop"):
+                            self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                        elif(self.__protection == "hamming"):
+                            self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                        self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg_multi"))
+                        self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
+                        try:
+                            self.write_tcl_file(''.join(self.__tcl_string))
+                        except TypeError as e:
+                            print("TypeError happened -- multi_bitflip_reg_multi\n", e)
+                            exit(1)
+                        if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
+                            self.__batch_number += 1
+                            self.gen_new_file(window)
 
     ## Fonction servant à écrire le fichier tcl final avec toutes les données de simulations
     def write_tcl_file(self, data):
@@ -512,19 +545,22 @@ class TCL:
             print("An exception has occurred : {exc}".format(exc=e.args[1]))
             return 1
         return 0
-
+            
     def gen_build_make(self):
         """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
-        str_to_clipboard = ""
-        if (len(self.__build_make_list) != 0):
-            str_to_clipboard = "cd /home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/" + self.__code
-            for elem in self.__build_make_list:
-                str_to_clipboard += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/wpensec/Documents/DRiSCY/pulpino/vsim\ TB_TEST=\"\"\ /home/wpensec/tools_memphis/questa/questasim/linux_x86_64/vsim\ \ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ " + elem + "\;\ exit\;'\ > vsim.log"
-            pyperclip.copy(str_to_clipboard)
-            # print(str_to_clipboard)
-            try:
-                with open(self.__gen_path + "build.make", 'w') as build_file:
-                    build_file.write(str_to_clipboard)
-            except Exception as e:
-                print("Une exception est survenue : {exc}".format(exc=e.args[1]))
-                return 1
+        if not self.__build_make_list:
+            return  # Nothing to do if build_make_list is empty
+        nb_simu_files = math.ceil(self.__nb_files / self.__config_data_simulator['multi_res_files'])
+        build_make_str = ""
+        try:
+            with open(self.__gen_path + "build.make", 'w') as build_file:
+                for index, elem in enumerate(self.__build_make_list):
+                    if index % nb_simu_files == 0:
+                        build_make_str += f"\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
+
+                    build_make_str += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/william/Documents/DRiSCY/pulpino/vsim\ TB_TEST=""\ /home/william/tools_memphis/questa/questasim/linux_x86_64/vsim\ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ {elem}\;\ exit\;'\ > vsim.log".format(elem=elem)
+                build_file.write(build_make_str)
+        except Exception as e:
+            print("An exception occurred: {exc}".format(exc=e.args[1]))
+            return 1
+        return 0

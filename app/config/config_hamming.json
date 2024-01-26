@@ -6,7 +6,7 @@
     "path_results_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/results_simulations/",
     "work_env": "/home/pensec/Documents/Divers/sharedFolder",
     "path_simulation": [
-        "/home/wpensec/Documents/DRiSCY/pulpino/sw/build/apps/",
+        "/home/william/Documents/DRiSCY/pulpino/sw/build/apps/",
         "__code",
         "/CMakeFiles/",
         "__code",
@@ -26,7 +26,7 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "multi_bitflip_spatial"
+        "multi_bitflip_reg_multi"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
@@ -148,5 +148,6 @@
     },
     "cycle_ref": 100,
     "cpu_period": 40,
-    "batch_sim": 2200
+    "batch_sim": 2064,
+    "multi_res_files": 3
 }
