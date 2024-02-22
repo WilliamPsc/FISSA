@@ -20,11 +20,11 @@ class FaultInjection:
             case "set1":
                 return self.__set1()
             case "bitflip":
-                return self.__bitflip(bit_flipped_0)
-            case "multi_bitflip_spatial":
-                return self.__multi_bitflip_spatial(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
-            case "multi_bitflip_temporel":
-                return self.__multi_bitflip_temporel(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
+                return self.__bitflip(bit_flipped_0, size_reg_0)
+            case "single_bitflip_spatial":
+                return self.__single_bitflip_spatial(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
+            case "single_bitflip_temporel":
+                return self.__single_bitflip_temporel(bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1)
             case "multi_bitflip_reg":
                 return self.__multi_bitflip_reg(bit_flipped_0)
             case "multi_bitflip_reg_multi":
@@ -58,27 +58,30 @@ if {$threat == "set1"} {
 }
 """
 
-    def __bitflip(self, bit_flipped_0):
-        return """
-if {{$threat == "bitflip"}} {{
-    if {{$width_register == 1}} {{
-        set value_curr_reg [examine -bin $faulted_register]
-        set value [lindex [split $value_curr_reg b] 1]
-        set bf [expr {{$value^1}}]
-        set bit_flipped 0
-        force -freeze $faulted_register $bf 0 -cancel "$half_periode ns"
-    }} else {{
-        set bit_attacked {wreg}
-        set bit_flipped $bit_attacked
-        set value_curr_reg [examine -hex $faulted_register\[{{$bit_attacked}}\]]
-        set value [lindex [split $value_curr_reg h] 1]
-        set bitflip_faulted_register [expr $value^1]
-        force -freeze $faulted_register\[{{$bit_attacked}}\] [concat $width_register'h$bitflip_faulted_register] 0 -cancel "$half_periode ns"
-    }}
+    def __bitflip(self, bit_flipped_0, size_reg_0):
+        if(size_reg_0 == 1):
+            return """
+if {{$width_register == 1}} {{
+    set value_curr_reg [examine -bin $faulted_register]
+    set value [lindex [split $value_curr_reg b] 1]
+    set bf [expr {{$value^1}}]
+    set bit_flipped 0
+    force -freeze $faulted_register $bf 0 -cancel "$half_periode ns"
+}}
+""".format(wreg = bit_flipped_0)
+        else:
+            return """
+if {{$width_register > 1}} {{
+    set bit_attacked {wreg}
+    set bit_flipped $bit_attacked
+    set value_curr_reg [examine -hex $faulted_register\[{{$bit_attacked}}\]]
+    set value [lindex [split $value_curr_reg h] 1]
+    set bitflip_faulted_register [expr $value^1]
+    force -freeze $faulted_register\[{{$bit_attacked}}\] [concat $width_register'h$bitflip_faulted_register] 0 -cancel "$half_periode ns"
 }}
 """.format(wreg = bit_flipped_0)
     
-    def __multi_bitflip_spatial(self, bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1):
+    def __single_bitflip_spatial(self, bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1):
         """Generate code for a spatial multi-bit-flip fault threat model"""
         if(size_reg_0 == 1 and size_reg_1 == 1):
             return """
@@ -156,7 +159,7 @@ force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1
             print("Erreur de paramètres ! ", size_reg_0, size_reg_1)
             exit(2)
 
-    def __multi_bitflip_temporel(self, bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1):
+    def __single_bitflip_temporel(self, bit_flipped_0, bit_flipped_1, size_reg_0, size_reg_1):
         """Generate code for a multi-bit-flip temporal fault threat model"""
         if(size_reg_0 == 1 and size_reg_1 == 1):
             return """

@@ -26,7 +26,7 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "multi_bitflip_reg_multi"
+        "single_bitflip_temporel"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
@@ -148,6 +148,6 @@
     },
     "cycle_ref": 100,
     "cpu_period": 40,
-    "batch_sim": 2064,
-    "multi_res_files": 3
+    "batch_sim": 2140,
+    "multi_res_files": 4
 }

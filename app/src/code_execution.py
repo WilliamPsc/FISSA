@@ -44,6 +44,7 @@ set regs_file {regs_file}
 set state_file {state_file}
 set f [open $state_file w]
 puts $f "{{"
+puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
 close $f
 
 set f [open $regs_file r]
@@ -55,6 +56,10 @@ close $f
 #############  INIT SIMULATIONS #############
 set regs_file {regs_file}
 set state_file {state_file}
+set f [open $state_file w]
+puts $f "{{"
+puts $f "\\t\\"start\\": \\"[clock format [clock seconds] -format \"%Y/%m/%d:%H:%M:%S\"]\\","
+close $f
 
 set f [open $regs_file r]
 set reg_file_data [read $f]
@@ -168,7 +173,7 @@ set bit_flipped_1 -1
 set status_end -1 
 """.format(number = nb_sim, start_window = start_time, faute = threat, width_register_0 = size_register_0, reg_0 = register_0, width_register_1 = size_register_1, reg_1 = register_1)
 
-    def init_sim_attacked_multi_bitflip_temporel(self, nb_sim, start_time, threat, register_0 = '', size_register_0 = 1, register_1 = '', size_register_1 = 1, t_reg0 = 0, t_reg1 = 0):
+    def init_sim_attacked_single_bitflip_temporel(self, nb_sim, start_time, threat, register_0 = '', size_register_0 = 1, register_1 = '', size_register_1 = 1, t_reg0 = 0, t_reg1 = 0):
         return """
 ##############################################################################
 ############# ATTACK {number} #############
@@ -296,7 +301,7 @@ while {$sim_active == 1} {
 }
 """
 
-    def run_sim_attacked_multi_bitflip_temporel(self, fault_injection = ""):
+    def run_sim_attacked_single_bitflip_temporel(self, fault_injection = ""):
         return """
 ###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
 while {{$sim_active == 1}} {{
@@ -307,19 +312,8 @@ while {{$sim_active == 1}} {{
 
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
-    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tcr/error]
-    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_decoder_tpr/error]
-    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_addr_rf_tag/error]
-    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_26/error]
-    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_decoder_rf_tag/error]
-
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    # if {{[expr {{$error_tcr}} != {{"5'h0"}}] || [expr {{$error_tpr}} != {{"5'h0"}}] || [expr {{$error_addr_tag}} != {{"4'h0"}}] || [expr {{$error_26}} != {{"5'h0"}}] || [expr {{$error_rf_tag}} != {{"6'h0"}}]}} {{
-    #     ## Detection error ##
-    #     set status_end 5
-    #     set sim_active 0
-    # }}
     if {{$nb_cycle > $cycle_ref}} {{
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
@@ -348,7 +342,7 @@ while {{$sim_active == 1}} {{
 
     def end_sim(self, nbSimCurr, nbSimusTotal):
         if (nbSimCurr != 0) and ((nbSimCurr % self.__config_data['batch_sim']) == 0):
-            print(nbSimCurr, end=' ')
+            # print(nbSimCurr, end=' ')
             return """
 ############# END SIM {number} #############
 # Write date of end

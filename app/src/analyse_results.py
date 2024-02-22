@@ -10,7 +10,9 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import concurrent.futures
 from datetime import datetime
+from timeit import default_timer as timer
 
 ### Class ###
 class AnalyseResults:
@@ -41,19 +43,6 @@ class AnalyseResults:
             return 1
         return 0
 
-    # def table_res(self, appli:str, value:pd.DataFrame, t1:pd.DataFrame):
-    #     """Display results in a table latex format"""
-    #     total = len(value)
-    #     self.__idx_app.append(appli)
-    #     crash = value.query('status_end == 1')
-    #     nstr = value.query('status_end == 2')
-    #     delay = value.query('status_end == 3')
-    #     success = value.query('status_end == 4')
-
-    #     percent_success = f'{round(len(success)*100/total, 2):.2f}'
-    #     list_table1 = [len(crash), len(nstr), len(delay), str(len(success)) + " (" + percent_success + "\%)", total]
-    #     t1.loc[len(t1)] = list_table1
-
     def table_res(self, appli: str, value: pd.DataFrame, t1: pd.DataFrame):
         """Display results in a table latex format"""
         total = len(value)
@@ -71,7 +60,6 @@ class AnalyseResults:
 
         # Update t1 DataFrame
         t1.loc[len(t1)] = [crash, nstr, delay, f'{success} ({percent_success}\%)', total]
-
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
@@ -91,36 +79,56 @@ class AnalyseResults:
             case "buffer_overflow":
                 if(threat == "multi_bitflip_reg_multi"):
                     vmax_value = 315
-                if(threat == "multi_bitflip_spatial"):
+                if(threat == "single_bitflip_spatial"):
                     vmax_value = 272
+                if(threat == "single_bitflip_temporel"):
+                    vmax_value = 0
             case "secretFunction":
                 if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 195
-                if(threat == "multi_bitflip_spatial"):
+                    vmax_value = 680
+                if(threat == "single_bitflip_spatial"):
                     vmax_value = 524
+                if(threat == "single_bitflip_temporel"):
+                    vmax_value = 320
             case "propagationTagV2":
                 if(threat == "multi_bitflip_reg_multi"):
                     vmax_value = 248
-                if(threat == "multi_bitflip_spatial"):
+                if(threat == "single_bitflip_spatial"):
                     vmax_value = 154
-        sns.heatmap(heatmap_data, annot=True, cmap='coolwarm', fmt='g', cbar_kws={'label': 'Number of success'},
+                if(threat == "single_bitflip_temporel"):
+                    vmax_value = 0
+        if(self.__config['prot'] == "wop"):
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
+                    center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
+                    annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=False)
+            
+            # Set fontsize for x and y-axis labels
+            plt.xticks(fontsize=8)
+            plt.yticks(fontsize=8)
+            # Set axis labels to None to remove them
+            plt.xlabel(None)
+            plt.ylabel(None)
+            # Adjust layout to eliminate extra white space
+            plt.tight_layout()
+        else:
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success'},
                     vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black',
-                    mask=(heatmap_data == 0), annot_kws={'fontsize': 6, 'ha': 'center', 'va': 'center'})
-        plt.title(f'Heatmap of success based on both faulted registers values for {name_appli}')
+                    mask=(heatmap_data == 0), annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=False)
+            
+            # Set fontsize for x and y-axis labels
+            plt.xticks(fontsize=8)
+            plt.yticks(fontsize=8)
+            # Set axis labels to None to remove them
+            plt.xlabel(None)
+            plt.ylabel(None)
+            # Adjust layout to eliminate extra white space
+            plt.tight_layout()
 
-        # Set fontsize for x and y-axis labels
-        plt.xticks(fontsize=8)
-        plt.yticks(fontsize=8)
-
-        # Set fontsize for x and y-axis labels
-        plt.xlabel('Faulted Register 0', fontsize=10)
-        plt.ylabel('Faulted Register 1', fontsize=10)
-
-        # Adjust layout to eliminate extra white space
-        plt.tight_layout()
+            # Remove all the blank space around the figure
+            plt.axis('tight')
 
         # Save the figure to a PDF file
-        plt.savefig(self.__table2 + "heatmap_" + appli + "-" + self.__config['prot'] + "_" + threat + ".pdf", format='pdf')
+        plt.savefig(self.__table2 + "heatmap_" + appli + "_" + self.__config['prot'] + "_" + threat + "_" + str(self.__config['multi_fault_injection']) + ".pdf", format='pdf', bbox_inches='tight')
 
     def calculate_time_difference(self, start, end):
         # Convert the date strings to datetime objects
@@ -141,9 +149,9 @@ class AnalyseResults:
 
     def analyse_results(self):
         """"""
-        test:bool = False
+        test:bool = True
         if(test):
-            applications = ["secretFunction"]
+            applications = ["buffer_overflow"]
         else:
             applications = self.get_codes()
         
@@ -155,27 +163,62 @@ class AnalyseResults:
                 print(f"\t======= >>> {threat} <<< =======")
                 # Ouverture de chaque fichier résultat
                 print("\t\t>>> Opening result file")
-                path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}-{self.__config['prot']}_{threat}/")
+                path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{threat}_{str(self.__config['multi_fault_injection'])}/")
                 # Check if the directory exists
                 if os.path.exists(path_to_filename):
                     json_files = [pos_json for pos_json in os.listdir(path_to_filename) if pos_json.endswith('.json')] # Enregistrement sous forme de DataFrame panda
                     if(len(json_files) != 0):
-                        print("\t\t>>> READING FILE ...")
-                        start_value = 0
-                        end_value = 0
+                        if(len(json_files) == 1):
+                            print("\t\t>>> READING FILE ...")
+                        else:
+                            print(f"\t\t>>> READING {len(json_files)} FILES ...")
+                        start_value = pd.Timestamp.max
+                        end_value = pd.Timestamp.min
+                        time_read = 0
+                        time_concat = 0
+                        list_dataframe_files = list()
+
                         for file in json_files:
+                            start_time_read = timer()
                             try:
+                                # Read JSON file
                                 value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose()
+
+                                # Extract values associated with 'start' and 'end' from index
+                                if 'start' in value_basique.index:
+                                    start_str = value_basique.loc['start'].iloc[0]
+                                    start_datetime = pd.to_datetime(start_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
+                                    if pd.notna(start_datetime):
+                                        start_value = min(start_value, start_datetime)
+                                if 'end' in value_basique.index:
+                                    end_str = value_basique.loc['end'].iloc[0]
+                                    end_datetime = pd.to_datetime(end_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
+                                    if pd.notna(end_datetime):
+                                        end_value = max(end_value, end_datetime)
                             except ValueError as e:
                                 print(f"Error reading JSON file {os.path.join(path_to_filename, file)}: {e}")
-                                continue
-                            # Extract values associated with 'start' and 'end' from index
-                            if 'start' in value_basique.index:
-                                start_value = value_basique.loc['start'].iloc[0]  # Assuming 'start' is in the index
-                            if 'end' in value_basique.index:
-                                end_value = value_basique.loc['end'].iloc[0]  # Assuming 'end' is in the index
-                            self.__table_data = pd.concat([self.__table_data, value_basique], axis=0, ignore_index=False)
+                                break
+                            end_time_read = timer()
+                            if(time_read == 0):
+                                time_read = (end_time_read - start_time_read)
+                            else:
+                                time_read += (end_time_read - start_time_read)
+                            list_dataframe_files.append(value_basique)
+
+                        start_time_concat = timer()
+                        self.__table_data = pd.concat(list_dataframe_files, axis=0, ignore_index=False)
+                        end_time_concat = timer()
+                        if(time_concat == 0):
+                            time_concat = (end_time_concat - start_time_concat)
+                        else:
+                            time_concat += (end_time_concat - start_time_concat)
+
+                        start_time_drop = timer()
                         self.__table_data = self.__table_data.drop(index=['start', 'simulation_0', 'end'])
+                        end_time_drop = timer()
+                        print(f'\t\t\t>>>> Execute time read : {round(1000*(time_read), 2)} ms')
+                        print(f'\t\t\t>>>> Execute time concat : {round(1000*(time_concat), 2)} ms')
+                        print(f'\t\t\t>>>> Execute time drop : {round(1000*(end_time_drop - start_time_drop), 2)} ms')
                         if(start_value != 0 and end_value != 0):
                             self.calculate_time_difference(start_value, end_value)
                         # ==================== TABLE 1 ====================
@@ -186,7 +229,7 @@ class AnalyseResults:
 
                         # ==================== TABLE 2 ====================
                         success = self.__table_data.query('status_end == 4')
-                        if(threat in ["multi_bitflip_spatial","multi_bitflip_reg_multi"] and len(success) > 0):
+                        if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
                             print("\t\t>>> Heatmap")
                             self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)
                         # =================================================
@@ -196,8 +239,9 @@ class AnalyseResults:
                     print(f"The directory \"{path_to_filename}\" does not exist.")
                 print()
 
-            # # Tableau avec résultats globaux
+            # Tableau avec résultats globaux
             print("==================== TABLE 1 ====================")
             df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
             print(df_t1)
-            self.write_results(self.__table1 + self.__config['prot'] + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="H"))
+            self.write_results(self.__table1 + self.__config['prot'] + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="t"))
+
