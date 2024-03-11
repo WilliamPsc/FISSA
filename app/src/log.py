@@ -57,20 +57,16 @@ puts $f "\\t\\"simulation_$nb_sim\\": {"
 puts $f "\\t\\t\\"cycle_ref\\": $cycle_ref," 
 puts $f "\\t\\t\\"cycle_ending\\": $check_cycle,"
 
-#---- TCR / TPR ----
-puts $f "\\t\\t\\"TPR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q]\\","
-puts $f "\\t\\t\\"TCR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q]\\","
-
 #---- Log Register File ----
 for {set j 0} {$j < 32} {incr j} {
-    puts $f "\\t\\t\\"rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
+    puts $f "\\t\\t\\"registers_i/rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
 }
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
-        puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
+        puts $f "\\t\\t\\"[join [lrange $nom_reg_list end-1 end] "/"]\\": \\"[examine -hex $reg]\\","
     }
 }
  
@@ -114,7 +110,7 @@ for {set j 0} {$j < 32} {incr j} {
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
         puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
     }
@@ -151,10 +147,6 @@ puts $f "\\t\\"simulation_$nb_sim\\": {"
 puts $f "\\t\\t\\"cycle_ref\\": $cycle_ref," 
 puts $f "\\t\\t\\"cycle_ending\\": $check_cycle,"
 
-#---- TCR / TPR ----
-puts $f "\\t\\t\\"TPR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q]\\","
-puts $f "\\t\\t\\"TCR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q]\\","
-
 #---- Log Register File ----
 for {set j 0} {$j < 32} {incr j} {
     puts $f "\\t\\t\\"rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
@@ -162,10 +154,15 @@ for {set j 0} {$j < 32} {incr j} {
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
-        puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
+        puts $f "\\t\\t\\"[lrange $nom_reg_list end-1 end] "/"]\\": \\"[examine -hex $reg]\\","
     }
+}
+
+foreach reg $log_registers_list {
+    set nom_reg_list [split $reg "/"]
+    puts $f "\\t\\t\\"[join [lrange $nom_reg_list end-1 end] "/"]\\": \\"[examine -hex $reg]\\","
 }
 
 #---- Log faulted register: name, width, threat considered, when ----
@@ -204,10 +201,6 @@ puts $f "\\t\\"simulation_$nb_sim\\": {"
 puts $f "\\t\\t\\"cycle_ref\\": $cycle_ref," 
 puts $f "\\t\\t\\"cycle_ending\\": $check_cycle,"
 
-#---- TCR / TPR ----
-puts $f "\\t\\t\\"TPR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q]\\","
-puts $f "\\t\\t\\"TCR\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q]\\","
-
 #---- Log Register File ----
 for {set j 0} {$j < 32} {incr j} {
     puts $f "\\t\\t\\"rf$j\\": \\"[examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i/rf_reg\[{$j}\]]\\","
@@ -215,10 +208,15 @@ for {set j 0} {$j < 32} {incr j} {
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
-        puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
+        puts $f "\\t\\t\\"[join [lrange $nom_reg_list end-1 end] "/"]\\": \\"[examine -hex $reg]\\","
     }
+}
+
+foreach reg $log_registers_list {
+    set nom_reg_list [split $reg "/"]
+    puts $f "\\t\\t\\"[join [lrange $nom_reg_list end-1 end] "/"]\\": \\"[examine -hex $reg]\\","
 }
 
 #---- Log faulted register: name, width, threat considered, when ----
@@ -269,7 +267,7 @@ for {set j 0} {$j < 32} {incr j} {
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
         puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
     }
@@ -317,7 +315,7 @@ for {set j 0} {$j < 32} {incr j} {
 
 #---- Log Registres du fichiers registres.yaml ----
 foreach reg $reg_file_data {
-    if {([expr {[lsearch $log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
+    if {([expr {[lsearch $avoid_log_registers_list $reg] == -1}]) && ([expr {$reg != "-"}])} {
         set nom_reg_list [split $reg "/"]
         puts $f "\\t\\t\\"[lindex $nom_reg_list [expr [llength $nom_reg_list] - 1]]\\": \\"[examine -hex $reg]\\","
     }

@@ -13,7 +13,7 @@
         ".vsimc.dir/",
         "__code"
     ],
-    "prot": "wop",
+    "prot": "simple_parity",
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",
@@ -35,8 +35,6 @@
         "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o"
     ],
     "avoid_log_registers": [
-        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q",
-        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[0]",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[1]",
@@ -71,7 +69,13 @@
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[30]",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[31]"
     ],
-    "log_registers": [],
+    "log_registers": [
+        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tcr/error_o_csr",
+        "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tpr/error_o_csr",
+        "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_addr_rf_tag/error_o_addr_rf_tag",
+        "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_26/error_o_26",
+        "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/simple_parity_decoder_rf_tag/error_o_rf_tag"
+    ],
     "fenetre_tir": {
         "buffer_overflow": [
             [
@@ -95,13 +99,13 @@
     "cycle_ref": 100,
     "cpu_period": 40,
     "batch_sim": {
-        "buffer_overflow": 0,
-        "secretFunction": 0,
-        "propagationTagV2": 0
+        "buffer_overflow": 2197,
+        "secretFunction": 2188,
+        "propagationTagV2": 2179
     },
     "multi_res_files": {
         "buffer_overflow": 4,
-        "secretFunction": 6,
+        "secretFunction": 10,
         "propagationTagV2": 4
     }
 }

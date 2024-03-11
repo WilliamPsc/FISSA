@@ -80,7 +80,8 @@ class Main:
         codes = self.get_codes()
         # codes = ["buffer_overflow"]
         for code in codes:
-            print("\t===============", self.__config_data['name_results'][code], "===============")
+            print(f"\t=============== {self.__config_data['name_results'][code]} ===============")
+            print(f"\t\t >>>> {''.join(self.__config_data['threat_model'])} <<<<")
             tcl_gen = TCL(self.__config_data, code, protection)
             tcl_gen.read_register_list()
             tcl_gen.write_faulted_registers_file()

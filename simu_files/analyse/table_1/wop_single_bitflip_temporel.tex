@@ -1,12 +1,14 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Logical fault injection simulation campaigns results}
 \label{table:end_sim_by_status_wop_single_bitflip_temporel}
-\begin{tabular}{lrrrlr}
+\begin{tabular}{lrrrrlr}
 \toprule
- & Crash & NSTR & Delay & Success & Total \\
+ & Crash & NSTR & Delay & Detection & Success & Total \\
 \midrule
-Buffer Overflow & 0 & 238633 & 1143 & 2159 (0.89\%) & 241935 \\
+Buffer Overflow & 0 & 238633 & 1143 & 0 & 2159 (0.89\%) & 241935 \\
+WU-FTPd & 0 & 429260 & 12192 & 0 & 10160 (2.25\%) & 451612 \\
+Compare/Compute & 0 & 94488 & 381 & 0 & 1905 (1.97\%) & 96774 \\
 \bottomrule
 \end{tabular}
 \end{table}

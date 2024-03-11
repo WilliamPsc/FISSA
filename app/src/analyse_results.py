@@ -54,12 +54,13 @@ class AnalyseResults:
         nstr = status_counts.get(2, 0)
         delay = status_counts.get(3, 0)
         success = status_counts.get(4, 0)
+        detection = status_counts.get(5, 0)
 
         # Calculate percentage of success
         percent_success = f'{(success / total) * 100:.2f}'
 
         # Update t1 DataFrame
-        t1.loc[len(t1)] = [crash, nstr, delay, f'{success} ({percent_success}\%)', total]
+        t1.loc[len(t1)] = [crash, nstr, delay, detection, f'{success} ({percent_success}\%)', total]
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
@@ -82,25 +83,25 @@ class AnalyseResults:
                 if(threat == "single_bitflip_spatial"):
                     vmax_value = 272
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 0
+                    vmax_value = 320
             case "secretFunction":
                 if(threat == "multi_bitflip_reg_multi"):
                     vmax_value = 680
                 if(threat == "single_bitflip_spatial"):
                     vmax_value = 524
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 320
+                    vmax_value = 672
             case "propagationTagV2":
                 if(threat == "multi_bitflip_reg_multi"):
                     vmax_value = 248
                 if(threat == "single_bitflip_spatial"):
                     vmax_value = 154
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 0
+                    vmax_value = 96
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
-                    annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=False)
+                    annot_kws={'fontsize': 6, 'ha': 'center', 'va': 'center'}, square=True)
             
             # Set fontsize for x and y-axis labels
             plt.xticks(fontsize=8)
@@ -113,7 +114,7 @@ class AnalyseResults:
         else:
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success'},
                     vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black',
-                    mask=(heatmap_data == 0), annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=False)
+                    mask=(heatmap_data == 0), annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=True)
             
             # Set fontsize for x and y-axis labels
             plt.xticks(fontsize=8)
@@ -133,8 +134,8 @@ class AnalyseResults:
     def calculate_time_difference(self, start, end):
         # Convert the date strings to datetime objects
         date_format = "%Y/%m/%d:%H:%M:%S"
-        date1 = datetime.strptime(start, date_format)
-        date2 = datetime.strptime(end, date_format)
+        date1 = datetime.strptime(start.strftime(date_format), date_format)
+        date2 = datetime.strptime(end.strftime(date_format), date_format)
 
         # Calculate the difference between the two dates
         time_difference = date2 - date1
@@ -149,14 +150,14 @@ class AnalyseResults:
 
     def analyse_results(self):
         """"""
-        test:bool = True
+        test:bool = False
         if(test):
             applications = ["buffer_overflow"]
         else:
             applications = self.get_codes()
         
         for threat in self.__config['threat_model']:
-            df_t1 = pd.DataFrame([], columns=["Crash", "NSTR", "Delay", "Success", "Total"])
+            df_t1 = pd.DataFrame([], columns=["Crash", "NSTR", "Delay", "Detection", "Success", "Total"])
             for appli in applications:
                 self.__table_data = pd.DataFrame()
                 print("=================== " + self.__config['name_results'][appli] + " ===================")
@@ -222,8 +223,8 @@ class AnalyseResults:
                         if(start_value != 0 and end_value != 0):
                             self.calculate_time_difference(start_value, end_value)
                         # ==================== TABLE 1 ====================
-                        self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
                         print("\t\t>>> TABLE 1")
+                        self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
                         df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
                         # =================================================
 
@@ -241,7 +242,8 @@ class AnalyseResults:
 
             # Tableau avec résultats globaux
             print("==================== TABLE 1 ====================")
-            df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
-            print(df_t1)
-            self.write_results(self.__table1 + self.__config['prot'] + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="t"))
+            if not df_t1.empty:
+                df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
+                print(df_t1)
+                self.write_results(self.__table1 + self.__config['prot'] + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="t"))
 

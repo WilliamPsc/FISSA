@@ -45,8 +45,9 @@ def performance_comparison(protect:str, nb_repetitions):
 if __name__ == "__main__":
     print("======== List of protections available ========")
     print("\t 1- Without protection")
-    print("\t 2- Hamming Code")
-    print("\t 3- BCH Code")
+    print("\t 2- Simple Parity")
+    print("\t 3- Hamming Code")
+    print("\t 4- BCH Code")
     input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
     protect_choice = [int(x) for x in input_str.split()]
     if all(1 <= num <= 3 for num in protect_choice):
@@ -55,8 +56,10 @@ if __name__ == "__main__":
             if(num == 1):
                 protection_chosen.append("Unprotected")
             if(num == 2):
-                protection_chosen.append("Hamming Code")
+                protection_chosen.append("Simple Parity")
             if(num == 3):
+                protection_chosen.append("Hamming Code")
+            if(num == 4):
                 protection_chosen.append("BCH Code")
         print("You choose:", ', '.join(protection_chosen))
     else:
@@ -77,9 +80,12 @@ if __name__ == "__main__":
                 protect = "wop"
                 protect_str = "Without protection"
             case 2:
+                protect = "simple_parity"
+                protect_str = "Simple Parity"
+            case 3:
                 protect = "hamming"
                 protect_str = "Hamming Code"
-            case 3:
+            case 4:
                 protect = "bch"
                 protect_str = "BCH Code"
             case _:

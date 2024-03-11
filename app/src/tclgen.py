@@ -65,12 +65,12 @@ class TCL:
         self.__tcl_string =  list()
         self.__nb_simu = 0
         self.__nb_simu_total = 0
-        self.__code_exec = CodeExecute(config_data)
+        self.__code_exec = CodeExecute(config_data, self.__code)
         self.__log_data = LogData(config_data)
         self.__inject_fault = FaultInjection(config_data)
         self.__batch_number = 1
         self.__res_file = 1
-        self.__batch_max_sim:int = config_data["batch_sim"]
+        self.__batch_max_sim:int = config_data["batch_sim"][self.__code]
         self.__build_make_list = list()
 
     @property
@@ -192,6 +192,7 @@ class TCL:
 
             self.__nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
             print("\t\t >>>> Number of files to generate:", '{:,}'.format(self.__nb_files).replace(',', ' '))
+            print(f"\t\t >>>> Number of batch: {self.__config_data_simulator['multi_res_files'][self.__code]}")
 
             file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
             self.build_make_list = file_str
@@ -209,10 +210,10 @@ class TCL:
         self.build_make_list = file_str
         self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
 
-        if(self.__config_data_simulator['multi_res_files'] < 1):
-            self.__config_data_simulator['multi_res_files'] = 1
+        if(self.__config_data_simulator['multi_res_files'][self.__code] < 1):
+            self.__config_data_simulator['multi_res_files'][self.__code] = 1
 
-        if(self.__config_data_simulator['multi_res_files'] == 1):
+        if(self.__config_data_simulator['multi_res_files'][self.__code] == 1):
             log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_1.json"
         else:
             log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
@@ -315,6 +316,7 @@ class TCL:
 
     def build_single_bitflip_spatial(self, window, nb_simulations):
         print("\t\t\t >>>> Number of registers to be targeted: ", len(self.__registers_list))
+        print("\t\t\t >>>> Number of bits to be targeted: ", sum(self.__registers_size))
         full_list_registre_with_size = list()
         for reg in self.__registers_list:
             if(reg not in self.__config_data_simulator['avoid_register']):
@@ -456,6 +458,8 @@ class TCL:
                     self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg", bin(size)[2:]))
                     if(self.__protection == "wop"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                    if(self.__protection == "simple_parity"):
+                        self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                     elif(self.__protection == "hamming"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
                     self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg"))
@@ -553,7 +557,7 @@ class TCL:
         """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
         if not self.__build_make_list:
             return  # Nothing to do if build_make_list is empty
-        nb_simu_files = math.ceil(self.__nb_files / self.__config_data_simulator['multi_res_files'])
+        nb_simu_files = math.ceil(self.__nb_files / self.__config_data_simulator['multi_res_files'][self.__code])
         build_make_str = ""
         try:
             with open(self.__gen_path + "build.make", 'w') as build_file:
