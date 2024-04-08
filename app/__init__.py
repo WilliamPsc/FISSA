@@ -46,11 +46,12 @@ if __name__ == "__main__":
     print("======== List of protections available ========")
     print("\t 1- Without protection")
     print("\t 2- Simple Parity")
-    print("\t 3- Hamming Code")
-    print("\t 4- BCH Code")
+    print("\t 3- Hamming Code - SECSED")
+    print("\t 4- Hamming Code - SECDED")
+    print("\t 5- BCH Code")
     input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
     protect_choice = [int(x) for x in input_str.split()]
-    if all(1 <= num <= 3 for num in protect_choice):
+    if all(1 <= num <= 5 for num in protect_choice):
         protection_chosen = []
         for num in protect_choice:
             if(num == 1):
@@ -58,8 +59,10 @@ if __name__ == "__main__":
             if(num == 2):
                 protection_chosen.append("Simple Parity")
             if(num == 3):
-                protection_chosen.append("Hamming Code")
+                protection_chosen.append("Hamming Code - SECSED")
             if(num == 4):
+                protection_chosen.append("Hamming Code - SECDED")
+            if(num == 5):
                 protection_chosen.append("BCH Code")
         print("You choose:", ', '.join(protection_chosen))
     else:
@@ -84,8 +87,11 @@ if __name__ == "__main__":
                 protect_str = "Simple Parity"
             case 3:
                 protect = "hamming"
-                protect_str = "Hamming Code"
+                protect_str = "Hamming Code - SECSED"
             case 4:
+                protect = "secded"
+                protect_str = "Hamming Code - SECDED"
+            case 5:
                 protect = "bch"
                 protect_str = "BCH Code"
             case _:
@@ -96,13 +102,13 @@ if __name__ == "__main__":
 
         match command:
             case 1:
-                print(f"\n    ==================== >>>> Launching the generator <<<< ====================")
+                print(f"\n\t==================== >>>> Launching the generator <<<< ====================")
                 generator(protect=protect)
             case 2:
-                print(f"\n    ==================== >>>> Results analysis <<<< ====================")
+                print(f"\n\t  ==================== >>>> Results analysis <<<< ====================")
                 analyse_results(protect=protect)
             case 3:
-                print(f"\n    ==================== >>>> Performance comparison <<<< ====================")
+                print(f"\n\t  ==================== >>>> Performance comparison <<<< ====================")
                 nb_repetitions = int(input("\tHow many repetitions to you want to generate? "))
                 if(nb_repetitions < 10 or nb_repetitions > 2200):
                     print("\t ⚠️  I recommend between 1,000 and 2,200 simulations, depending on the case. Try to have all simulations in 1 file. ⚠️")

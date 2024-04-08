@@ -360,6 +360,54 @@ while {$sim_active == 1} {
 }
 """
 
+    def run_sim_attacked_secded(self):
+        return """
+###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
+while {$sim_active == 1} {
+    run "$periode ns" ;# run 1 cycle
+    incr nb_cycle
+
+    set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
+
+    set ded_if      [examine /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/ded_interrupt]
+    set ded_id      [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/ded_interrupt]
+    set ded_csr     [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/ded_interrupt]
+    set ded_lsu     [examine /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/ded_interrupt]
+    set ded_rf_tag  [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/ded_interrupt]
+
+
+    #############  CHECKING SIM VALUES #############
+    ## if conditions to stop the run cycles
+    if {[expr {$ded_if} == {"1'h1"}] || [expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_lsu} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
+        ## Detection error ##
+        set status_end 7
+        set sim_active 0
+    } elseif {$nb_cycle > $cycle_ref} {
+        ## CYCLE OVERFLOW : CRASH ##
+        set sim_active 0
+        set status_end 1
+    } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
+        ## INSN ILL HANDLER ##
+        if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
+            # Illegal insn handler au même moment que simulation 0  : NOTHING #
+            set status_end 2
+        } else {
+            # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
+            set status_end 3
+        }
+        set sim_active 0
+    } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
+        ## RAS ##
+        set status_end 0
+        set sim_active 0
+    } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
+        ## SUCCESS ? ##
+        set status_end 4
+        set sim_active 0
+    }
+}
+"""
+
     def run_sim_attacked_single_bitflip_temporel(self, fault_injection = ""):
         return """
 ###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######

@@ -10,7 +10,6 @@
 ## General modules ##
 import pathlib
 import yaml
-import shutil
 ## Custom modules ##
 from src.tclgen import TCL
 
@@ -27,10 +26,6 @@ class Main:
         self.__app_folder = pathlib.Path(__file__).resolve().parent
         self.__config_folder = pathlib.Path.joinpath(self.__app_folder, "config")
         self.__config_file_path = str(self.__config_folder) + "/config_" + protect + ".json"
-        # self.__src_folder = pathlib.Path.joinpath(self.__app_folder, "src")
-        # self.__sim_folder = pathlib.Path(pathlib.Path(__file__).resolve().parent).resolve().parent
-        # self.__simu_folder = pathlib.Path.joinpath(self.__sim_folder, "simu_files")
-        # self.__results_folder = pathlib.Path.joinpath(self.__sim_folder, "results_simulations")
 
         # Define other variables
         self.__config_data = dict()
@@ -49,6 +44,7 @@ class Main:
         except Exception as e:
             print("One exception has occurred : {exc}".format(exc=e.args[1]))
             return 3
+        print(">>> SUCCESS - config file read.")
         return 0
 
     def get_codes(self):
@@ -86,10 +82,4 @@ class Main:
             tcl_gen.read_register_list()
             tcl_gen.write_faulted_registers_file()
             tcl_gen.build_data_string()
-            # if(self.__config_data['work_env'] != ""):
-            #     copy = input("Do you want to copy the generated files in the work environnement folder [y/n] ? ")
-            #     if(copy.lower()== 'y'):
-            #         src = self.__results_folder + '/' + code + '/' + code + "-" + protection + "_" + '-'.join(self.__config_data['threat_model'])
-            #         dest = self.__config_data['work_env']
-            #         shutil.copytree(src,dest,dirs_exist_ok=True)
             print("\n")

@@ -365,6 +365,8 @@ class TCL:
                     self.__tcl_string.append(self.__code_exec.run_sim_attacked())
                 elif(self.__protection == "hamming"):
                     self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                elif(self.__protection == "secded"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked_secded())
                 self.__tcl_string.append(self.__log_data.log_sim(threat="single_bitflip_spatial"))
                 self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                 try:
@@ -532,13 +534,15 @@ class TCL:
                     registers = yaml.safe_load(registers_file)
                 except yaml.YAMLError as e:
                     print(e)
+                    exit(2)
             for reg in registers:
                 for data_reg in registers[reg]:
                     name_regs.append(data_reg['name'])
                     size_regs.append(data_reg['width'])
         except FileNotFoundError:
             print(f"File registers_{self.__protection}.yaml not found. Please check the installation.")
-            return 1
+            print("Exiting generation ...")
+            exit(1)
         self.__registers_list = name_regs
         self.__registers_size = size_regs
         return 0

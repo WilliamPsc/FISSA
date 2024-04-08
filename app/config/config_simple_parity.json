@@ -1,9 +1,9 @@
 {
     "name_simulator": "modelsim",
-    "path_tcl_generation": "/home/pensec/Documents/Github/genTCL_fault_injections/",
-    "path_files_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/",
-    "path_generated_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/generated_simulations/",
-    "path_results_sim": "/home/pensec/Documents/Github/genTCL_fault_injections/simu_files/results_simulations/",
+    "path_tcl_generation": "/home/pensec/Documents/Github/FISSA/",
+    "path_files_sim": "/home/pensec/Documents/Github/FISSA/simu_files/",
+    "path_generated_sim": "/home/pensec/Documents/Github/FISSA/simu_files/generated_simulations/",
+    "path_results_sim": "/home/pensec/Documents/Github/FISSA/simu_files/results_simulations/",
     "work_env": "/home/pensec/Documents/Divers/sharedFolder",
     "path_simulation": [
         "/home/william/Documents/DRiSCY/pulpino/sw/build/apps/",
