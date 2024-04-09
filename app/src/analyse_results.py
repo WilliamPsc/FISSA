@@ -55,16 +55,18 @@ class AnalyseResults:
         delay = status_counts.get(3, 0)
         success = status_counts.get(4, 0)
         detection = status_counts.get(5, 0)
+        detect_and_correct = status_counts.get(6,0)
+        double_errors_detect = status_counts.get(7,0)
 
         # Calculate percentage of success
         percent_success = f'{(success / total) * 100:.2f}'
 
         # Update t1 DataFrame
-        t1.loc[len(t1)] = [crash, nstr, delay, detection, f'{success} ({percent_success}\%)', total]
+        t1.loc[len(t1)] = [crash, nstr, delay, detection, detect_and_correct, double_errors_detect, f'{success} ({percent_success}\%)', total]
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
-        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 7].copy()
         # Extract the last part of the strings after the last '/'
         self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
         self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
@@ -79,25 +81,52 @@ class AnalyseResults:
         match appli:
             case "buffer_overflow":
                 if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 315
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 315
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
                 if(threat == "single_bitflip_spatial"):
-                    vmax_value = 272
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 272
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 30
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 320
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 320
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
             case "secretFunction":
                 if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 680
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 680
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
                 if(threat == "single_bitflip_spatial"):
-                    vmax_value = 524
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 524
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 672
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 672
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
             case "propagationTagV2":
                 if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 248
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 248
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
                 if(threat == "single_bitflip_spatial"):
-                    vmax_value = 154
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 154
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
                 if(threat == "single_bitflip_temporel"):
-                    vmax_value = 96
+                    if(self.__config['prot'] == "hamming"):
+                        vmax_value = 96
+                    elif(self.__config['prot'] == "secded"):
+                        vmax_value = 0
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
@@ -157,7 +186,7 @@ class AnalyseResults:
             applications = self.get_codes()
         
         for threat in self.__config['threat_model']:
-            df_t1 = pd.DataFrame([], columns=["Crash", "NSTR", "Delay", "Detection", "Success", "Total"])
+            df_t1 = pd.DataFrame([], columns=["Crash", "Silent", "Delay", "Detection", "Detection and Correction", "Double Errors Detection", "Success", "Total"])
             for appli in applications:
                 self.__table_data = pd.DataFrame()
                 print("=================== " + self.__config['name_results'][appli] + " ===================")
