@@ -5,3 +5,5 @@
 *.out
 *.synctex.gz
 *.toc
+# table_1/*
+# heatmap/*

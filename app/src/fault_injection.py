@@ -74,7 +74,7 @@ if {{$width_register == 1}} {{
 if {{$width_register > 1}} {{
     set bit_attacked {wreg}
     set bit_flipped $bit_attacked
-    set value_curr_reg [examine -hex $faulted_register\[{{$bit_attacked}}\]]
+    set value_curr_reg [examine -bin $faulted_register\[{{$bit_attacked}}\]]
     set value [lindex [split $value_curr_reg h] 1]
     set bitflip_faulted_register [expr $value^1]
     force -freeze $faulted_register\[{{$bit_attacked}}\] [concat $width_register'h$bitflip_faulted_register] 0 -cancel "$half_periode ns"

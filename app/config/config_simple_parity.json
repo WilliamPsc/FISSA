@@ -14,6 +14,7 @@
         "__code"
     ],
     "prot": "simple_parity",
+    "version": 1,
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",

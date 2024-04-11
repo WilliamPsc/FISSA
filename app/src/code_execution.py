@@ -280,11 +280,11 @@ set bool_cycle 0
 while {$sim_active == 1} {
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
-    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tcr/error_o_csr]
-    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tpr/error_o_csr]
-    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_addr_rf_tag/error_o_addr_rf_tag]
-    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_26/error_o_26]
-    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/simple_parity_decoder_rf_tag/error_o_rf_tag]
+    set error_tcr [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tcr/error_o_csr]
+    set error_tpr [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tpr/error_o_csr]
+    set error_addr_tag [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_addr_rf_tag/error_o_addr_rf_tag]
+    set error_26 [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_26/error_o_26]
+    set error_rf_tag [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/simple_parity_decoder_rf_tag/error_o_rf_tag]
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
@@ -395,11 +395,22 @@ while {$sim_active == 1} {
     set ded_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/ded_interrupt]
     set ded_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/ded_interrupt]
 
+    set sec_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/sec_interrupt]
+    set sec_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/sec_interrupt]
+    set sec_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt]
+    set sec_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/sec_interrupt]
+    set sec_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/sec_interrupt]
+
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
     if {[expr {$ded_if} == {"1'h1"}] || [expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_lsu} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
-        ## Detection error ##
+        ## Double Error Detection ##
         set status_end 7
+        set sim_active 0
+        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+    } elseif {[expr {$sec_if} == {"1'h1"}] || [expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_lsu} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
+        ## Single Error Correction ##
+        set status_end 6
         set sim_active 0
         set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
     } elseif {$nb_cycle > $cycle_ref} {

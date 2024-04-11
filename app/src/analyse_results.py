@@ -21,6 +21,7 @@ class AnalyseResults:
         self.__table_data = pd.DataFrame()
         self.__table_data_filtered = pd.DataFrame()
         self.__config = data
+        self.__implem_version = self.__config['version']
         self.__idx_app = list()
         self.__table1 = self.__config['path_files_sim'] + "analyse/table_1/"
         if not os.path.exists(self.__table1):
@@ -66,7 +67,7 @@ class AnalyseResults:
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
-        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 7].copy()
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
         # Extract the last part of the strings after the last '/'
         self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
         self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
@@ -81,52 +82,25 @@ class AnalyseResults:
         match appli:
             case "buffer_overflow":
                 if(threat == "multi_bitflip_reg_multi"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 315
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 315
                 if(threat == "single_bitflip_spatial"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 272
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 30
+                    vmax_value = 272
                 if(threat == "single_bitflip_temporel"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 320
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 320
             case "secretFunction":
                 if(threat == "multi_bitflip_reg_multi"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 680
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 680
                 if(threat == "single_bitflip_spatial"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 524
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 524
                 if(threat == "single_bitflip_temporel"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 672
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 672
             case "propagationTagV2":
                 if(threat == "multi_bitflip_reg_multi"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 248
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 248
                 if(threat == "single_bitflip_spatial"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 154
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 154
                 if(threat == "single_bitflip_temporel"):
-                    if(self.__config['prot'] == "hamming"):
-                        vmax_value = 96
-                    elif(self.__config['prot'] == "secded"):
-                        vmax_value = 0
+                    vmax_value = 96
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
@@ -158,7 +132,7 @@ class AnalyseResults:
             plt.axis('tight')
 
         # Save the figure to a PDF file
-        plt.savefig(self.__table2 + "heatmap_" + appli + "_" + self.__config['prot'] + "_" + threat + "_" + str(self.__config['multi_fault_injection']) + ".pdf", format='pdf', bbox_inches='tight')
+        plt.savefig(f"{self.__table2}heatmap_{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}.pdf", format='pdf', bbox_inches='tight')
 
     def calculate_time_difference(self, start, end):
         # Convert the date strings to datetime objects
@@ -193,7 +167,7 @@ class AnalyseResults:
                 print(f"\t======= >>> {threat} <<< =======")
                 # Ouverture de chaque fichier résultat
                 print("\t\t>>> Opening result file")
-                path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{threat}_{str(self.__config['multi_fault_injection'])}/")
+                path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}/")
                 # Check if the directory exists
                 if os.path.exists(path_to_filename):
                     json_files = [pos_json for pos_json in os.listdir(path_to_filename) if pos_json.endswith('.json')] # Enregistrement sous forme de DataFrame panda
@@ -274,5 +248,5 @@ class AnalyseResults:
             if not df_t1.empty:
                 df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
                 print(df_t1)
-                self.write_results(self.__table1 + self.__config['prot'] + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label="table:end_sim_by_status_" + self.__config['prot'] + "_" + '_'.join(self.__config['threat_model']), position_float="centering", multicol_align="c", hrules=True, position="t"))
+                self.write_results(self.__table1 + self.__config['prot'] + "_" + str(self.__implem_version) + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label=f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{''.join(self.__config['threat_model'])}", position_float="centering", multicol_align="c", hrules=True, position="t"))
 
