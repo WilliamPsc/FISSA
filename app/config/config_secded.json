@@ -108,6 +108,6 @@
     "multi_res_files": {
         "buffer_overflow": 8,
         "secretFunction": 8,
-        "propagationTagV2": 4
+        "propagationTagV2": 8
     }
 }

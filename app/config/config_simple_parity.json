@@ -100,13 +100,13 @@
     "cycle_ref": 100,
     "cpu_period": 40,
     "batch_sim": {
-        "buffer_overflow": 2197,
-        "secretFunction": 2188,
-        "propagationTagV2": 2179
+        "buffer_overflow": 2000,
+        "secretFunction": 2000,
+        "propagationTagV2": 2000
     },
     "multi_res_files": {
-        "buffer_overflow": 4,
-        "secretFunction": 10,
-        "propagationTagV2": 4
+        "buffer_overflow": 8,
+        "secretFunction": 8,
+        "propagationTagV2": 8
     }
 }

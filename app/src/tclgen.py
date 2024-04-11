@@ -37,7 +37,7 @@ class TCL:
         self.__code = code
         self.__protection = prot
         self.__implem_version = config_data['version']
-        self.__gen_path = config_data["path_generated_sim"] + code + "/" + code + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
+        self.__gen_path = config_data["path_generated_sim"] + code + "/" + code + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
         if os.path.exists(self.__gen_path):
             # Iterate over each file in the folder
             for filename in os.listdir(self.__gen_path):
@@ -50,7 +50,7 @@ class TCL:
             os.makedirs(self.__gen_path)
             os.makedirs(self.__gen_path + "results/")
         
-        self.__res_path = config_data["path_results_sim"] + code + "/" + code + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
+        self.__res_path = config_data["path_results_sim"] + code + "/" + code + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
         if os.path.exists(self.__res_path):
             # Iterate over each file in the folder
             for filename in os.listdir(self.__res_path):
@@ -184,7 +184,7 @@ class TCL:
     ## Fonction servant à construire la chaîne de simulation
     def build_data_string(self):
         """Function used to build the simulation TCL string"""
-        self.__path_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
+        self.__path_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/"
         self.__reg_file_sim = self.__path_file_sim + "faulted_regs.yaml"
         self.__file_number = 1
         for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
@@ -197,7 +197,7 @@ class TCL:
 
             file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
             self.build_make_list = file_str
-            log_file_sim = str(self.__path_file_sim) + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
+            log_file_sim = str(self.__path_file_sim) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
 
             self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
 
@@ -211,13 +211,16 @@ class TCL:
         self.build_make_list = file_str
         self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
 
+        # TODO:
+        # - Change how it works by adding 3 values of multi_res_files (0,1,2+) like : 0 (1 TCL + 1 result file) / 1 (1+ TCL + 1 result file) / 2+ (2+ TCL files + 2+ result files)
+
         if(self.__config_data_simulator['multi_res_files'][self.__code] < 1):
             self.__config_data_simulator['multi_res_files'][self.__code] = 1
 
         if(self.__config_data_simulator['multi_res_files'][self.__code] == 1):
-            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_1.json"
+            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_1.json"
         else:
-            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + self.__implem_version + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
+            log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
         
         self.build_ref_sim(log_file_sim, window, self.__nb_simu_total, self.__file_number)
 
@@ -530,7 +533,7 @@ class TCL:
         name_regs = []
         size_regs = []
         try:
-            with open(self.__files_sim + "registers/" + self.__protection + "/registers_" + self.__protection + "_" + self.__implem_version + ".yaml", "r", encoding="utf-8") as registers_file:
+            with open(self.__files_sim + "registers/" + self.__protection + "/registers_" + self.__protection + "_" + str(self.__implem_version) + ".yaml", "r", encoding="utf-8") as registers_file:
                 try:
                     registers = yaml.safe_load(registers_file)
                 except yaml.YAMLError as e:
