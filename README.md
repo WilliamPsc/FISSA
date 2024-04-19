@@ -14,9 +14,9 @@
 ---
 ### Description
 FISSA is a tool designed for generating fault injection campaigns in micro-architectures, essential for assessing the security of designs against physical attacks. By deliberately introducing hardware errors into the micro-architecture of processors, FISSA allows users to test their robustness against potential hardware failures.
-This open-source tool integrates with existing simulation environments like Questasim, Vivado, and Verilator, streamlining the process of generating fault injection scenarios.
+This open-source tool integrates with existing simulation environment like Questasim, streamlining the process of generating fault injection scenarios.
 
-With FISSA, generating fault injection campaigns becomes more accessible, empowering users to assess the security and reliability of their designs efficiently to enable the *Security By Design*.
+With FISSA, generating fault injection campaigns becomes more accessible, empowering users to assess the security and reliability of their designs efficiently to enable *Security By Design*.
 
 ---
 ### Installation
@@ -36,6 +36,8 @@ Once the dependencies are installed, you're ready to use FISSA for generating fa
 
 ##### Generator
 
+##### Integration with HDL Simulator
+
 ##### Analyser
 
 #### Running FISSA
@@ -51,9 +53,6 @@ You will have a contextual menu in which you will have to choose the protection 
 Users can easily define parameters such as threat models, attack windows, and registers to be attacked via configuration files, simplifying the testing process. FISSA also provides reporting functions for analysing results, and it generates TCL scripts compatible with various simulation tools.
 
 ---
-### Contributing
-
----
 ### Example
 
 ---
@@ -67,15 +66,20 @@ Users can easily define parameters such as threat models, attack windows, and re
 - Development of a graphical user interface
 
 ---
+### Contributing
+
+---
 ### Contact Information
 - Author: William PENSEC 
-- Email: william(at)pensec(dot)fr
 
 ---
 ### Acknowledgements - Version date
 - Thanks to Noura Ait Manssour for the first iteration
 - 18/04/2024
 
-<!-- ---
+---
 ### Citation
-(article IOLTS) -->
+
+```
+
+```
