@@ -1,0 +1,434 @@
+####
+## @Author : William PENSEC
+## @Version : 1.0
+## @DateDebut : 21 avril 2024
+## @DateVersion : 21 avril 2024
+## @Description : Storage file for all processor registers to be faulted - Hamming Code SECDED version - Implem 4
+####
+
+### YAML configuration file for simulator ###
+---
+## FETCH
+FETCH:
+  -
+      name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o_tag
+      width: 1
+  -
+      name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_if_o_tag
+      width: 1
+
+## DECODE
+DECODE:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_a_ex_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_b_ex_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operand_c_ex_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/alu_operator_o_mode
+    width: 2
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_d_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s1_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/check_s2_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/is_store_post_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/memory_set_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/regfile_alu_waddr_ex_o_tag
+    width: 5
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/register_set_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/store_dest_addr_ex_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/store_source_ex_o_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/use_store_ops_ex_o
+    width: 1
+  
+## RF TAG
+RF_TAG:
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[0\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[1\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[2\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[3\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[4\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[5\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[6\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[7\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[8\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[9\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[10\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[11\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[12\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[13\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[14\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[15\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[16\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[17\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[18\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[19\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[20\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[21\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[22\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[23\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[24\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[25\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[26\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[27\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[28\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[29\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[30\]
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[31\]
+    width: 1
+  
+## EXECUTE
+EXECUTE:
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/rs1_o_tag
+    width: 1
+  
+## CSR
+CSR:
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tcr_q
+    width: 32
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/tpr_q
+    width: 32
+  
+## Load Store Unit
+LSU:
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_type_q_tag
+    width: 2
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/data_we_q_tag
+    width: 1
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_offset_q_tag
+    width: 2
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/rdata_q_tag
+    width: 4
+
+### SECDED Protection ###
+SD_ENCODER_IF_STAGE:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_if_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_if_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_id_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_id_o_tag/sd_o
+    width: 1
+
+SD_ENCODER_ID_STAGE:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_addr_rf_tag/hc_o
+    width: 4
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_addr_rf_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operator_o_mode/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operator_o_mode/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_store_dest_addr_ex_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_store_dest_addr_ex_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_store_source_ex_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_store_source_ex_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_use_store_ops_ex_o/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_use_store_ops_ex_o/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_a_ex_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_a_ex_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_b_ex_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_b_ex_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_c_ex_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_alu_operand_c_ex_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_s1_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_s1_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_s2_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_s2_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_d_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_check_d_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_register_set_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_register_set_o_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_is_store_post_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/YYYsecded_encoder_is_store_post_o_tagYYY/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_memory_set_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_memory_set_o_tag/sd_o
+    width: 1
+
+SD_ENCODER_RF_TAG:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o_rf_tag
+    width: 6
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o
+    width: 1
+
+SD_ENCODER_EX_STAGE:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/secded_encoder_rs1_o_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/secded_encoder_rs1_o_tag/sd_o
+    width: 1
+
+SD_ENCODER_CSR:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_arith/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_arith/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_branch/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_branch/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_jump/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_jump/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_shift/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_shift/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_comparison/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_comparison/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_logical/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_logical/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_load_store_mode/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_load_store_mode/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_load_store_enable/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tpr_load_store_enable/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_arith/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_arith/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_branch/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_branch/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_jump/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_jump/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_shift/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_shift/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_comparison/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_comparison/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_logical/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_logical/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_load_store/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_load_store/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_execute/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_tcr_execute/sd_o
+    width: 1
+
+SD_ENCODER_LSU:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_data_we_q_tag/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_data_we_q_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_rdata_offset_q_tag/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_rdata_offset_q_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_data_type_q_tag/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_data_type_q_tag/sd_o
+    width: 1
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_rdata_q_tag/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_rdata_q_tag/sd_o
+    width: 1
+...

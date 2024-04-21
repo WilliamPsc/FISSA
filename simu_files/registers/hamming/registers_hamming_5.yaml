@@ -1,9 +1,9 @@
 ####
 ## @Author : William PENSEC
-## @Version : 1.2
-## @DateDebut : 20 janvier 2023
-## @DateVersion : 10 janvier 2024
-## @Description : Storage file for all processor registers to be faulted - Hamming Code version - Implem 1
+## @Version : 1.0
+## @DateDebut : 21 avril 2024
+## @DateVersion : 21 avril 2024
+## @Description : Storage file for all processor registers to be faulted - Hamming Code version - Implem 5
 ####
 
 ### YAML configuration file for simulator ###
@@ -192,26 +192,130 @@ LSU:
     width: 4
 
 ### Hamming Code Protection ###
-HC_ENCODER_5:
+HC_ENCODER_IF_STAGE:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_addr_rf_tag/hc_o_5
-    width: 4
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/hamming_code_encoder_pc_if_id_o_tag/hc_o
+    width: 3
 
-HC_ENCODER_26:
+HC_ENCODER_ID_STAGE:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_26/hc_o_26
-    width: 5
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group0/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group1/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group2/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group3/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group4/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group5/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group6/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group7/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group8/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_group9/hc_o
+    width: 2
 
-HC_ENCODER_32:
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tpr/hc_o_32
-    width: 5
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tcr/hc_o_32
-    width: 5
-
-HC_ENCODER_rf_reg:
+HC_ENCODER_RF_TAG:
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_encoder_rf_tag/hc_o_rf_tag
     width: 6
+
+HC_ENCODER_CSR:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group0/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group1/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group2/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group3/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group4/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group5/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group6/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group7/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group8/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group9/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group10/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group11/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group12/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group13/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group14/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group15/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group16/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group17/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group18/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group19/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group20/hc_o
+    width: 2
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_csr_group21/hc_o
+    width: 2
+
+HC_ENCODER_LSU:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_group1/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_group2/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_group3/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_group4/hc_o
+    width: 3
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_group5/hc_o
+    width: 3
 ...

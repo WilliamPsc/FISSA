@@ -3,7 +3,7 @@
 ## @Version : 1.0
 ## @DateDebut : 8 April 2024
 ## @DateVersion : 8 April 2024
-## @Description : Storage file for all processor registers to be faulted - Hamming Code SECDED version
+## @Description : Storage file for all processor registers to be faulted - Hamming Code SECDED version - Implem 5
 ####
 
 ### YAML configuration file for simulator ###
@@ -192,7 +192,7 @@ LSU:
     width: 4
 
 ### Hamming Code SECDED Protection ###
-secded_if_stage:
+SD_IF_STAGE:
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_if_id_o_tag/hc_o
     width: 3
@@ -200,7 +200,7 @@ secded_if_stage:
     name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/secded_encoder_pc_if_id_o_tag/sd_o
     width: 1
 
-secded_id_stage:
+SD_ID_STAGE:
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_id_group0/hc_o
     width: 3
@@ -262,7 +262,15 @@ secded_id_stage:
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_id_group9/sd_o
     width: 1
 
-secded_csr:
+SD_RF_TAG:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o_rf_tag
+    width: 6
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o_rf_tag
+    width: 1
+    
+SD_CSR:
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_csr_group0/hc_o
     width: 3
@@ -396,7 +404,7 @@ secded_csr:
     name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/secded_encoder_csr_group21/sd_o
     width: 1
 
-secded_lsu:
+SD_LSU:
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_lsu_group1/hc_o
     width: 3
@@ -426,13 +434,5 @@ secded_lsu:
     width: 3
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/secded_encoder_lsu_group5/sd_o
-    width: 1
-
-secded_rftag:
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o_rf_tag
-    width: 6
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o_rf_tag
     width: 1
 ...

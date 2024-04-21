@@ -1,9 +1,9 @@
 ####
 ## @Author : William PENSEC
-## @Version : 1.2
-## @DateDebut : 20 janvier 2023
-## @DateVersion : 10 janvier 2024
-## @Description : Storage file for all processor registers to be faulted - Hamming Code version - Implem 1
+## @Version : 1.0
+## @DateDebut : 21 avril 2024
+## @DateVersion : 21 avril 2024
+## @Description : Storage file for all processor registers to be faulted - Hamming Code version - Implem 2
 ####
 
 ### YAML configuration file for simulator ###
@@ -192,26 +192,36 @@ LSU:
     width: 4
 
 ### Hamming Code Protection ###
-HC_ENCODER_5:
+HC_ENCODER_IF_STAGE:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_addr_rf_tag/hc_o_5
-    width: 4
+    name: /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/hamming_code_encoder_pc_if_id_o_tag/hc_o
+    width: 3
 
-HC_ENCODER_26:
+HC_ENCODER_ID_STAGE:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_26/hc_o_26
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_id_stage/hc_o
     width: 5
 
-HC_ENCODER_32:
+HC_ENCODER_RF_TAG:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tpr/hc_o_32
-    width: 5
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tcr/hc_o_32
-    width: 5
-
-HC_ENCODER_rf_reg:
-  -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_encoder_rf_tag/hc_o_rf_tag
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_encoder_rf_tag/hc_o
     width: 6
+
+HC_ENCODER_EX_STAGE:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/hamming_code_encoder_rs1_o_tag/hc_o
+    width: 2
+
+HC_ENCODER_CSR:
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tpr/hc_o
+    width: 5
+  -
+    name: /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/hamming_code_encoder_tcr/hc_o
+    width: 5
+
+HC_ENCODER_LSU:
+  - 
+    name: /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/hamming_code_encoder_lsu_reg/hc_o
+    width: 4
 ...
