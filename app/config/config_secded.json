@@ -14,7 +14,7 @@
         "__code"
     ],
     "prot": "secded",
-    "version": 5,
+    "version": 1,
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",

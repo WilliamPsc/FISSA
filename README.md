@@ -52,6 +52,15 @@ You will have a contextual menu in which you will have to choose the protection 
 ### Features
 Users can easily define parameters such as threat models, attack windows, and registers to be attacked via configuration files, simplifying the testing process. FISSA also provides reporting functions for analysing results, and it generates TCL scripts compatible with various simulation tools.
 
+
+- set0
+- set1
+- bitflip
+- single_bitflip_spatial
+- single_bitflip_temporel
+- multi_bitflip_reg
+- multi_bitflip_reg_multi
+
 ---
 ### Example
 

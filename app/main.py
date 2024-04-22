@@ -68,15 +68,24 @@ class Main:
             print(self.__config_data)
         return 0
     
-    def copy_to_work_env():
-        pass
-    
-    def launch_generator(self):
+    def compute_sim(self):
+        """Used to check the number of simulations"""
         protection = self.get_prot()
         codes = self.get_codes()
-        # codes = ["buffer_overflow"]
         for code in codes:
-            print(f"\t=============== {self.__config_data['name_results'][code]} ===============")
+            print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
+            print(f"\t\t >>>> {''.join(self.__config_data['threat_model'])} <<<<")
+            tcl_gen = TCL(self.__config_data, code, protection)
+            tcl_gen.read_register_list()
+            tcl_gen.compute_nb_simulations()
+            print("\n")
+    
+    def launch_generator(self):
+        """Used to generate all simulations files"""
+        protection = self.get_prot()
+        codes = self.get_codes()
+        for code in codes:
+            print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
             print(f"\t\t >>>> {''.join(self.__config_data['threat_model'])} <<<<")
             tcl_gen = TCL(self.__config_data, code, protection)
             tcl_gen.read_register_list()

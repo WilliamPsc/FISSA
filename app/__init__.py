@@ -31,6 +31,15 @@ def analyse_results(protect:str):
     print(f'\tExecute time main : {round(1000*(end_time - start_time_main), 2)} ms')
     print("\tTime of generation :", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
+def compute_sim(protect:str):
+    start_time_main = timer()
+    app_main = Main(protect=protect)
+    app_main.read_config()
+    app_main.compute_sim()
+    end_time = timer()
+    print(f'\tExecute time main : {round(1000*(end_time - start_time_main), 2)} ms')
+    print("\tTime of generation :", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+
 def performance_comparison(protect:str, nb_repetitions):
     start_time_main = timer()
     perf = PerformancesComparison(protect)
@@ -49,8 +58,9 @@ if __name__ == "__main__":
     print("\t 3- Hamming Code - SECSED")
     print("\t 4- Hamming Code - SECDED")
     print("\t 5- BCH Code")
-    input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
-    protect_choice = [int(x) for x in input_str.split()]
+    # input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
+    # protect_choice = [int(x) for x in input_str.split()]
+    protect_choice = [4]
     if all(1 <= num <= 5 for num in protect_choice):
         protection_chosen = []
         for num in protect_choice:
@@ -66,16 +76,15 @@ if __name__ == "__main__":
                 protection_chosen.append("BCH Code")
         print("You choose:", ', '.join(protection_chosen))
     else:
-        protect_choice = [num for num in protect_choice if num <= 3 and num > 0]
-    
-    # protect_choice = [1,2]
+        protect_choice = [num for num in protect_choice if num <= 5 and num > 0]
+
 
     print("======== List of available commands ========")
     print("\t 1- Launch Generator")
     print("\t 2- Analyse results")
-    print("\t 3- Performance comparison")
-    command = int(input("What do you want to execute? "))
-    # command = 1
+    print("\t 3- Compute number of simulations")
+    # command = int(input("What do you want to execute? "))
+    command = 2
     
     for protection in protect_choice:
         match protection:
@@ -108,10 +117,7 @@ if __name__ == "__main__":
                 print(f"\n\t  ==================== >>>> Results analysis <<<< ====================")
                 analyse_results(protect=protect)
             case 3:
-                print(f"\n\t  ==================== >>>> Performance comparison <<<< ====================")
-                nb_repetitions = int(input("\tHow many repetitions to you want to generate? "))
-                if(nb_repetitions < 10 or nb_repetitions > 2200):
-                    print("\t ⚠️  I recommend between 1,000 and 2,200 simulations, depending on the case. Try to have all simulations in 1 file. ⚠️")
-                performance_comparison(protect=protect, nb_repetitions=nb_repetitions)
+                print(f"\n\t  ==================== >>>> Compute the number of simulations <<<< ====================")
+                compute_sim(protect=protect)
             case _:
                 print("No choice has been found. Try again.")

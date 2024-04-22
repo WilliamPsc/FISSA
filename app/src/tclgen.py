@@ -181,6 +181,20 @@ class TCL:
                 case _:
                     self.__nb_simu_total = 0
 
+    def compute_nb_simulations(self):
+        """Function used to only check how many simulations need to be done"""
+        for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
+
+            print("\t\t\t >>>> Number of registers to be targeted: ", len(self.__registers_list))
+            print("\t\t\t >>>> Number of bits to be targeted: ", sum(self.__registers_size))
+            
+            self.set_nb_simu_total(self.__config_data_simulator["threat_model"], window)
+            print(f"\t\t >>>> Number of simulations to execute: {'{:,}'.format(self.__nb_simu_total).replace(',', ' ')}")
+
+            self.__nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
+            print("\t\t >>>> Number of files to generate:", '{:,}'.format(self.__nb_files).replace(',', ' '))
+            print(f"\t\t >>>> Number of batch: {self.__config_data_simulator['multi_res_files'][self.__code]}")
+
     ## Fonction servant à construire la chaîne de simulation
     def build_data_string(self):
         """Function used to build the simulation TCL string"""

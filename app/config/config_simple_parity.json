@@ -18,8 +18,7 @@
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",
-        "secretFunction",
-        "propagationTagV2"
+        "secretFunction"
     ],
     "name_results": {
         "buffer_overflow": "Buffer Overflow",
@@ -27,7 +26,7 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "single_bitflip_temporel"
+        "multi_bitflip_reg_multi"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
