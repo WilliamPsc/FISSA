@@ -58,9 +58,8 @@ if __name__ == "__main__":
     print("\t 3- Hamming Code - SECSED")
     print("\t 4- Hamming Code - SECDED")
     print("\t 5- BCH Code")
-    # input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
-    # protect_choice = [int(x) for x in input_str.split()]
-    protect_choice = [4]
+    input_str = input("Which protections do you want to use? Enter a list of numbers separated by spaces: ")
+    protect_choice = [int(x) for x in input_str.split()]
     if all(1 <= num <= 5 for num in protect_choice):
         protection_chosen = []
         for num in protect_choice:
@@ -83,8 +82,7 @@ if __name__ == "__main__":
     print("\t 1- Launch Generator")
     print("\t 2- Analyse results")
     print("\t 3- Compute number of simulations")
-    # command = int(input("What do you want to execute? "))
-    command = 2
+    command = int(input("What do you want to execute? "))
     
     for protection in protect_choice:
         match protection:
