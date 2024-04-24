@@ -70,7 +70,7 @@ class TCL:
         self.__log_data = LogData(config_data)
         self.__inject_fault = FaultInjection(config_data)
         self.__batch_number = 1
-        self.__res_file = 1
+        self.__periode = config_data["cpu_period"]
         self.__batch_max_sim:int = config_data["batch_sim"][self.__code]
         self.__build_make_list = list()
 
@@ -211,7 +211,7 @@ class TCL:
 
             file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
             self.build_make_list = file_str
-            log_file_sim = str(self.__path_file_sim) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + '-'.join(self.__threat_model) + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
+            log_file_sim = str(self.__path_file_sim) + "results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
 
             self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
 
@@ -257,14 +257,14 @@ class TCL:
                 for reg in self.__registers_list:
                     if(reg not in self.__config_data_simulator['avoid_register']):
                         for wreg in range(self.__registers_size[self.__registers_list.index(reg)]):
-                            for start_time in range(window[0], window[1], 40):
+                            for start_time in range(window[0], window[1], self.__periode):
                                 self.build_bitflip_simu(start_time, reg, wreg, nb_simulations)
                                 if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
                                     self.__batch_number += 1
             else:
                 for reg in self.__registers_list:
                     if(reg not in self.__config_data_simulator['avoid_register']):
-                        for start_time in range(window[0], window[1], 40):
+                        for start_time in range(window[0], window[1], self.__periode):
                             match threat:
                                 case "set0":
                                     self.build_bit_reset_simu(start_time, reg, nb_simulations)
@@ -345,7 +345,7 @@ class TCL:
         print("\t\t\t >>>> Number of possible combinations: ", len(combinations_list))
 
         for reg1, reg2 in combinations_list:
-            for start_time in range(window[0], window[1], 40):
+            for start_time in range(window[0], window[1], self.__periode):
                 self.__tcl_string = list()
                 self.__nb_simu += 1
                 bit_flip_0 = -1
@@ -471,7 +471,7 @@ class TCL:
         for index, register in enumerate(relevant_reg):
             size_reg = relevant_reg_size[index]
             for size in range(int(math.pow(2,size_reg))):
-                for start_time in range(window[0], window[1], 40):
+                for start_time in range(window[0], window[1], self.__periode):
                     self.__tcl_string = list()
                     self.__nb_simu += 1
                     self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "multi_bitflip_reg", register, size_reg))
@@ -506,7 +506,7 @@ class TCL:
         for index, (register_1, size_1, register_2, size_2) in enumerate(valid_registers):
             for size1 in range(int(math.pow(2,size_1))):
                 for size2 in range(int(math.pow(2,size_2))):
-                    for start_time in range(window[0], window[1], 40):
+                    for start_time in range(window[0], window[1], self.__periode):
                         self.__tcl_string = list()
                         self.__nb_simu += 1
                         self.__tcl_string.append(self.__code_exec.init_sim_attacked_multi_bitflip_reg_multi(self.__nb_simu, start_time, "multi_bitflip_reg_multi", register_1, size_1, register_2, size_2))

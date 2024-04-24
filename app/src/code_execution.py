@@ -123,7 +123,7 @@ while {$cycle_curr <= $cycle_ref} {
 
 #############  CHECKING SIM VALUES #############
 ## CHECK ENDING CYCLE ##
-set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Vérification du numéro du cycle actuel
+set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Vérification du numéro du cycle actuel
 set value_end_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 set status_end 0
 set cycle_curr 0
@@ -139,7 +139,7 @@ puts "Simulation number : $nb_sim"
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
 
-set nb_cycle [expr [expr {start_window} - $start] / 40]
+set nb_cycle [expr [expr {start_window} - $start] / $periode]
 set sim_active 1
 ##---------------------
 ###### FORCE VALUE ON FAULTED REGISTER ######
@@ -162,7 +162,7 @@ puts "Simulation number : $nb_sim"
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
 
-set nb_cycle [expr [expr {start_window} - $start] / 40]
+set nb_cycle [expr [expr {start_window} - $start] / $periode]
 set sim_active 1
 ##---------------------
 ###### FORCE VALUE ON FAULTED REGISTER ######
@@ -188,7 +188,7 @@ puts "Simulation number : $nb_sim"
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
 
-set nb_cycle [expr [expr {start_window} - $start] / 40]
+set nb_cycle [expr [expr {start_window} - $start] / $periode]
 set sim_active 1
 ##---------------------
 ###### FORCE VALUE ON FAULTED REGISTER ######
@@ -216,7 +216,7 @@ puts "Simulation number : $nb_sim"
 set start_sim "{start_window} ns"
 run "{start_window} ns" ;# Saut vers la fenêtre d'attaque
 
-set nb_cycle [expr [expr {start_window} - $start] / 40]
+set nb_cycle [expr [expr {start_window} - $start] / $periode]
 set sim_active 1
 ##---------------------
 ###### FORCE VALUE ON FAULTED REGISTER ######
@@ -247,7 +247,7 @@ while {$sim_active == 1} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
@@ -258,17 +258,17 @@ while {$sim_active == 1} {
             set status_end 3
         }
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }
 }
 """
@@ -292,12 +292,12 @@ while {$sim_active == 1} {
         ## Detection error ##
         set status_end 5
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
@@ -308,17 +308,17 @@ while {$sim_active == 1} {
             set status_end 3
         }
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }
 
     if {[expr {$sim_active} == 1]} {
@@ -346,7 +346,7 @@ while {$sim_active == 1} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
@@ -357,17 +357,17 @@ while {$sim_active == 1} {
             set status_end 3
         }
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }
 
     if {[expr {$sim_active} == 1]} {
@@ -389,35 +389,31 @@ set bool_cycle 0
 while {$sim_active == 1} {
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
-    set ded_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/ded_interrupt]
     set ded_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/ded_interrupt]
     set ded_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/ded_interrupt]
-    set ded_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/ded_interrupt]
     set ded_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/ded_interrupt]
 
-    set sec_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/sec_interrupt]
     set sec_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/sec_interrupt]
     set sec_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt]
-    set sec_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/sec_interrupt]
     set sec_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/sec_interrupt]
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    if {[expr {$ded_if} == {"1'h1"}] || [expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_lsu} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
+    if {[expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
         ## Double Error Detection ##
         set status_end 7
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
-    } elseif {[expr {$sec_if} == {"1'h1"}] || [expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_lsu} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+    } elseif {[expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
         ## Single Error Correction ##
         set status_end 6
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {([expr {$value_pc} == {"32'h0000022c"}]) && ([expr {[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]} == {"32'hfa010113"}])} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
@@ -428,17 +424,17 @@ while {$sim_active == 1} {
             set status_end 3
         }
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }
 
     if {[expr {$sim_active} == 1]} {
@@ -472,12 +468,12 @@ while {{$sim_active == 1}} {{
         ## Detection error ##
         set status_end 5
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }} elseif {{$nb_cycle > $cycle_ref}} {{
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }} elseif {{([expr {{$value_pc}} == {{"32'h0000022c"}}]) && ([expr {{[examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o]}} == {{"32'hfa010113"}}])}} {{
         ## INSN ILL HANDLER ##
         if {{[expr {{$cycle_ill_insn}} == {{[expr $now / 1000]}}]}} {{
@@ -488,17 +484,17 @@ while {{$sim_active == 1}} {{
             set status_end 3
         }}
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} == {{$value_end_pc}}])}} {{
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} != {{$value_end_pc}}])}} {{
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / 40] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     }}
 
 

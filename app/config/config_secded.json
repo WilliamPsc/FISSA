@@ -72,10 +72,8 @@
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg[31]"
     ],
     "log_registers": [
-        "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/sec_interrupt", "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/ded_interrupt",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/sec_interrupt", "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/ded_interrupt",
         "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt", "/tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/ded_interrupt",
-        "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/sec_interrupt", "/tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/ded_interrupt",
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/sec_interrupt", "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/ded_interrupt"
     ],
     "fenetre_tir": {
