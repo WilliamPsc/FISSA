@@ -35,15 +35,13 @@ class FaultInjection:
     def __set0(self):
         """Return the code to inject a fault in case of a bit reset fault injection scenario"""
         return """
-if {$threat == "set0"} {
-    if {$faulted_register == "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"} {
-        for {set j 0} {$j < [llength $faulted_register]} {incr j} {
-            force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\] "1'h0" 0 -cancel "$half_periode ns"
-        }
-    } else {
-        force -freeze $faulted_register 0 0 -cancel "$half_periode ns"
-    }  
-}
+if {$faulted_register == "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg"} {
+    for {set j 0} {$j < [llength $faulted_register]} {incr j} {
+        force -freeze /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/rf_reg\[{$j}\] "1'h0" 0 -cancel "$half_periode ns"
+    }
+} else {
+    force -freeze $faulted_register 0 0 -cancel "$half_periode ns"
+}  
 """
 
     def __set1(self):

@@ -67,7 +67,7 @@ class AnalyseResults:
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
-        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 2].copy()
         # Extract the last part of the strings after the last '/'
         self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
         self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
@@ -84,7 +84,7 @@ class AnalyseResults:
                 if(threat == "multi_bitflip_reg_multi"):
                     vmax_value = 315
                 if(threat == "single_bitflip_spatial"):
-                    vmax_value = 272
+                    vmax_value = 840
                 if(threat == "single_bitflip_temporel"):
                     vmax_value = 320
             case "secretFunction":
@@ -232,7 +232,7 @@ class AnalyseResults:
                         # =================================================
 
                         # ==================== TABLE 2 ====================
-                        success = self.__table_data.query('status_end == 4')
+                        success = self.__table_data.query('status_end == 2')
                         if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
                             print("\t\t>>> Heatmap")
                             self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)

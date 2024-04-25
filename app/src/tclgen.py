@@ -294,42 +294,42 @@ class TCL:
         self.__tcl_string = list()
         self.__nb_simu += 1
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "set0", reg, self.__registers_size[self.__registers_list.index(reg)]))
-        self.__tcl_string.append(self.__inject_fault.inject_fault("set0"))
+        self.__tcl_string.append(self.__inject_fault.inject_fault("set0", size_reg_0=self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
         self.__tcl_string.append(self.__log_data.log_sim(threat="set0"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
         except TypeError:
-            print("TypeError happened")
+            print("TypeError happened - Bit reset")
             exit(1)
 
     def build_bit_set_simu(self, start_time, reg, nb_simulations):
         self.__tcl_string = list()
         self.__nb_simu += 1
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "set1", reg, self.__registers_size[self.__registers_list.index(reg)]))
-        self.__tcl_string.append(self.__inject_fault.inject_fault("set1"))
+        self.__tcl_string.append(self.__inject_fault.inject_fault("set1", size_reg_0=self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
         self.__tcl_string.append(self.__log_data.log_sim(threat="set1"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
         except TypeError:
-            print("TypeError happened")
+            print("TypeError happened - Bit set")
             exit(1)
 
     def build_bitflip_simu(self, start_time, reg, wreg, nb_simulations):
         self.__tcl_string = list()
         self.__nb_simu += 1
         self.__tcl_string.append(self.__code_exec.init_sim_attacked(self.__nb_simu, start_time, "bitflip", reg, self.__registers_size[self.__registers_list.index(reg)]))
-        self.__tcl_string.append(self.__inject_fault.inject_fault("bitflip", wreg))
+        self.__tcl_string.append(self.__inject_fault.inject_fault("bitflip", bit_flipped_0=wreg, size_reg_0=self.__registers_size[self.__registers_list.index(reg)]))
         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
         self.__tcl_string.append(self.__log_data.log_sim(threat="bitflip"))
         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
         try:
             self.write_tcl_file(''.join(self.__tcl_string))
         except TypeError:
-            print("TypeError happened")
+            print("TypeError happened -- Single bit-flip")
             exit(1)
 
     def build_single_bitflip_spatial(self, window, nb_simulations):
@@ -381,6 +381,8 @@ class TCL:
                 self.__tcl_string.append(self.__inject_fault.inject_fault("single_bitflip_spatial", bit_flip_0, bit_flip_1, size_reg_0, size_reg_1))
                 if(self.__protection == "wop"):
                     self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                elif(self.__protection == "simple_parity"):
+                    self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                 elif(self.__protection == "hamming"):
                     self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
                 elif(self.__protection == "secded"):
