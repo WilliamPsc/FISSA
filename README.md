@@ -45,18 +45,18 @@ export FISSA=$pwd
 If you run `ls $FISSA`, it should return the content of the `FISSA` folder.
 
 ---
+### Integrating your design inside FISSA
+
+#### Generator
+
+
+#### Integration with HDL Simulator
+
+
+#### Analyser
+
+---
 ### Getting started
-#### Integrating your design inside FISSA
-
-
-##### Generator
-
-
-##### Integration with HDL Simulator
-
-
-##### Analyser
-
 #### Running FISSA
 First, you need to go in the ```FISSA/app/``` folder and then from this folder you will be able to run the \_\_init\_\_.py file.
 Execute these commands in FISSA main folder:
@@ -78,14 +78,27 @@ After you pressed `ENTER`, the command will be executed with the aforementionned
 ### Features
 Users can easily define parameters such as threat models, attack windows, and registers to be attacked via configuration files, simplifying the testing process. FISSA also provides reporting functions for analysing results, and it generates TCL scripts compatible with various simulation tools.
 
+#### Clock period
 
-- set0
-- set1
-- bitflip
-- single_bitflip_spatial
-- single_bitflip_temporel
-- multi_bitflip_reg
-- multi_bitflip_reg_multi
+#### Maximum number of cycles
+
+#### Number of simulations per file
+
+#### Number of simulation's batch
+
+#### Paths
+
+#### Targets defined in configuration file
+
+#### Fault models
+By default, seven fault models are defined. These fault models are:
+- __set0__ : set a target to '0 during half a clock period.
+- __set1__ : set a target to '1 during half a clock period.
+- __bitflip__ : set a target to '0 during half a clock period.
+- __single_bitflip_spatial__
+- __single_bitflip_temporel__
+- __multi_bitflip_reg__
+- __multi_bitflip_reg_multi__
 
 ---
 ### Example

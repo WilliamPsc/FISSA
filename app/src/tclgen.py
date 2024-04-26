@@ -480,7 +480,7 @@ class TCL:
                     self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg", bin(size)[2:]))
                     if(self.__protection == "wop"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked())
-                    if(self.__protection == "simple_parity"):
+                    elif(self.__protection == "simple_parity"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                     elif(self.__protection == "hamming"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
@@ -515,6 +515,8 @@ class TCL:
                         self.__tcl_string.append(self.__inject_fault.inject_fault("multi_bitflip_reg_multi", bit_flipped_0=bin(size1)[2:], bit_flipped_1=bin(size2)[2:]))
                         if(self.__protection == "wop"):
                             self.__tcl_string.append(self.__code_exec.run_sim_attacked())
+                        elif(self.__protection == "simple_parity"):
+                            self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                         elif(self.__protection == "hamming"):
                             self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
                         self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg_multi"))

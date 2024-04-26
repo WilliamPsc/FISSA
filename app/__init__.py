@@ -11,7 +11,6 @@ from datetime import datetime
 from timeit import default_timer as timer
 from main_results import MainResults
 from main import Main
-from tools.performance_comparison import PerformancesComparison
 
 def generator(protect:str):
     start_time_main = timer()
@@ -39,16 +38,6 @@ def compute_sim(protect:str):
     end_time = timer()
     print(f'\tExecute time main : {round(1000*(end_time - start_time_main), 2)} ms')
     print("\tTime of generation :", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-
-def performance_comparison(protect:str, nb_repetitions):
-    start_time_main = timer()
-    perf = PerformancesComparison(protect)
-    perf.read_register_list()
-    perf.write_faulted_registers_file()
-    perf.build_data_string(nb_repetitions)
-    end_time = timer()
-    print(f'\tExecute time main : {round(1000*(end_time - start_time_main), 2)} ms')
-    print("\tTime for analyse :", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
 ### Execute simulator ###
 if __name__ == "__main__":

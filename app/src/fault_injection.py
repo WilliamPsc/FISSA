@@ -254,20 +254,16 @@ force -freeze $faulted_register_1\[{{$bit_attacked}}\] [concat $width_register_1
     def __multi_bitflip_reg(self, value_reg_0):
         """"""
         return """
-if {{$threat == "multi_bitflip_reg"}} {{
-    set bit_flipped [concat [expr $width_register]'b{value_set_reg}]
-    force -freeze $faulted_register $bit_flipped 0 -cancel "$half_periode ns"
-}}
+set bit_flipped [concat [expr $width_register]'b{value_set_reg}]
+force -freeze $faulted_register $bit_flipped 0 -cancel "$half_periode ns"
 """.format(value_set_reg = value_reg_0)
 
     def __multi_bitflip_reg_multi(self, value_reg_0, value_reg_1):
         """"""
         return """
-if {{$threat == "multi_bitflip_reg_multi"}} {{
-    set bit_flipped_0 [concat [expr $width_register_0]'b{value_set_reg_0}]
-    force -freeze $faulted_register_0 $bit_flipped_0 0 -cancel "$half_periode ns"
+set bit_flipped_0 [concat [expr $width_register_0]'b{value_set_reg_0}]
+force -freeze $faulted_register_0 $bit_flipped_0 0 -cancel "$half_periode ns"
 
-    set bit_flipped_1 [concat [expr $width_register_1]'b{value_set_reg_1}]
-    force -freeze $faulted_register_1 $bit_flipped_1 0 -cancel "$half_periode ns"
-}}
+set bit_flipped_1 [concat [expr $width_register_1]'b{value_set_reg_1}]
+force -freeze $faulted_register_1 $bit_flipped_1 0 -cancel "$half_periode ns"
 """.format(value_set_reg_0 = value_reg_0, value_set_reg_1 = value_reg_1)

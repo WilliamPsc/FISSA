@@ -148,8 +148,11 @@ class AnalyseResults:
         hours, remainder = divmod(time_difference.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
 
+        hours_total = hours + (days*24)
+
         # Print the difference
         print(f"\t\t\t>>>> The simulation time was: {days} days, {hours} hours, {minutes} minutes")
+        print(f"\t\t\t>>>> The total simulation time was in hours: {hours_total} hours, {minutes} minutes")
 
     def analyse_results(self):
         """"""
