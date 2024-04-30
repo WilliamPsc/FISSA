@@ -199,12 +199,12 @@ HC_ENCODER_IF_STAGE:
 
 HC_ENCODER_ID_STAGE:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_decoder_id_stage/hc_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/hamming_code_encoder_id_stage/hc_o
     width: 5
 
 HC_ENCODER_RF_TAG:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_encoder_rf_tag/hc_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/hamming_code_encoder_rf_tag/hc_o_rf_tag
     width: 6
 
 HC_ENCODER_EX_STAGE:

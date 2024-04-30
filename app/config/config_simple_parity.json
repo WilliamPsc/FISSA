@@ -26,7 +26,7 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "multi_bitflip_reg"
+        "multi_bitflip_reg_multi"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
