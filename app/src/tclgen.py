@@ -261,6 +261,7 @@ class TCL:
                                 self.build_bitflip_simu(start_time, reg, wreg, nb_simulations)
                                 if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
                                     self.__batch_number += 1
+                                    self.gen_new_file(window)
             else:
                 for reg in self.__registers_list:
                     if(reg not in self.__config_data_simulator['avoid_register']):
@@ -275,6 +276,7 @@ class TCL:
                                     exit(1)
                             if(self.__nb_simu >= (self.__batch_max_sim * self.__batch_number)):
                                 self.__batch_number += 1
+                                self.gen_new_file(window)
 
     def build_ref_sim(self, log_file_sim, window, nb_simulations, nb_file = 1):
         self.__tcl_string = list()

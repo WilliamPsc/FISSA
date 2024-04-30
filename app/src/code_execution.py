@@ -352,8 +352,9 @@ while {$sim_active == 1} {
     if {[expr {$sec_if} != {"1'h0"}] || [expr {$sec_id} != {"1'h0"}] || [expr {$sec_rf_tag} != {"1'h0"}] || [expr {$sec_ex} != {"1'h0"}] || [expr {$sec_csr} != {"1'h0"}] || [expr {$sec_lsu} != {"1'h0"}]} {
         ## Detection error ##
         set status_end 6
-        set sim_active 0
-    } elseif {$nb_cycle > $cycle_ref} {
+    } 
+    
+    if {$nb_cycle > $cycle_ref} {
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
@@ -362,23 +363,27 @@ while {$sim_active == 1} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
             # Illegal insn handler au même moment que simulation 0  : NOTHING #
-            set status_end 2
+            if {[expr {$status_end} == 0]} {
+                set status_end 2
+            } else {
+                set status_end 6
+            }
         } else {
             # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
             set status_end 3
         }
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} == {$value_end_pc}])} {
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     } elseif {($nb_cycle == $cycle_ref) && ([expr {$value_pc} != {$value_end_pc}])} {
-        ## SUCCESS ? ##
+        ## SUCCESS ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     }
 
     if {[expr {$sim_active} == 1]} {

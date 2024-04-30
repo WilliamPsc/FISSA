@@ -107,8 +107,8 @@
         "propagationTagV2": 2000
     },
     "multi_res_files": {
-        "buffer_overflow": 5,
-        "secretFunction": 5,
+        "buffer_overflow": 4,
+        "secretFunction": 4,
         "propagationTagV2": 8
     }
 }
