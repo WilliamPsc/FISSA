@@ -154,102 +154,96 @@ class AnalyseResults:
         print(f"\t\t\t>>>> The simulation time was: {days} days, {hours} hours, {minutes} minutes")
         print(f"\t\t\t>>>> The total simulation time was in hours: {hours_total} hours, {minutes} minutes")
 
-    def analyse_results(self):
+    def analyse_results(self, threat):
         """"""
-        test:bool = False
-        if(test):
-            applications = ["buffer_overflow"]
-        else:
-            applications = self.get_codes()
-        
-        for threat in self.__config['threat_model']:
-            df_t1 = pd.DataFrame([], columns=["Crash", "Silent", "Delay", "Detection", "Detection and Correction", "Double Errors Detection", "Success", "Total"])
-            for appli in applications:
-                self.__table_data = pd.DataFrame()
-                print("=================== " + self.__config['name_results'][appli] + " ===================")
-                print(f"\t======= >>> {threat} <<< =======")
-                # Ouverture de chaque fichier résultat
-                print("\t\t>>> Opening result file")
-                path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}/")
-                # Check if the directory exists
-                if os.path.exists(path_to_filename):
-                    json_files = [pos_json for pos_json in os.listdir(path_to_filename) if pos_json.endswith('.json')] # Enregistrement sous forme de DataFrame panda
-                    if(len(json_files) != 0):
-                        if(len(json_files) == 1):
-                            print("\t\t>>> READING FILE ...")
-                        else:
-                            print(f"\t\t>>> READING {len(json_files)} FILES ...")
-                        start_value = pd.Timestamp.max
-                        end_value = pd.Timestamp.min
-                        time_read = 0
-                        time_concat = 0
-                        list_dataframe_files = list()
-
-                        for file in json_files:
-                            start_time_read = timer()
-                            try:
-                                # Read JSON file
-                                value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose()
-
-                                # Extract values associated with 'start' and 'end' from index
-                                if 'start' in value_basique.index:
-                                    start_str = value_basique.loc['start'].iloc[0]
-                                    start_datetime = pd.to_datetime(start_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
-                                    if pd.notna(start_datetime):
-                                        start_value = min(start_value, start_datetime)
-                                if 'end' in value_basique.index:
-                                    end_str = value_basique.loc['end'].iloc[0]
-                                    end_datetime = pd.to_datetime(end_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
-                                    if pd.notna(end_datetime):
-                                        end_value = max(end_value, end_datetime)
-                            except ValueError as e:
-                                print(f"Error reading JSON file {os.path.join(path_to_filename, file)}: {e}")
-                                break
-                            end_time_read = timer()
-                            if(time_read == 0):
-                                time_read = (end_time_read - start_time_read)
-                            else:
-                                time_read += (end_time_read - start_time_read)
-                            list_dataframe_files.append(value_basique)
-
-                        start_time_concat = timer()
-                        self.__table_data = pd.concat(list_dataframe_files, axis=0, ignore_index=False)
-                        end_time_concat = timer()
-                        if(time_concat == 0):
-                            time_concat = (end_time_concat - start_time_concat)
-                        else:
-                            time_concat += (end_time_concat - start_time_concat)
-
-                        start_time_drop = timer()
-                        self.__table_data = self.__table_data.drop(index=['start', 'simulation_0', 'end'])
-                        end_time_drop = timer()
-                        print(f'\t\t\t>>>> Execute time read : {round(1000*(time_read), 2)} ms')
-                        print(f'\t\t\t>>>> Execute time concat : {round(1000*(time_concat), 2)} ms')
-                        print(f'\t\t\t>>>> Execute time drop : {round(1000*(end_time_drop - start_time_drop), 2)} ms')
-                        if(start_value != 0 and end_value != 0):
-                            self.calculate_time_difference(start_value, end_value)
-                        # ==================== TABLE 1 ====================
-                        print("\t\t>>> TABLE 1")
-                        self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
-                        df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
-                        # =================================================
-
-                        # ==================== TABLE 2 ====================
-                        success = self.__table_data.query('status_end == 2')
-                        if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
-                            print("\t\t>>> Heatmap")
-                            self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)
-                        # =================================================
+        applications = self.get_codes()
+        df_t1 = pd.DataFrame([], columns=["Crash", "Silent", "Delay", "Detection", "Detection and Correction", "Double Errors Detection", "Success", "Total"])
+        for appli in applications:
+            self.__table_data = pd.DataFrame()
+            print("=================== " + self.__config['name_results'][appli] + " ===================")
+            print(f"\t======= >>> {threat} <<< =======")
+            # Ouverture de chaque fichier résultat
+            print("\t\t>>> Opening result file")
+            path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}/")
+            # Check if the directory exists
+            if os.path.exists(path_to_filename):
+                json_files = [pos_json for pos_json in os.listdir(path_to_filename) if pos_json.endswith('.json')] # Enregistrement sous forme de DataFrame panda
+                if(len(json_files) != 0):
+                    if(len(json_files) == 1):
+                        print("\t\t>>> READING FILE ...")
                     else:
-                        print(f"The directory \"{path_to_filename}\" is empty.")
+                        print(f"\t\t>>> READING {len(json_files)} FILES ...")
+                    start_value = pd.Timestamp.max
+                    end_value = pd.Timestamp.min
+                    time_read = 0
+                    time_concat = 0
+                    list_dataframe_files = list()
+
+                    for file in json_files:
+                        start_time_read = timer()
+                        try:
+                            # Read JSON file
+                            value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose()
+
+                            # Extract values associated with 'start' and 'end' from index
+                            if 'start' in value_basique.index:
+                                start_str = value_basique.loc['start'].iloc[0]
+                                start_datetime = pd.to_datetime(start_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
+                                if pd.notna(start_datetime):
+                                    start_value = min(start_value, start_datetime)
+                            if 'end' in value_basique.index:
+                                end_str = value_basique.loc['end'].iloc[0]
+                                end_datetime = pd.to_datetime(end_str, format="%Y/%m/%d:%H:%M:%S", errors='coerce')
+                                if pd.notna(end_datetime):
+                                    end_value = max(end_value, end_datetime)
+                        except ValueError as e:
+                            print(f"Error reading JSON file {os.path.join(path_to_filename, file)}: {e}")
+                            break
+                        end_time_read = timer()
+                        if(time_read == 0):
+                            time_read = (end_time_read - start_time_read)
+                        else:
+                            time_read += (end_time_read - start_time_read)
+                        list_dataframe_files.append(value_basique)
+
+                    start_time_concat = timer()
+                    self.__table_data = pd.concat(list_dataframe_files, axis=0, ignore_index=False)
+                    end_time_concat = timer()
+                    if(time_concat == 0):
+                        time_concat = (end_time_concat - start_time_concat)
+                    else:
+                        time_concat += (end_time_concat - start_time_concat)
+
+                    start_time_drop = timer()
+                    self.__table_data = self.__table_data.drop(index=['start', 'simulation_0', 'end'])
+                    end_time_drop = timer()
+                    print(f'\t\t\t>>>> Execute time read : {round(1000*(time_read), 2)} ms')
+                    print(f'\t\t\t>>>> Execute time concat : {round(1000*(time_concat), 2)} ms')
+                    print(f'\t\t\t>>>> Execute time drop : {round(1000*(end_time_drop - start_time_drop), 2)} ms')
+                    if(start_value != 0 and end_value != 0):
+                        self.calculate_time_difference(start_value, end_value)
+                    # ==================== TABLE 1 ====================
+                    print("\t\t>>> TABLE 1")
+                    self.table_res(self.__config['name_results'][appli], self.__table_data, df_t1)
+                    df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
+                    # =================================================
+
+                    # ==================== TABLE 2 ====================
+                    success = self.__table_data.query('status_end == 2')
+                    if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
+                        print("\t\t>>> Heatmap")
+                        self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)
+                    # =================================================
                 else:
-                    print(f"The directory \"{path_to_filename}\" does not exist.")
-                print()
+                    print(f"The directory \"{path_to_filename}\" is empty.")
+            else:
+                print(f"The directory \"{path_to_filename}\" does not exist.")
+            print()
 
             # Tableau avec résultats globaux
-            print("==================== TABLE 1 ====================")
-            if not df_t1.empty:
-                df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
-                print(df_t1)
-                self.write_results(self.__table1 + self.__config['prot'] + "_" + str(self.__implem_version) + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption="Logical fault injection simulation campaigns results", label=f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{''.join(self.__config['threat_model'])}", position_float="centering", multicol_align="c", hrules=True, position="t"))
+        print("==================== TABLE 1 ====================")
+        if not df_t1.empty:
+            df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
+            print(df_t1)
+            self.write_results(self.__table1 + self.__config['prot'] + "_" + str(self.__implem_version) + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption=f"Results for {threat} for the {self.__config['prot']} version", label=f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{threat}", position_float="centering", multicol_align="c", hrules=True, position="t"))
 

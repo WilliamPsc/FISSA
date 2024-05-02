@@ -30,5 +30,6 @@ class MainResults:
         return 0
 
     def analyse_results(self):
-        results = AnalyseResults(self.__config_data)
-        results.analyse_results()
+        for threat  in self.__config_data['threat_model']:
+            results = AnalyseResults(self.__config_data)
+            results.analyse_results(threat)

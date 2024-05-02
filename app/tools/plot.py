@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class SimulationPlotter:
-    def __init__(self, nb_simulations, sim_min=200, sim_max=2200):
+    def __init__(self, nb_simulations, sim_min=1900, sim_max=2200):
         self.__nb_simulations = nb_simulations
         self.__sim_min = sim_min
         self.__sim_max = sim_max

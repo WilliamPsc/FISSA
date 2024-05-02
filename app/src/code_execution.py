@@ -235,10 +235,8 @@ set status_end -1
     def run_sim_attacked(self):
         return """
 ###### RUN SIM 100 cycles MAX or WHILE PC != 0x84 ######
+set bool_cycle 0
 while {$sim_active == 1} {
-    run "$periode ns" ;# run 1 cycle
-    incr nb_cycle
-
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
     #############  CHECKING SIM VALUES #############
@@ -269,6 +267,16 @@ while {$sim_active == 1} {
         set status_end 4
         set sim_active 0
         set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+    }
+
+    if {[expr {$sim_active} == 1]} {
+        run "$half_periode ns" ;# run 1/2 cycle
+        if {[expr $bool_cycle == 1]} {
+            incr nb_cycle
+            set bool_cycle 0
+        } else {
+            set bool_cycle 1
+        }
     }
 }
 """

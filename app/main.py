@@ -73,22 +73,24 @@ class Main:
         protection = self.get_prot()
         codes = self.get_codes()
         for code in codes:
-            print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
-            print(f"\t\t >>>> {''.join(self.__config_data['threat_model'])} <<<<")
-            tcl_gen = TCL(self.__config_data, code, protection)
-            tcl_gen.read_register_list()
-            tcl_gen.compute_nb_simulations()
-            print("\n")
+            for threat in self.__config_data['threat_model']:
+                print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
+                print(f"\t\t >>>> {threat} <<<<")
+                tcl_gen = TCL(self.__config_data, code, protection, threat)
+                tcl_gen.read_register_list()
+                tcl_gen.compute_nb_simulations()
+                print("\n")
     
     def launch_generator(self):
         """Used to generate all simulations files"""
         protection = self.get_prot()
         codes = self.get_codes()
         for code in codes:
-            print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
-            print(f"\t\t >>>> {''.join(self.__config_data['threat_model'])} <<<<")
-            tcl_gen = TCL(self.__config_data, code, protection)
-            tcl_gen.read_register_list()
-            tcl_gen.write_faulted_registers_file()
-            tcl_gen.build_data_string()
-            print("\n")
+            for threat in self.__config_data['threat_model']:
+                print(f"\t=============== {self.__config_data['name_results'][code]} - Implementation {self.__config_data['version']} ===============")
+                print(f"\t\t >>>> {threat} <<<<")
+                tcl_gen = TCL(self.__config_data, code, protection, threat)
+                tcl_gen.read_register_list()
+                tcl_gen.write_faulted_registers_file()
+                tcl_gen.build_data_string()
+                print("\n")
