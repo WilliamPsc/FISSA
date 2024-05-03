@@ -67,7 +67,7 @@ class AnalyseResults:
 
     def heatmap(self, appli:str, name_appli:str, threat:str):
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
-        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 2].copy()
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
         # Extract the last part of the strings after the last '/'
         self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
         self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
@@ -82,9 +82,9 @@ class AnalyseResults:
         match appli:
             case "buffer_overflow":
                 if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 315
+                    vmax_value = 32
                 if(threat == "single_bitflip_spatial"):
-                    vmax_value = 840
+                    vmax_value = 272
                 if(threat == "single_bitflip_temporel"):
                     vmax_value = 320
             case "secretFunction":
@@ -104,7 +104,7 @@ class AnalyseResults:
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
-                    annot_kws={'fontsize': 6, 'ha': 'center', 'va': 'center'}, square=True)
+                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=True)
             
             # Set fontsize for x and y-axis labels
             plt.xticks(fontsize=8)
@@ -160,8 +160,9 @@ class AnalyseResults:
         df_t1 = pd.DataFrame([], columns=["Crash", "Silent", "Delay", "Detection", "Detection and Correction", "Double Errors Detection", "Success", "Total"])
         for appli in applications:
             self.__table_data = pd.DataFrame()
-            print("=================== " + self.__config['name_results'][appli] + " ===================")
-            print(f"\t======= >>> {threat} <<< =======")
+            print("\t=================== " + self.__config['name_results'][appli] + " ===================")
+            print(f"\t=================== Implementation {self.__config['version']} ===================")
+            print(f"\t\t======= >>> {threat} <<< =======")
             # Ouverture de chaque fichier résultat
             print("\t\t>>> Opening result file")
             path_to_filename = os.path.join(self.__config["path_results_sim"], appli, f"{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}/")
@@ -182,8 +183,10 @@ class AnalyseResults:
                     for file in json_files:
                         start_time_read = timer()
                         try:
-                            # Read JSON file
-                            value_basique = pd.read_json(os.path.join(path_to_filename, file)).transpose()
+                            # Open the file using with statement to ensure it's closed after reading
+                            with open(os.path.join(path_to_filename, file)) as f:
+                                # Read JSON file
+                                value_basique = pd.read_json(f).transpose()
 
                             # Extract values associated with 'start' and 'end' from index
                             if 'start' in value_basique.index:
@@ -229,7 +232,7 @@ class AnalyseResults:
                     # =================================================
 
                     # ==================== TABLE 2 ====================
-                    success = self.__table_data.query('status_end == 2')
+                    success = self.__table_data.query('status_end == 4')
                     if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
                         print("\t\t>>> Heatmap")
                         self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)

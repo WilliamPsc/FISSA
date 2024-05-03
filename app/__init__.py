@@ -101,10 +101,10 @@ if __name__ == "__main__":
                 print(f"\n\t==================== >>>> Launching the generator <<<< ====================")
                 generator(protect=protect)
             case 2:
-                print(f"\n\t  ==================== >>>> Results analysis <<<< ====================")
+                print(f"\n\t==================== >>>> Results analysis <<<< ====================")
                 analyse_results(protect=protect)
             case 3:
-                print(f"\n\t  ==================== >>>> Compute the number of simulations <<<< ====================")
+                print(f"\n\t==================== >>>> Compute the number of simulations <<<< ====================")
                 compute_sim(protect=protect)
             case _:
                 print("No choice has been found. Try again.")

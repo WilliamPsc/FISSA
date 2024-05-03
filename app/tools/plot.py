@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -6,9 +7,11 @@ class SimulationPlotter:
         self.__nb_simulations = nb_simulations
         self.__sim_min = sim_min
         self.__sim_max = sim_max
+        self.__files_min = 0
+        self.__files_max = 0
 
     def __nb_files(self, x):
-        return self.__nb_simulations // x  # Use integer division to get integer values
+        return self.__nb_simulations / x # Use integer division to get integer values
 
     def __sim_numbers_finals(self, x):
         return self.__nb_simulations % x
@@ -27,7 +30,7 @@ class SimulationPlotter:
         max_y2_x_value = x[max_y2_index]
 
         return {
-            'max_y1_value': max_y1_value,
+            'max_y1_value': math.ceil(max_y1_value),
             'max_y1_x_value': max_y1_x_value,
             'max_y2_value': max_y2_value,
             'max_y2_x_value': max_y2_x_value
@@ -39,12 +42,15 @@ class SimulationPlotter:
         max_y2_index = np.argmax(y2)
         return x[max_y2_index]
 
-    def plot_simulation(self):
+    def plot_simulation(self, save_fig:bool):
         x = np.arange(self.__sim_min, self.__sim_max + 1)
         y1 = self.__nb_files(x)
         y2 = self.__sim_numbers_finals(x)
 
         best_values = self.get_best_value()
+
+        self.__files_min = math.ceil(best_values["max_y1_value"] * 0.8)
+        self.__files_max = math.ceil(best_values["max_y1_value"] * 1.2)
 
         fig, axs = plt.subplots(2, 1, sharex=True)
 
@@ -57,7 +63,7 @@ class SimulationPlotter:
                         xytext=(10, 10), textcoords='offset points', arrowprops=dict(arrowstyle="->"))
 
         axs[0].set_xlim(left=self.__sim_min, right=self.__sim_max)
-        axs[0].set_ylim(bottom=0, top=300)
+        axs[0].set_ylim(bottom=self.__files_min, top=self.__files_max)
 
         axs[1].set_xlim(left=self.__sim_min, right=self.__sim_max)
         axs[1].set_ylim(bottom=0, top=self.__sim_max)
@@ -78,13 +84,20 @@ class SimulationPlotter:
         plt.tight_layout()
 
         # Save the plot as a PDF file
-        # plt.savefig('tools/simulation_plot.pdf')
+        if(save_fig):
+            plt.savefig('tools/simulation_plot.pdf')
 
         # Display the plot window asynchronously
         plt.show()
 
 # Example usage:
 nb_simulations = int(input("How many simulations do you want to execute? "))
-plotter = SimulationPlotter(nb_simulations)
+sim_min = int(input("How many simulations minimum do you want in a file ? "))
+sim_max = int(input("How many simulations maximum do you want in a file ? "))
+save_plot = input("Do you want to save the generated plot [y/n]? ")
+save_figure = False
+if(save_plot in ["y", "Y", "O", "o", "\n"]):
+    save_figure = True
+plotter = SimulationPlotter(nb_simulations, sim_min, sim_max)
 print("Best Values:", plotter.get_best_value())
-plotter.plot_simulation()
+plotter.plot_simulation(save_figure)
