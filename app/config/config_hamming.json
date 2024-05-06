@@ -14,7 +14,7 @@
         "__code"
     ],
     "prot": "hamming",
-    "version": 2,
+    "version": 3,
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",
@@ -26,7 +26,7 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "multi_bitflip_reg_multi"
+        "single_bitflip_spatial"
     ],
     "multi_fault_injection": 2,
     "avoid_register": [
@@ -102,8 +102,8 @@
     "cycle_ref": 100,
     "cpu_period": 40,
     "batch_sim": {
-        "buffer_overflow": 2172,
-        "secretFunction": 1590,
+        "buffer_overflow": 1578,
+        "secretFunction": 1578,
         "propagationTagV2": 2000
     },
     "multi_res_files": {
