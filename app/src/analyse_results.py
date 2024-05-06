@@ -1,7 +1,7 @@
 """
 ## @Author : William PENSEC
 ## @Version : 0.0
-## @Date : 14 février 2023
+## @Date : 06 may 2024
 ## @Description :
 """
 
@@ -10,7 +10,6 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import concurrent.futures
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -25,11 +24,9 @@ class AnalyseResults:
         self.__idx_app = list()
         self.__table1 = self.__config['path_files_sim'] + "analyse/table_1/"
         if not os.path.exists(self.__table1):
-        #     shutil.rmtree(self.__table1)
             os.makedirs(self.__table1)
         self.__table2 = self.__config['path_files_sim'] + "analyse/heatmap/"
         if not os.path.exists(self.__table2):
-            # shutil.rmtree(self.__table2)
             os.makedirs(self.__table2)
 
     def get_codes(self):
@@ -69,46 +66,52 @@ class AnalyseResults:
         """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple"""
         self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
         # Extract the last part of the strings after the last '/'
-        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
-        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(lambda x: x.split('/hc_o_32')[0][-3:] + '/hc_o_32' if x.endswith('/hc_o_32') else x.split('/')[-1])
+        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(
+            lambda x: '/'.join(x.split('/')[-2:]) if x.endswith('/hc_o') else x.split('/')[-1])
+        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(
+            lambda x: x.replace("hamming_code_encoder_", "hc_") if x.startswith('hamming_code_encoder') else x)
 
+        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(
+            lambda x: '/'.join(x.split('/')[-2:]) if x.endswith('/hc_o') else x.split('/')[-1])
+        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(
+            lambda x: x.replace("hamming_code_encoder_", "hc_") if x.startswith('hamming_code_encoder') else x)
 
         # Create a pivot table for 'faulted_register' on both axes and count occurrences
         heatmap_data = self.__table_data_filtered.pivot_table(index='faulted_register_1', columns='faulted_register_0', values='status_end', aggfunc='count', fill_value=0)
 
         # Create a heatmap using seaborn with white background for 0 values
-        plt.figure(figsize=(12, 10))
-        # vmax_value = heatmap_data.values.max()
-        match appli:
-            case "buffer_overflow":
-                if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 32
-                if(threat == "single_bitflip_spatial"):
-                    vmax_value = 272
-                if(threat == "single_bitflip_temporel"):
-                    vmax_value = 320
-            case "secretFunction":
-                if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 680
-                if(threat == "single_bitflip_spatial"):
-                    vmax_value = 524
-                if(threat == "single_bitflip_temporel"):
-                    vmax_value = 672
-            case "propagationTagV2":
-                if(threat == "multi_bitflip_reg_multi"):
-                    vmax_value = 248
-                if(threat == "single_bitflip_spatial"):
-                    vmax_value = 154
-                if(threat == "single_bitflip_temporel"):
-                    vmax_value = 96
+        plt.figure(figsize=(15, 12))
+        vmax_value = heatmap_data.values.max()
+        # match appli:
+        #     case "buffer_overflow":
+        #         if(threat == "multi_bitflip_reg_multi"):
+        #             vmax_value = 500
+        #         if(threat == "single_bitflip_spatial"):
+        #             vmax_value = 272
+        #         if(threat == "single_bitflip_temporel"):
+        #             vmax_value = 320
+        #     case "secretFunction":
+        #         if(threat == "multi_bitflip_reg_multi"):
+        #             vmax_value = 680
+        #         if(threat == "single_bitflip_spatial"):
+        #             vmax_value = 524
+        #         if(threat == "single_bitflip_temporel"):
+        #             vmax_value = 672
+        #     case "propagationTagV2":
+        #         if(threat == "multi_bitflip_reg_multi"):
+        #             vmax_value = 248
+        #         if(threat == "single_bitflip_spatial"):
+        #             vmax_value = 154
+        #         if(threat == "single_bitflip_temporel"):
+        #             vmax_value = 96
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
-                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=True)
+                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=False)
             
             # Set fontsize for x and y-axis labels
-            plt.xticks(fontsize=8)
-            plt.yticks(fontsize=8)
+            plt.xticks(fontsize=7)
+            plt.yticks(fontsize=7)
             # Set axis labels to None to remove them
             plt.xlabel(None)
             plt.ylabel(None)
@@ -117,11 +120,11 @@ class AnalyseResults:
         else:
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success'},
                     vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black',
-                    mask=(heatmap_data == 0), annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=True)
+                    mask=(heatmap_data == 0), annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=False)
             
             # Set fontsize for x and y-axis labels
-            plt.xticks(fontsize=8)
-            plt.yticks(fontsize=8)
+            plt.xticks(fontsize=7)
+            plt.yticks(fontsize=7)
             # Set axis labels to None to remove them
             plt.xlabel(None)
             plt.ylabel(None)
@@ -231,7 +234,7 @@ class AnalyseResults:
                     df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
                     # =================================================
 
-                    # ==================== TABLE 2 ====================
+                    # ==================== HEATMAP ====================
                     success = self.__table_data.query('status_end == 4')
                     if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
                         print("\t\t>>> Heatmap")
@@ -248,5 +251,8 @@ class AnalyseResults:
         if not df_t1.empty:
             df_t1 = df_t1.set_axis(self.__idx_app, axis='index')
             print(df_t1)
-            self.write_results(self.__table1 + self.__config['prot'] + "_" + str(self.__implem_version) + "_" + threat + ".tex", df_t1.style.format_index(escape="latex").to_latex(caption=f"Results for {threat} for the {self.__config['prot']} version", label=f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{threat}", position_float="centering", multicol_align="c", hrules=True, position="t"))
+            path_table1 = f"{self.__table1}{self.__config['prot']}_{self.__implem_version}_{threat}.tex"
+            caption = f"Results for {threat} for the {self.__config['prot']} version"
+            label = f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{threat}"
+            self.write_results(path_table1, df_t1.style.format_index(escape="latex").to_latex(caption=caption, label=label, position_float="centering", multicol_align="c", hrules=True, position="t"))
 

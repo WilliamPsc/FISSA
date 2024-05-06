@@ -17,6 +17,7 @@
     "version": 2,
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
+        "buffer_overflow",
         "secretFunction"
     ],
     "name_results": {
