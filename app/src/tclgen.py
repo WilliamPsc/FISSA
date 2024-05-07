@@ -72,6 +72,9 @@ class TCL:
         self.__batch_number = 1
         self.__periode = config_data["cpu_period"]
         self.__batch_max_sim:int = config_data["batch_sim"][self.__code]
+        self.__number_batches = self.__config_data_simulator['multi_res_files'][self.__code]
+        if(self.__number_batches < 1):
+            self.__number_batches = 1
         self.__build_make_list = list()
 
     @property
@@ -192,7 +195,7 @@ class TCL:
 
             self.__nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
             print("\t\t >>>> Number of files to generate:", '{:,}'.format(self.__nb_files).replace(',', ' '))
-            print(f"\t\t >>>> Number of batch: {self.__config_data_simulator['multi_res_files'][self.__code]}")
+            print(f"\t\t >>>> Number of batch: {self.__number_batches}")
 
     ## Fonction servant à construire la chaîne de simulation
     def build_data_string(self):
@@ -206,7 +209,7 @@ class TCL:
 
             self.__nb_files = math.ceil(self.__nb_simu_total / self.__batch_max_sim)
             print("\t\t >>>> Number of files to generate:", '{:,}'.format(self.__nb_files).replace(',', ' '))
-            print(f"\t\t >>>> Number of batch: {self.__config_data_simulator['multi_res_files'][self.__code]}")
+            print(f"\t\t >>>> Number of batch: {self.__number_batches}")
 
             file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
             self.build_make_list = file_str
@@ -227,10 +230,7 @@ class TCL:
         # TODO:
         # - Change how it works by adding 3 values of multi_res_files (0,1,2+) like : 0 (1 TCL + 1 result file) / 1 (1+ TCL + 1 result file) / 2+ (2+ TCL files + 2+ result files)
 
-        if(self.__config_data_simulator['multi_res_files'][self.__code] < 1):
-            self.__config_data_simulator['multi_res_files'][self.__code] = 1
-
-        if(self.__config_data_simulator['multi_res_files'][self.__code] == 1):
+        if(self.__number_batches == 1):
             log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + self.__threat_model + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_1.json"
         else:
             log_file_sim = ''.join(self.__config_data_simulator['path_simulation']).replace('__code', self.__code) + "_" + self.__protection + "_" + str(self.__implem_version) + "_" + self.__threat_model + "_" + str(self.__nb_faults) + "/results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
@@ -579,23 +579,62 @@ class TCL:
             return 1
         return 0
             
+    # def gen_build_make(self):
+    #     """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
+    #     if not self.__build_make_list:
+    #         return  # Nothing to do if build_make_list is empty
+    #     nb_simu_files = math.ceil(self.__nb_files / self.__number_batches)
+    #     build_make_str = ""
+    #     try:
+    #         with open(self.__gen_path + "build.make", 'w') as build_file:
+    #             for index, elem in enumerate(self.__build_make_list):
+    #                 if index % nb_simu_files == 0 and index != 0:
+    #                     build_make_str += f"\n\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
+    #                 elif index % nb_simu_files == 0 and index == 0:
+    #                     build_make_str += f"cd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
+
+    #                 build_make_str += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/william/Documents/DRiSCY/pulpino/vsim\ TB_TEST=""\ /home/william/tools_memphis/questa/questasim/linux_x86_64/vsim\ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ {elem}\;\ exit\;'\ > vsim.log".format(elem=elem)
+    #             build_file.write(build_make_str)
+    #     except Exception as e:
+    #         print("An exception occurred: {exc}".format(exc=e.args[1]))
+    #         return 1
+    #     return 0
+    
+    def __distribute_files(self):
+        files_per_batch = self.__file_number // self.__number_batches
+        remainder = self.__file_number % self.__number_batches
+        batches = [files_per_batch] * self.__number_batches
+        for i in range(remainder):
+            batches[i] += 1
+        return batches
+    
     def gen_build_make(self):
         """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
         if not self.__build_make_list:
             return  # Nothing to do if build_make_list is empty
-        nb_simu_files = math.ceil(self.__nb_files / self.__config_data_simulator['multi_res_files'][self.__code])
-        build_make_str = ""
-        try:
-            with open(self.__gen_path + "build.make", 'w') as build_file:
-                for index, elem in enumerate(self.__build_make_list):
-                    if index % nb_simu_files == 0 and index != 0:
-                        build_make_str += f"\n\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
-                    elif index % nb_simu_files == 0 and index == 0:
-                        build_make_str += f"cd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
 
-                    build_make_str += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/william/Documents/DRiSCY/pulpino/vsim\ TB_TEST=""\ /home/william/tools_memphis/questa/questasim/linux_x86_64/vsim\ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ {elem}\;\ exit\;'\ > vsim.log".format(elem=elem)
+        files_per_batch = self.__distribute_files()
+        build_make_str = ""
+        
+        try:
+            index = 0
+            with open(self.__gen_path + "build.make", 'w') as build_file:
+                for batch_size in files_per_batch:
+                    # Add cd command at the beginning of each batch
+                    build_make_str += f"\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
+                    for _ in range(batch_size):
+                        if index >= len(self.__build_make_list):
+                            break
+                        elem = self.__build_make_list[index]
+                        build_make_str += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/william/Documents/DRiSCY/pulpino/vsim\ TB_TEST="\
+                                          f"\"\"\ /home/william/tools_memphis/questa/questasim/linux_x86_64/vsim\ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ {elem}\;\ exit\;'\ > vsim.log"
+                        index += 1
+
+                    # Add new line to separate batches if not the last command
+                    if index < len(self.__build_make_list):
+                        build_make_str += "\n\n"
                 build_file.write(build_make_str)
         except Exception as e:
-            print("An exception occurred: {exc}".format(exc=e.args[1]))
+            print(f"An exception occurred: {str(e)}")
             return 1
         return 0
