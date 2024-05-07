@@ -621,7 +621,7 @@ class TCL:
             with open(self.__gen_path + "build.make", 'w') as build_file:
                 for batch_size in files_per_batch:
                     # Add cd command at the beginning of each batch
-                    build_make_str += f"\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
+                    build_make_str += f"cd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
                     for _ in range(batch_size):
                         if index >= len(self.__build_make_list):
                             break
