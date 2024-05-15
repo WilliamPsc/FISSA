@@ -107,7 +107,7 @@ class AnalyseResults:
         if(self.__config['prot'] == "wop"):
             sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
-                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=False)
+                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=True)
             
             # Set fontsize for x and y-axis labels
             plt.xticks(fontsize=7)

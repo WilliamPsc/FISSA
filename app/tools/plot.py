@@ -94,10 +94,11 @@ class SimulationPlotter:
 nb_simulations = int(input("How many simulations do you want to execute? "))
 sim_min = int(input("How many simulations minimum do you want in a file ? "))
 sim_max = int(input("How many simulations maximum do you want in a file ? "))
-save_plot = input("Do you want to save the generated plot [y/n]? ")
+save_plot = input("Do you want to save the generated plot [y/n] (no by default)? ")
 save_figure = False
-if(save_plot in ["y", "Y", "O", "o", "\n"]):
+if(save_plot in ["y", "Y", "O", "o"]):
     save_figure = True
+print(save_figure)
 plotter = SimulationPlotter(nb_simulations, sim_min, sim_max)
 print("Best Values:", plotter.get_best_value())
 plotter.plot_simulation(save_figure)

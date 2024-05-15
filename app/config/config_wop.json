@@ -25,9 +25,9 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
+        "single_bitflip_spatial",
         "single_bitflip_temporel",
-        "multi_bitflip_reg_multi",
-        "single_bitflip_spatial"
+        "multi_bitflip_reg_multi"
 
     ],
     "multi_fault_injection": 2,
