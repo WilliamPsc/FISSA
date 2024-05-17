@@ -105,20 +105,20 @@ class AnalyseResults:
         #         if(threat == "single_bitflip_temporel"):
         #             vmax_value = 96
         if(self.__config['prot'] == "wop"):
-            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar=False, vmin=0, vmax=vmax_value,
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success', 'shrink': 0.8}, vmin=0, vmax=vmax_value,
                     center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
-                    annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=True)
+                    annot_kws={'fontsize': 8, 'ha': 'center', 'va': 'center'}, square=False)
             
             # Set fontsize for x and y-axis labels
-            plt.xticks(fontsize=7)
-            plt.yticks(fontsize=7)
+            plt.yticks(fontsize=9)
+            plt.xticks(fontsize=9)
             # Set axis labels to None to remove them
             plt.xlabel(None)
             plt.ylabel(None)
             # Adjust layout to eliminate extra white space
             plt.tight_layout()
         else:
-            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success'},
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success', 'shrink': 0.8},
                     vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black',
                     mask=(heatmap_data == 0), annot_kws={'fontsize': 5, 'ha': 'center', 'va': 'center'}, square=False)
             
