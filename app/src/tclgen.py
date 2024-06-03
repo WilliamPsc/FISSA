@@ -484,6 +484,8 @@ class TCL:
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                     elif(self.__protection == "hamming"):
                         self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                    elif(self.__protection == "secded"):
+                        self.__tcl_string.append(self.__code_exec.run_sim_attacked_secded())
                     self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg"))
                     self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                     try:
@@ -519,6 +521,8 @@ class TCL:
                             self.__tcl_string.append(self.__code_exec.run_sim_attacked_simple())
                         elif(self.__protection == "hamming"):
                             self.__tcl_string.append(self.__code_exec.run_sim_attacked_hamming())
+                        elif(self.__protection == "secded"):
+                            self.__tcl_string.append(self.__code_exec.run_sim_attacked_secded())
                         self.__tcl_string.append(self.__log_data.log_sim(threat="multi_bitflip_reg_multi"))
                         self.__tcl_string.append(self.__code_exec.end_sim(self.__nb_simu, nb_simulations))
                         try:
@@ -578,27 +582,6 @@ class TCL:
             print("An exception has occurred : {exc}".format(exc=e.args[1]))
             return 1
         return 0
-            
-    # def gen_build_make(self):
-    #     """Generate the simulation compilation string to be copied in build.make to simulate the simulations in 1 line"""
-    #     if not self.__build_make_list:
-    #         return  # Nothing to do if build_make_list is empty
-    #     nb_simu_files = math.ceil(self.__nb_files / self.__number_batches)
-    #     build_make_str = ""
-    #     try:
-    #         with open(self.__gen_path + "build.make", 'w') as build_file:
-    #             for index, elem in enumerate(self.__build_make_list):
-    #                 if index % nb_simu_files == 0 and index != 0:
-    #                     build_make_str += f"\n\ncd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
-    #                 elif index % nb_simu_files == 0 and index == 0:
-    #                     build_make_str += f"cd /home/william/Documents/DRiSCY/pulpino/sw/build/apps/{self.__code}"
-
-    #                 build_make_str += " && tcsh -c env\ PULP_CORE=riscv\ VSIM_DIR=/home/william/Documents/DRiSCY/pulpino/vsim\ TB_TEST=""\ /home/william/tools_memphis/questa/questasim/linux_x86_64/vsim\ -c\ -64\ -do\ 'source\ tcl_files/run.tcl\;\ {elem}\;\ exit\;'\ > vsim.log".format(elem=elem)
-    #             build_file.write(build_make_str)
-    #     except Exception as e:
-    #         print("An exception occurred: {exc}".format(exc=e.args[1]))
-    #         return 1
-    #     return 0
     
     def __distribute_files(self):
         files_per_batch = self.__file_number // self.__number_batches

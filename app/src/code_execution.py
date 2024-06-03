@@ -423,14 +423,14 @@ while {$sim_active == 1} {
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
+    if {[expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
+        ## Single Error Correction ##
+        set status_end 6
+    }
+    
     if {[expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
         ## Double Error Detection ##
         set status_end 7
-        set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
-    } elseif {[expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
-        ## Single Error Correction ##
-        set status_end 6
         set sim_active 0
         set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
     } elseif {$nb_cycle > $cycle_ref} {
@@ -442,7 +442,11 @@ while {$sim_active == 1} {
         ## INSN ILL HANDLER ##
         if {[expr {$cycle_ill_insn} == {[expr $now / 1000]}]} {
             # Illegal insn handler au même moment que simulation 0  : NOTHING #
-            set status_end 2
+            if {[expr {$status_end} == 0]} {
+                set status_end 2
+            } else {
+                set status_end 6
+            }
         } else {
             # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
             set status_end 3
