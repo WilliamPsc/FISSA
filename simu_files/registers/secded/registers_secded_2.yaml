@@ -210,10 +210,10 @@ SD_ENCODER_ID_STAGE:
 
 SD_ENCODER_RF_TAG:
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o_rf_tag
     width: 6
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o_rf_tag
     width: 1
 
 SD_ENCODER_EX_STAGE:

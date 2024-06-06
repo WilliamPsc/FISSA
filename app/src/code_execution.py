@@ -413,22 +413,28 @@ set bool_cycle 0
 while {$sim_active == 1} {
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
 
+    set ded_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/ded_interrupt]
     set ded_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/ded_interrupt]
+    set ded_ex      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/ded_interrupt]
     set ded_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/ded_interrupt]
     set ded_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/ded_interrupt]
+    set ded_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/ded_interrupt]
 
+    set sec_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/sec_interrupt]
     set sec_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/sec_interrupt]
-    set sec_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt]
     set sec_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/sec_interrupt]
+    set sec_ex      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/sec_interrupt]
+    set sec_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt]
+    set sec_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/sec_interrupt]
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    if {[expr {$sec_id} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}]} {
+    if {[expr {$sec_if} == {"1'h1"}] || [expr {$sec_id} == {"1'h1"}] || [expr {$sec_ex} == {"1'h1"}] || [expr {$sec_csr} == {"1'h1"}] || [expr {$sec_rf_tag} == {"1'h1"}] || [expr {$sec_lsu} == {"1'h1"}]} {
         ## Single Error Correction ##
         set status_end 6
     }
     
-    if {[expr {$ded_id} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}]} {
+    if {[expr {$ded_if} == {"1'h1"}] || [expr {$ded_id} == {"1'h1"}] || [expr {$ded_ex} == {"1'h1"}] || [expr {$ded_csr} == {"1'h1"}] || [expr {$ded_rf_tag} == {"1'h1"}] || [expr {$ded_lsu} == {"1'h1"}]} {
         ## Double Error Detection ##
         set status_end 7
         set sim_active 0

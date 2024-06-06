@@ -283,7 +283,7 @@ SD_ENCODER_ID_STAGE:
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_is_store_post_o_tag/hc_o
     width: 2
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/YYYsecded_encoder_is_store_post_o_tagYYY/sd_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_is_store_post_o_tag/sd_o
     width: 1
   -
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/secded_encoder_memory_set_o_tag/hc_o
@@ -297,7 +297,7 @@ SD_ENCODER_RF_TAG:
     name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/hc_o_rf_tag
     width: 6
   -
-    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o
+    name: /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/secded_encoder_rf_tag/sd_o_rf_tag
     width: 1
 
 SD_ENCODER_EX_STAGE:
