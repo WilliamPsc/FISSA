@@ -169,6 +169,16 @@ By default, seven fault models are defined. These fault models are:
 ---
 ### Citation
 
+- GitHub's citation
+```TeX
+@online{fissa,
+  author = {William PENSEC},
+  title = {FISSA -- Fault Injection Simulation for Security Assessment},
+  year = 2024,
+  url = {https://github.com/WilliamPsc/FISSA}
+}
+```
+- Paper's citation
 ```
 
 ```
