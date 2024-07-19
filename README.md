@@ -178,7 +178,28 @@ By default, seven fault models are defined. These fault models are:
   url = {https://github.com/WilliamPsc/FISSA}
 }
 ```
-- Paper's citation
-```
+- Paper citation
+  * IEEE Bibtex
+  ```
+  @INPROCEEDINGS{PLG-24-dsd,
+    author={
+      Pensec, William and
+      Lapôtre, Vianney and
+      Gogniat, Guy
+    },
+    title={Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment}, 
+    booktitle={2024 27th Euromicro Conference on Digital System Design (DSD)}, 
+    year={2024},
+    volume={},
+    number={},
+    pages={},
+    keywords={Hardware security; Physical Attacks; Fault injection simulation; Open-Source tool; Vulnerability Assessment},
+    doi={}
+  }
+  ```
 
-```
+  * Plain text
+  ```
+  W. Pensec, V. Lapôtre and G. Gogniat, "Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment", 2024 27th Euromicro Conference on Digital System Design (DSD), Paris, France, 2024, keywords: {Hardware security; Physical Attacks; Fault injection simulation; Open-Source tool; Vulnerability Assessment}
+  ```
+---
