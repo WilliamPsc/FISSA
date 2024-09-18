@@ -357,7 +357,7 @@ while {$sim_active == 1} {
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    if {[expr {$sec_if} != {"1'h0"}] || [expr {$sec_id} != {"1'h0"}] || [expr {$sec_rf_tag} != {"1'h0"}] || [expr {$sec_ex} != {"1'h0"}] || [expr {$sec_csr} != {"1'h0"}] || [expr {$sec_lsu} != {"1'h0"}]} {
+    if {[expr {$sec_if} != {"1'h0"}] || [expr {$sec_id} != {"1'h0"}] || [expr {$sec_ex} != {"1'h0"}] || [expr {$sec_rf_tag} != {"1'h0"}] || [expr {$sec_lsu} != {"1'h0"}] || [expr {$sec_csr} != {"1'h0"}]} {
         ## Detection error ##
         set status_end 6
     } 
@@ -489,21 +489,29 @@ while {$sim_active == 1} {
 set bool_cycle 0
 while {{$sim_active == 1}} {{
     {fault_injection}
+
     set value_pc [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/pc_id_o]
-    set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tcr/error_o_csr]
-    set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tpr/error_o_csr]
-    set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_addr_rf_tag/error_o_addr_rf_tag]
-    set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_26/error_o_26]
-    set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/simple_parity_decoder_rf_tag/error_o_rf_tag]
+    # set error_tcr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tcr/error_o_csr]
+    # set error_tpr [examine /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/simple_parity_decoder_tpr/error_o_csr]
+    # set error_addr_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_addr_rf_tag/error_o_addr_rf_tag]
+    # set error_26 [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/simple_parity_decoder_26/error_o_26]
+    # set error_rf_tag [examine /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/simple_parity_decoder_rf_tag/error_o_rf_tag]
+
+    # set sec_if      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/if_stage_i/sec_interrupt]
+    set sec_id      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/sec_interrupt]
+    set sec_rf_tag  [examine -hex /tb/top_i/core_region_i/RISCV_CORE/id_stage_i/registers_i_tag/sec_interrupt]
+    # set sec_ex      [examine -hex /tb/top_i/core_region_i/RISCV_CORE/ex_stage_i/sec_interrupt]
+    set sec_csr     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/cs_registers_i/sec_interrupt]
+    # set sec_lsu     [examine -hex /tb/top_i/core_region_i/RISCV_CORE/load_store_unit_i/sec_interrupt]
 
     #############  CHECKING SIM VALUES #############
     ## if conditions to stop the run cycles
-    if {{[expr {{$error_tcr}} != {{"1'h0"}}] || [expr {{$error_tpr}} != {{"1'h0"}}] || [expr {{$error_addr_tag}} != {{"1'h0"}}] || [expr {{$error_26}} != {{"1'h0"}}] || [expr {{$error_rf_tag}} != {{"1'h0"}}]}} {{
+    if {{[expr {{$sec_id}} != {{"1'h0"}}] || [expr {{$sec_rf_tag}} != {{"1'h0"}}] || [expr {{$sec_csr}} != {{"1'h0"}}]}} {{
         ## Detection error ##
-        set status_end 5
-        set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
-    }} elseif {{$nb_cycle > $cycle_ref}} {{
+        set status_end 6
+    }}
+    
+    if {{$nb_cycle > $cycle_ref}} {{
         ## CYCLE OVERFLOW : CRASH ##
         set sim_active 0
         set status_end 1
@@ -512,25 +520,28 @@ while {{$sim_active == 1}} {{
         ## INSN ILL HANDLER ##
         if {{[expr {{$cycle_ill_insn}} == {{[expr $now / 1000]}}]}} {{
             # Illegal insn handler au même moment que simulation 0  : NOTHING #
-            set status_end 2
+            if {{[expr {{$status_end}} == 0]}} {{
+                set status_end 2
+            }} else {{
+                set status_end 6
+            }}
         }} else {{
             # Illegal insn handler à un moment différent que simulation 0 : EXCEPTION DECALEE #
             set status_end 3
         }}
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} == {{$value_end_pc}}])}} {{
         ## RAS ##
         set status_end 0
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     }} elseif {{($nb_cycle == $cycle_ref) && ([expr {{$value_pc}} != {{$value_end_pc}}])}} {{
         ## SUCCESS ? ##
         set status_end 4
         set sim_active 0
-        set check_cycle [expr [expr $now / 1000 - $start] / $periode] ;# Checking which is current cycle (for log)
+        set check_cycle [expr [expr $now / 1000 - $start] / $periode]
     }}
-
 
     if {{[expr {{$sim_active}} == 1]}} {{
         run "$half_periode ns" ;# run 1/2 cycle

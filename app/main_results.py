@@ -33,3 +33,4 @@ class MainResults:
         for threat  in self.__config_data['threat_model']:
             results = AnalyseResults(self.__config_data)
             results.analyse_results(threat)
+            results.free_memory_attr()

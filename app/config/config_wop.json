@@ -18,7 +18,8 @@
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
         "buffer_overflow",
-        "secretFunction"
+        "secretFunction",
+        "propagationTagV2"
     ],
     "name_results": {
         "buffer_overflow": "Buffer Overflow",
@@ -26,9 +27,9 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "single_bitflip_spatial"
+        "bitflip"
     ],
-    "multi_fault_injection": 2,
+    "multi_fault_injection": 1,
     "avoid_register": [
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec_dift",
         "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o",
@@ -95,13 +96,13 @@
     "cycle_ref": 100,
     "cpu_period": 40,
     "batch_sim": {
-        "buffer_overflow": 2000,
-        "secretFunction": 2000,
-        "propagationTagV2": 2000
+        "buffer_overflow": 1000,
+        "secretFunction": 1000,
+        "propagationTagV2": 1000
     },
     "multi_res_files": {
-        "buffer_overflow": 4,
-        "secretFunction": 4,
-        "propagationTagV2": 8
+        "buffer_overflow": 2,
+        "secretFunction": 2,
+        "propagationTagV2": 2
     }
 }

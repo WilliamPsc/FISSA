@@ -137,6 +137,63 @@ class AnalyseResults:
         # Save the figure to a PDF file
         plt.savefig(f"{self.__table2}heatmap_{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}.pdf", format='pdf', bbox_inches='tight')
 
+    def heatmap_from_list(self, appli: str, name_appli: str, threat: str, filter_names: list):
+        """Display results as a heatmap with faulted register in both axis and a value for the number of success for each couple, 
+        considering only a provided list of names."""
+        
+        self.__table_data_filtered = self.__table_data[self.__table_data['status_end'] == 4].copy()
+
+        # Apply transformations to faulted_register_0 and faulted_register_1
+        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(
+            lambda x: '/'.join(x.split('/')[-2:]) if x.endswith('/hc_o') else x.split('/')[-1])
+        self.__table_data_filtered['faulted_register_0'] = self.__table_data_filtered['faulted_register_0'].apply(
+            lambda x: x.replace("hamming_code_encoder_", "hc_") if x.startswith('hamming_code_encoder') else x)
+
+        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(
+            lambda x: '/'.join(x.split('/')[-2:]) if x.endswith('/hc_o') else x.split('/')[-1])
+        self.__table_data_filtered['faulted_register_1'] = self.__table_data_filtered['faulted_register_1'].apply(
+            lambda x: x.replace("hamming_code_encoder_", "hc_") if x.startswith('hamming_code_encoder') else x)
+
+        # Filter based on the provided list of names
+        self.__table_data_filtered = self.__table_data_filtered[
+            (self.__table_data_filtered['faulted_register_0'].isin(filter_names)) &
+            (self.__table_data_filtered['faulted_register_1'].isin(filter_names))
+        ]
+
+        # Create a pivot table for 'faulted_register' on both axes and count occurrences
+        heatmap_data = self.__table_data_filtered.pivot_table(
+            index='faulted_register_1', 
+            columns='faulted_register_0', 
+            values='status_end', 
+            aggfunc='count', 
+            fill_value=0
+        )
+
+        # Create a heatmap using seaborn with white background for 0 values
+        plt.figure(figsize=(10, 8))
+        vmax_value = heatmap_data.values.max()
+
+        if self.__config['prot'] == "wop":
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success', 'shrink': 0.8},
+                        vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
+                        annot_kws={'fontsize': 12, 'ha': 'center', 'va': 'center'}, square=True)
+            plt.yticks(fontsize=12)
+            plt.xticks(fontsize=12)
+        else:
+            sns.heatmap(heatmap_data, annot=True, cmap='copper_r', fmt='g', cbar_kws={'label': 'Number of success', 'shrink': 0.8},
+                        vmin=0, vmax=vmax_value, center=None, linewidths=0.5, linecolor='black', mask=(heatmap_data == 0),
+                        annot_kws={'fontsize': 12, 'ha': 'center', 'va': 'center'}, square=False)
+            plt.xticks(fontsize=12)
+            plt.yticks(fontsize=12)
+
+        plt.xlabel(None)
+        plt.ylabel(None)
+        plt.tight_layout()
+
+        # Save the figure to a PDF file
+        plt.savefig(f"{self.__table2}heatmap_{appli}_{self.__config['prot']}_{self.__implem_version}_{threat}_{str(self.__config['multi_fault_injection'])}.pdf", format='pdf', bbox_inches='tight')
+
+
     def calculate_time_difference(self, start, end):
         # Convert the date strings to datetime objects
         date_format = "%Y/%m/%d:%H:%M:%S"
@@ -156,6 +213,10 @@ class AnalyseResults:
         # Print the difference
         print(f"\t\t\t>>>> The simulation time was: {days} days, {hours} hours, {minutes} minutes")
         print(f"\t\t\t>>>> The total simulation time was in hours: {hours_total} hours, {minutes} minutes")
+
+    def free_memory_attr(self):
+        del self.__table_data
+        del self.__table_data_filtered
 
     def analyse_results(self, threat):
         """"""
@@ -239,6 +300,8 @@ class AnalyseResults:
                     if(threat in ["single_bitflip_spatial","multi_bitflip_reg_multi", "single_bitflip_temporel"] and len(success) > 0 and int(self.__config['multi_fault_injection']) == 2):
                         print("\t\t>>> Heatmap")
                         self.heatmap(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat)
+                        # registers = ["pc_if_o_tag", "memory_set_o_tag", "tcr_q", "tpr_q", "rf_reg[1]", "rf_reg[2]"]
+                        # self.heatmap_from_list(appli=appli, name_appli=self.__config['name_results'][appli], threat=threat, filter_names=registers)
                     # =================================================
                 else:
                     print(f"The directory \"{path_to_filename}\" is empty.")
@@ -255,4 +318,7 @@ class AnalyseResults:
             caption = f"Results for {threat} for the {self.__config['prot']} version"
             label = f"table:end_sim_by_status_{self.__config['prot']}_{self.__implem_version}_{threat}"
             self.write_results(path_table1, df_t1.style.format_index(escape="latex").to_latex(caption=caption, label=label, position_float="centering", multicol_align="c", hrules=True, position="t"))
-
+        
+        del df_t1
+        del list_dataframe_files
+        # self.free_memory_attr()
