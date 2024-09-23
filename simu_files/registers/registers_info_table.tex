@@ -1,0 +1,65 @@
+\begin{table}
+\caption{D-RI5CY Registers Information}
+\label{tab:driscy_register_info}
+\begin{tabular}{rcc}
+\toprule
+Register Name & Module & Size \\
+\midrule
+pc\_id\_o\_tag & FETCH & 1 \\
+pc\_if\_o\_tag & FETCH & 1 \\
+alu\_operand\_a\_ex\_o\_tag & DECODE & 1 \\
+alu\_operand\_b\_ex\_o\_tag & DECODE & 1 \\
+alu\_operand\_c\_ex\_o\_tag & DECODE & 1 \\
+alu\_operator\_o\_mode & DECODE & 2 \\
+check\_d\_o\_tag & DECODE & 1 \\
+check\_s1\_o\_tag & DECODE & 1 \\
+check\_s2\_o\_tag & DECODE & 1 \\
+is\_store\_post\_o\_tag & DECODE & 1 \\
+memory\_set\_o\_tag & DECODE & 1 \\
+regfile\_alu\_waddr\_ex\_o\_tag & DECODE & 5 \\
+register\_set\_o\_tag & DECODE & 1 \\
+store\_dest\_addr\_ex\_o\_tag & DECODE & 1 \\
+store\_source\_ex\_o\_tag & DECODE & 1 \\
+use\_store\_ops\_ex\_o & DECODE & 1 \\
+rf\_reg[0] & RF\_TAG & 1 \\
+rf\_reg[1] & RF\_TAG & 1 \\
+rf\_reg[2] & RF\_TAG & 1 \\
+rf\_reg[3] & RF\_TAG & 1 \\
+rf\_reg[4] & RF\_TAG & 1 \\
+rf\_reg[5] & RF\_TAG & 1 \\
+rf\_reg[6] & RF\_TAG & 1 \\
+rf\_reg[7] & RF\_TAG & 1 \\
+rf\_reg[8] & RF\_TAG & 1 \\
+rf\_reg[9] & RF\_TAG & 1 \\
+rf\_reg[10] & RF\_TAG & 1 \\
+rf\_reg[11] & RF\_TAG & 1 \\
+rf\_reg[12] & RF\_TAG & 1 \\
+rf\_reg[13] & RF\_TAG & 1 \\
+rf\_reg[14] & RF\_TAG & 1 \\
+rf\_reg[15] & RF\_TAG & 1 \\
+rf\_reg[16] & RF\_TAG & 1 \\
+rf\_reg[17] & RF\_TAG & 1 \\
+rf\_reg[18] & RF\_TAG & 1 \\
+rf\_reg[19] & RF\_TAG & 1 \\
+rf\_reg[20] & RF\_TAG & 1 \\
+rf\_reg[21] & RF\_TAG & 1 \\
+rf\_reg[22] & RF\_TAG & 1 \\
+rf\_reg[23] & RF\_TAG & 1 \\
+rf\_reg[24] & RF\_TAG & 1 \\
+rf\_reg[25] & RF\_TAG & 1 \\
+rf\_reg[26] & RF\_TAG & 1 \\
+rf\_reg[27] & RF\_TAG & 1 \\
+rf\_reg[28] & RF\_TAG & 1 \\
+rf\_reg[29] & RF\_TAG & 1 \\
+rf\_reg[30] & RF\_TAG & 1 \\
+rf\_reg[31] & RF\_TAG & 1 \\
+rs1\_o\_tag & EXECUTE & 1 \\
+tcr\_q & CSR & 32 \\
+tpr\_q & CSR & 32 \\
+data\_type\_q\_tag & LSU & 2 \\
+data\_we\_q\_tag & LSU & 1 \\
+rdata\_offset\_q\_tag & LSU & 2 \\
+rdata\_q\_tag & LSU & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
