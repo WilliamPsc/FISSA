@@ -1,0 +1,14 @@
+\begin{table}[t]
+	\centering
+	\caption{Results for multi_bitflip_reg for the hamming version}
+	\label{table:end_sim_by_status_hamming_2_multi_bitflip_reg}
+	\begin{tabular}{lrrrrrrlr}
+		\toprule
+		                & Crash & Silent & Delay & Detection & Detection and Correction & Double Errors Detection & Success     & Total \\
+		\midrule
+		Buffer Overflow & 0     & 0      & 12    & 0         & 2038                     & 0                       & 14 (0.68\%) & 2064  \\
+		WU-FTPd         & 0     & 0      & 53    & 0         & 2666                     & 0                       & 33 (1.20\%) & 2752  \\
+		Compare/Compute & 0     & 0      & 15    & 0         & 1356                     & 0                       & 5 (0.36\%)  & 1376  \\
+		\bottomrule
+	\end{tabular}
+\end{table}
