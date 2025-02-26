@@ -173,7 +173,7 @@ By default, seven fault models are defined. These fault models are:
 ```TeX
 @online{fissa,
   author = {William PENSEC},
-  title = {FISSA -- Fault Injection Simulation for Security Assessment},
+  title = {{FISSA -- Fault Injection Simulation for Security Assessment}},
   year = 2024,
   url = {https://github.com/WilliamPsc/FISSA}
 }
@@ -181,24 +181,20 @@ By default, seven fault models are defined. These fault models are:
 - IEEE Bibtex
 ```
 @INPROCEEDINGS{PLG-24-dsd,
-  author={
-    Pensec, William and
-    Lapôtre, Vianney and
-    Gogniat, Guy
-  },
-  title={Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment}, 
-  booktitle={2024 27th Euromicro Conference on Digital System Design (DSD)}, 
-  year={2024},
-  volume={},
-  number={},
-  pages={},
-  keywords={Hardware security; Physical Attacks; Fault injection simulation; Open-Source tool; Vulnerability Assessment},
-  doi={}
+    author={Pensec, William and Lapôtre, Vianney and Gogniat, Guy},
+    booktitle={2024 27th Euromicro Conference on Digital System Design (DSD)}, 
+    title={Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment}, 
+    year={2024},
+    volume={},
+    number={},
+    pages={369-376},
+    keywords={Digital systems;Buildings;User experience;Robustness;Hardware;Security;Hardware design languages;Open source software;Resilience;Graphical user interfaces;Hardware security;Physical Attacks;Fault injection simulation;Open-Source tool;Vulnerability Assessment},
+    doi={10.1109/DSD64264.2024.00056}
 }
 ```
 
 - Plain text
 ```
-W. Pensec, V. Lapôtre and G. Gogniat, "Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment", 2024 27th Euromicro Conference on Digital System Design (DSD), Paris, France, 2024, keywords: {Hardware security; Physical Attacks; Fault injection simulation; Open-Source tool; Vulnerability Assessment}
+William Pensec, Vianney Lapôtre and Guy Gogniat, "Scripting the Unpredictable: Automate Fault Injection in RTL Simulation for Vulnerability Assessment," 2024 27th Euromicro Conference on Digital System Design (DSD), Paris, France, 2024, pp. 369-376, doi: 10.1109/DSD64264.2024.00056. keywords: {Digital systems;Buildings;User experience;Robustness;Hardware;Security;Hardware design languages;Open source software;Resilience;Graphical user interfaces;Hardware security;Physical Attacks;Fault injection simulation;Open-Source tool;Vulnerability Assessment},
 ```
 ---
