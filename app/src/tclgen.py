@@ -204,6 +204,8 @@ class TCL:
         self.__reg_file_sim = self.__path_file_sim + "faulted_regs.yaml"
         self.__file_number = 1
         for window in self.__config_data_simulator['fenetre_tir'][self.__code]:
+            self.__nb_simu_total = 0
+            self.__nb_simu = 0
             self.set_nb_simu_total(self.__threat_model, window)
             print(f"\t\t >>>> Number of simulations to execute: {'{:,}'.format(self.__nb_simu_total).replace(',', ' ')}")
 
@@ -211,11 +213,12 @@ class TCL:
             print("\t\t >>>> Number of files to generate:", '{:,}'.format(self.__nb_files).replace(',', ' '))
             print(f"\t\t >>>> Number of batch: {self.__number_batches}")
 
-            file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + ".tcl"
+            file_str = "source\ " + str(self.__path_file_sim) + str(self.__code) + "_" + str(self.__protection) + "_" + str(self.__file_number) + "_" + '-'.join(str(x) for x in window) + ".tcl"
+            print(file_str)
             self.build_make_list = file_str
-            log_file_sim = str(self.__path_file_sim) + "results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".json"
+            log_file_sim = str(self.__path_file_sim) + "results/" + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + "_" + '-'.join(str(x) for x in window) + ".json"
 
-            self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + ".tcl"
+            self.__tcl_file = self.__gen_path + self.__code + "_" + self.__protection + "_" + str(self.__file_number) + "_" + '-'.join(str(x) for x in window) + ".tcl"
 
             self.build_ref_sim(log_file_sim, window, self.__nb_simu_total, 1)
             self.build_faulted_simu(window, self.__nb_simu_total)

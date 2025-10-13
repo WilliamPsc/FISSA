@@ -1,9 +1,9 @@
 {
     "name_simulator": "modelsim",
-    "path_tcl_generation": "/home/william/these/FISSA/",
-    "path_files_sim": "/home/william/these/FISSA/simu_files/",
-    "path_generated_sim": "/home/william/these/FISSA/simu_files/generated_simulations/",
-    "path_results_sim": "/home/william/these/FISSA/simu_files/results_simulations/",
+    "path_tcl_generation": "/home/william/work/FISSA/",
+    "path_files_sim": "/home/william/work/FISSA/simu_files/",
+    "path_generated_sim": "/home/william/work/FISSA/simu_files/generated_simulations/",
+    "path_results_sim": "/home/william/work/FISSA/simu_files/results_simulations/",
     "work_env": "/home/pensec/Documents/Divers/sharedFolder",
     "path_simulation": [
         "/home/william/Documents/DRiSCY/pulpino/sw/build/apps/",
@@ -17,9 +17,7 @@
     "version": 1,
     "name_reg_file_ext_wo_protect": "/faulted-reg.yaml",
     "codes": [
-        "buffer_overflow",
-        "secretFunction",
-        "propagationTagV2"
+        "buffer_overflow"
     ],
     "name_results": {
         "buffer_overflow": "Buffer Overflow",
@@ -27,9 +25,9 @@
         "propagationTagV2": "Compare/Compute"
     },
     "threat_model": [
-        "single_bitflip_spatial"
+        "bitflip"
     ],
-    "multi_fault_injection": 2,
+    "multi_fault_injection": 1,
     "avoid_register": [
         "/tb/top_i/core_region_i/RISCV_CORE/id_stage_i/illegal_insn_dec_dift",
         "/tb/top_i/core_region_i/RISCV_CORE/if_stage_i/instr_rdata_id_o",
@@ -76,8 +74,16 @@
     "fenetre_tir": {
         "buffer_overflow": [
             [
-                137140,
-                137380
+                0,
+                40
+            ],
+            [
+                80,
+                160
+            ],
+            [
+                200,
+                240
             ]
         ],
         "secretFunction": [
@@ -96,13 +102,13 @@
     "cycle_ref": 100,
     "cpu_period": 40,
     "batch_sim": {
-        "buffer_overflow": 1000,
+        "buffer_overflow": 2000,
         "secretFunction": 1000,
         "propagationTagV2": 1000
     },
     "multi_res_files": {
-        "buffer_overflow": 2,
-        "secretFunction": 2,
-        "propagationTagV2": 2
+        "buffer_overflow": 1,
+        "secretFunction": 1,
+        "propagationTagV2": 1
     }
 }
